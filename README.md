@@ -1,8 +1,37 @@
 # Assessment of high-quality datasets
 
-This repository holds the code, the data, the results and the logs of the survey *A survey on the assessment of high-quality datasets* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
+This repository holds the code, the data and the results of the survey *A survey on the assessment of high-quality datasets* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
 
 The Chinese version is [README_zh.md](README_zh.md).
+
+## Scale of the work
+
+| Item | Scale |
+|---|---|
+| Literature | 22 search queries on Semantic Scholar from 2010 to November 2026, 52213 hits, 21835 papers after screening by citations and removing duplicates, 207 references in the survey |
+| Standards and policies | National standards, drafts for comment, technical documents of TC609, ISO/IEC 5259, ISO 8000, the EU AI Act and the NIST AI RMF, read in full where a public text exists |
+| Datasets | 54 datasets in 11 groups, about $3.39\times 10^8$ records |
+| Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
+| Assessment practices | 66 practices from the five method families of the survey |
+| Experiments | 11 experiment groups, 40609 model trainings, about 850 hours of run time in the result files, on a 64-core CPU server and A6000 GPUs |
+| Code | About 7200 lines of Python for the experiments and the package `hqd_assess`, and 165 tests |
+
+| Group of datasets | Datasets | Records |
+|---|---:|---:|
+| Tables with benchmark errors | 11 | 299,122 |
+| Tables with real errors | 13 | 589,415 |
+| Image labels | 2 | 120,000 |
+| Language-model corpora | 2 | 1,564,345 |
+| Multimodal data | 2 | 530,671 |
+| Synthetic data | 3 | 250,000 |
+| Dynamic data | 1 | 259,287,888 |
+| Evaluation protocol | 6 | 15,971,700 |
+| Data leakage | 3 | 24,000 |
+| Test-set labels | 10 | 60,585,386 |
+| Detector estimates | 1 | 5,000 |
+| Total | 54 | 339,227,527 |
+
+A static scan over a whole table counts its records. `analysis/big_tables.py` computes the records per dataset from the result files.
 
 ## The framework
 
@@ -86,7 +115,7 @@ pytest
 | `figures/` | The result figures |
 | `results/` | Result records of the runs |
 | `scripts/download_data.sh` | Download commands for the datasets from their sources |
-| `scripts/package_release.py` | Packs dataset files and run logs into release archives with checksums |
+| `scripts/package_release.py` | Packs the saved predictions and scores into release archives with checksums |
 
 ## Experiments
 
@@ -113,7 +142,7 @@ pytest
 
 ## Datasets
 
-[docs/datasets.md](docs/datasets.md) has one entry per dataset with its official source, the license as stated by the source, its use and the download command. The 11 tables and the 44 classic TEP files are in `data/`, with the ciFAIR lists and the reviewer votes of the test-set label errors. `scripts/download_data.sh DIR` downloads the other datasets from their public hosts into `DIR`, and `scripts/download_data.sh DIR rieth taxi` selects some of them. The large files are also attached to the GitHub Release, see [docs/release_assets.md](docs/release_assets.md).
+[docs/datasets.md](docs/datasets.md) has one entry per dataset with its official source, the license as stated by the source, its use and the download command. The tables with benchmark errors and the 44 classic TEP files are in `data/`, with the ciFAIR lists and the reviewer votes of the test-set label errors. `scripts/download_data.sh DIR` downloads the other datasets from their public hosts into `DIR`, and `scripts/download_data.sh DIR rieth taxi` selects some of them. All links of the script were tested on 7 November 2026.
 
 | Group | Datasets |
 |---|---|
@@ -285,11 +314,11 @@ Figures 1 to 4 and the tables that summarize the literature are typeset with the
 | Numbers in the text | `results/numbers_*.json`, `results/tables_summary.json` | `analysis/summaries.py`, `analysis/make_numbers.py` | `Numbers, tables and figures` |
 | Derived numbers of the propositions and examples | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
-## Results and logs
+## Results
 
 `results/` holds the result record of each track, one JSON object per run in the JSONL files and a list of runs in the JSON files. `docs/parameters.md` gives the number of scored runs per file. The files `results/numbers_*.json` hold the numbers of the text, `results/tables_summary.json` holds the summary of the table runs, `results/audit_native.json` holds the comparison of the native tracks with their job lists, `results/audit_cleanml_published.json` holds the accuracies of the CleanML runs next to the published ones, `results/results_detectors.jsonl`, `results/detectors_summary.json` and `results/sanity_detectors.json` hold the detector estimates with their summary and checks, and `results/dataset_docs.json` holds the documentation scores with their quotations. `results/results_civilcomments.jsonl` holds the same CivilComments rows as `results/results_wilds.jsonl`. A row with an `error` field is a run that was not scored, for example a deletion that leaves fewer than 30 records.
 
-The logs of the runs are attached to the GitHub Release as `hqd-logs-LABEL`. `scripts/package_release.py` rewrites paths, user names, host names, addresses and tokens to neutral placeholders before packing. [docs/release_assets.md](docs/release_assets.md) lists the content of each archive, the rewriting rules and the commands to fetch, check and unpack an archive.
+The saved test predictions of the image runs and the scores of the corpus documents, which take GPU time to compute again, are attached to the GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0). `scripts/download_data.sh DIR release` fetches, checks and unpacks them. [docs/release_assets.md](docs/release_assets.md) lists their content.
 
 ## License
 

@@ -78,7 +78,7 @@ The next table gives the state of the raw tables as means over the training reco
 | `nasa` | 9.7 | 48.6 | 2.0 | 43.2 | 3.5 | 0.0 | 93.9 |
 | `soilmoisture` | 30.1 | 100.0 | 29.2 | 100.0 | 100.0 | 0.0 | 71.4 |
 
-- Official source. The REIN benchmark (Abdelaal et al., 2023) at https://github.com/mohamedyd/rein-benchmark, with its data at https://www.researchgate.net/publication/382496079_Datasets_of_REIN_Benchmark. The UniClean benchmark (Ding et al., 2025), with its link in the references of `README.md`. The underlying sources are in the index above.
+- Official source. The REIN benchmark (Abdelaal et al., 2023) at https://github.com/mohamedyd/rein-benchmark. The UniClean benchmark (Ding et al., 2025), with its link in the references of `README.md`. The underlying sources are in the index above.
 - License. The REIN and UniClean repositories state no license. The terms of the underlying sources are in the index above.
 - How to obtain. The files are in `data/tables/`.
 - Scripts. `study/run_real_tables.py`, `study/run_tables_fine.py`, `study/run_decision.py`, `study/run_decision_fine.py`, `study/run_detectors.py`, `analysis/tables_summary.py` and `examples/table_claims.py`.
@@ -90,14 +90,14 @@ Tables with real errors and the cleaned versions of the CleanML benchmark (Li et
 | Table | Records | Error types | Underlying source named by the benchmark |
 |---|---|---|---|
 | Airbnb | 33145 | Duplicates, outliers, missing values | Collected by the authors of the benchmark, in the archive |
-| Citation | 5005 | Duplicates | https://sites.google.com/site/anhaidgroup/useful-stuff/data |
+| Citation | 5005 | Duplicates | https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository |
 | Company | 128889 | Inconsistency | https://www.kaggle.com/jacksapper/company-sentiment-by-location |
 | Credit | 150000 | Outliers, missing values | https://www.kaggle.com/c/GiveMeSomeCredit/data |
 | EEG | 14980 | Outliers | https://archive.ics.uci.edu/ml/datasets/EEG+Eye+State |
 | KDD | 131329 | Missing values, outliers | KDD Cup 2014, in the archive |
-| Marketing | 8993 | Missing values | https://sites.google.com/site/anhaidgroup/useful-stuff/data |
+| Marketing | 8993 | Missing values | https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository |
 | Movie | 9329 | Duplicates, inconsistency | https://data.world/popculture/imdb-5000-movie-dataset and https://www.kaggle.com/tmdb/tmdb-movie-metadata |
-| Restaurant | 12007 | Duplicates, inconsistency | https://sites.google.com/site/anhaidgroup/useful-stuff/data |
+| Restaurant | 12007 | Duplicates, inconsistency | https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository |
 | Sensor | 62076 | Outliers | http://db.csail.mit.edu/labdata/labdata.html |
 | Titanic | 891 | Missing values | https://www.kaggle.com/upendr/titanic-machine-learning-from-disaster/data |
 | University | 210 | Inconsistency | https://archive.ics.uci.edu/ml/datasets/University |

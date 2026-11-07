@@ -57,6 +57,7 @@ GROUPS = {
     "llmtexts": [("llm_texts", "imdb.tgz"), ("llm_texts", "20news-bydate.tar.gz"), ("llm_texts", "amazon5core.tar.gz-part*")],
     "agnews": [("agnews", "agnews/train.csv"), ("agnews", "agnews/test.csv")],
     "predictions": [("preds", "preds/*.npy"), ("preds", "preds_clean/*.npy")],
+    "scores": [("corpus", "corpus/c4_ppl.npy"), ("corpus", "corpus/c4_group.npy"), ("corpus", "corpus/c4_llm_score.npy"), ("", "text_ppl.npz")],
 }
 EXCLUDE_DIRS = {"__pycache__", ".git", "old", "wandb", ".cache"}
 EXCLUDE_LOG_NAME = re.compile(r"(?i)failed|\.bad|\.bak|before")

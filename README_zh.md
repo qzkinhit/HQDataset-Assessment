@@ -1,8 +1,37 @@
 # 高质量数据集测评
 
-本仓库存放综述《高质量数据集测评研究综述》的代码、数据、结果和日志，同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有展开的文档，包括测评流程的算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
+本仓库存放综述《高质量数据集测评研究综述》的代码、数据和结果，同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有展开的文档，包括测评流程的算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
 
 英文版见 [README.md](README.md)。
+
+## 工作量
+
+| 项目 | 规模 |
+|---|---|
+| 文献 | 在 Semantic Scholar 上用 22 组检索式检索 2010 年至 2026 年 11 月的文献，命中 52213 篇，按被引次数筛选并去重后得到 21835 篇，综述引用 207 篇 |
+| 标准和政策 | 国家标准、征求意见稿、TC609 技术文件、ISO/IEC 5259、ISO 8000、欧盟人工智能法案和 NIST AI RMF，有公开文本的逐篇通读 |
+| 数据集 | 11 组共 54 个数据集，约 $3.39\times 10^8$ 条记录 |
+| 下载数据 | 除 `data/` 中的文件外，`scripts/download_data.sh` 从官方来源下载 146 个文件，共约 17 GiB |
+| 测评做法 | 综述五类方法中的 66 种具体做法 |
+| 实验 | 11 组实验，40609 次模型训练，结果文件记录的运行时间累计约 850 小时，使用 64 核 CPU 服务器和 A6000 GPU |
+| 代码 | 实验和软件包 `hqd_assess` 共约 7200 行 Python 代码，165 项测试 |
+
+| 数据集分组 | 数据集数 | 记录数 |
+|---|---:|---:|
+| 带基准错误的表格 | 11 | 299,122 |
+| 带真实错误的表格 | 13 | 589,415 |
+| 图像标签 | 2 | 120,000 |
+| 大模型语料 | 2 | 1,564,345 |
+| 多模态数据 | 2 | 530,671 |
+| 合成数据 | 3 | 250,000 |
+| 动态数据 | 1 | 259,287,888 |
+| 评测协议 | 6 | 15,971,700 |
+| 评测数据泄露 | 3 | 24,000 |
+| 测试集标签 | 10 | 60,585,386 |
+| 检测器估计 | 1 | 5,000 |
+| 合计 | 54 | 339,227,527 |
+
+对整张表做静态扫描时计入该表的全部记录。`analysis/big_tables.py` 从结果文件计算每个数据集的记录数。
 
 ## 测评框架
 
@@ -86,7 +115,7 @@ pytest
 | `figures/` | 实验结果图 |
 | `results/` | 实验结果记录 |
 | `scripts/download_data.sh` | 从来源下载数据集的命令 |
-| `scripts/package_release.py` | 把数据文件和运行日志打成带 SHA-256 的发布归档包 |
+| `scripts/package_release.py` | 把保存的预测和评分打成带 SHA-256 的发布归档包 |
 
 ## 实验
 
@@ -113,7 +142,7 @@ pytest
 
 ## 数据集
 
-[docs/datasets.md](docs/datasets.md) 为每个数据集列出官方来源、来源声明的许可、用途和下载命令。11 张表和 44 个经典 TEP 文件在 `data/`，ciFAIR 清单和测试集标签错误的评审投票也在其中。`scripts/download_data.sh DIR` 从公开地址把其余数据集下载到 `DIR`，`scripts/download_data.sh DIR rieth taxi` 可以只下载其中几个。大文件同时放在 GitHub Release 中，见 [docs/release_assets.md](docs/release_assets.md)。
+[docs/datasets.md](docs/datasets.md) 为每个数据集列出官方来源、来源声明的许可、用途和下载命令。带基准错误的表格和 44 个经典 TEP 文件在 `data/`，ciFAIR 清单和测试集标签错误的评审投票也在其中。`scripts/download_data.sh DIR` 从公开地址把其余数据集下载到 `DIR`，`scripts/download_data.sh DIR rieth taxi` 可以只下载其中几个。脚本中的全部链接已于 2026 年 11 月 7 日逐个测试可用。
 
 | 分组 | 数据集 |
 |---|---|
@@ -285,11 +314,11 @@ python analysis/stored_runs.py --update docs/parameters.md
 | 正文中的数字 | `results/numbers_*.json`，`results/tables_summary.json` | `analysis/summaries.py`，`analysis/make_numbers.py` | 数字、表格和图 |
 | 命题和例子中计算得到的数字 | | `hqd_assess/`，`tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
-## 结果和日志
+## 结果
 
 `results/` 存放每组实验的结果记录，JSONL 文件每行一次运行，JSON 文件中为运行列表。`docs/parameters.md` 给出每个文件的已计分运行数。`results/numbers_*.json` 存放正文中的数字，`results/tables_summary.json` 存放表格实验的汇总，`results/audit_native.json` 存放原生实验与作业清单的比较，`results/audit_cleanml_published.json` 存放 CleanML 实验的准确率与已发表数值的对照，`results/results_detectors.jsonl`、`results/detectors_summary.json` 和 `results/sanity_detectors.json` 存放检测器估计及其汇总和检查结果，`results/dataset_docs.json` 存放说明文档得分及其原文。`results/results_civilcomments.jsonl` 与 `results/results_wilds.jsonl` 中的 CivilComments 行相同。带 `error` 字段的行是未计分的运行，例如删除后不足 30 条记录。
 
-运行日志以 `hqd-logs-LABEL` 的形式放在 GitHub Release 中。`scripts/package_release.py` 在打包前把路径、用户名、主机名、地址和令牌改写为中性占位符。[docs/release_assets.md](docs/release_assets.md) 列出每个归档包的内容、改写规则，以及下载、检查和解包的命令。
+图像实验保存的测试预测和语料文档的评分需要 GPU 时间重新计算，它们放在 GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0) 中。`scripts/download_data.sh DIR release` 下载、检查并解包这些文件，[docs/release_assets.md](docs/release_assets.md) 列出其内容。
 
 ## 许可
 
@@ -309,5 +338,5 @@ python analysis/stored_runs.py --update docs/parameters.md
 ## 基准的参考文献
 
 - M. Abdelaal, C. Hammacher, H. Schöning. REIN: a comprehensive benchmark framework for data cleaning methods in ML pipelines. The 26th International Conference on Extending Database Technology, pp. 499-511, 2023.
-- X. Ding, Z. Qian, H. Wang, et al. UniClean: a scalable data cleaning solution for mixed errors based on unified cleaners and optimized cleaning workflow. Proc. VLDB Endow., vol. 18, no. 11, pp. 4117-4130, 2025. 基准见 https://github.com/qzkinhit/UniClean-bench-Result。
+- X. Ding, Z. Qian, H. Wang, et al. UniClean: a scalable data cleaning solution for mixed errors based on unified cleaners and optimized cleaning workflow. Proc. VLDB Endow., vol. 18, no. 11, pp. 4117-4130, 2025. 基准见 [UniClean-bench-Result](https://github.com/qzkinhit/UniClean-bench-Result)。
 - P. Li, X. Rao, J. Blase, et al. CleanML: a study for evaluating the impact of data cleaning on ML classification tasks. 37th IEEE International Conference on Data Engineering, pp. 13-24, 2021.

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Download the datasets of the experiments into the layout that the scripts read.
 # Usage: scripts/download_data.sh [DIR] [DATASET ...]
-# DATASET is any of rieth, taxi, cifar, cifair, coco, corpus, textpool, synthetic, labelerrors, dclm, cleanml, datacomp, mirflickr, wilds, llmtexts, agnews. The default is all of them.
+# DATASET is any of rieth, taxi, cifar, cifair, coco, corpus, textpool, synthetic, labelerrors, dclm, cleanml, datacomp, mirflickr, wilds, llmtexts, agnews, release. The default is all of them.
 # Ten of the 11 tables and classic TEP are in data/, the CSV files of Mercedes come from the REIN benchmark. docs/datasets.md gives the source and the license of each dataset.
 # DRY_RUN=1 prints the commands without running them. A file that already exists is kept.
 set -euo pipefail
 ROOT="${1:-downloads}"
 if [ "$#" -gt 0 ]; then shift; fi
-if [ "$#" -gt 0 ]; then SETS="$*"; else SETS="rieth taxi cifar cifair coco corpus textpool synthetic labelerrors dclm cleanml datacomp mirflickr wilds llmtexts agnews"; fi
+if [ "$#" -gt 0 ]; then SETS="$*"; else SETS="rieth taxi cifar cifair coco corpus textpool synthetic labelerrors dclm cleanml datacomp mirflickr wilds llmtexts agnews release"; fi
 HERE="$(cd "$(dirname "$0")" && pwd)"
 RANGES="$HERE/../native/fetch_ranges.py"
 
@@ -145,6 +145,16 @@ for name in $SETS; do
     agnews)
       # AG News for the auxiliary runner study/run_study.py, written as train.csv and test.csv
       run python3 -c "import os, sys; from datasets import load_dataset; d = load_dataset('fancyzhx/ag_news'); os.makedirs(sys.argv[1], exist_ok=True); [d[s].to_csv(f'{sys.argv[1]}/{s}.csv', index=False) for s in ('train', 'test')]" "$ROOT/agnews"
+      ;;
+    release)
+      # saved test predictions of the image runs and scores of the corpus documents, from the GitHub Release of this repository
+      REL=https://github.com/qzkinhit/HQDataset-Assessment/releases/download/v1.0
+      for f in SHA256SUMS-v1.txt hqd-data-predictions.tar hqd-data-scores.tar; do
+        fetch "$REL/$f" "$ROOT/release/$f"
+      done
+      run sh -c "cd '$ROOT/release' && (sha256sum -c SHA256SUMS-v1.txt 2>/dev/null || shasum -a 256 -c SHA256SUMS-v1.txt)"
+      run tar -xf "$ROOT/release/hqd-data-predictions.tar" -C "$ROOT"
+      run tar -xf "$ROOT/release/hqd-data-scores.tar" -C "$ROOT"
       ;;
     *)
       echo "Unknown dataset $name" >&2
