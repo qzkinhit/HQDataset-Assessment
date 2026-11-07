@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.idea/
+.vscode/
+*.egg-info/
+build/
+dist/
+
+# downloaded data and intermediate arrays
+downloads/
+*.npz
+*.npy
+*.parquet
+*.RData
+*.json.gz
+
+# output of the plot script and of the runners
+figures/plots/
+pool_logs/
+preds/
+*.part
+*.log
+
+# output of the release packer and of the job lists
+release_assets/
+jobs/
+llm_work/
+
+# data that the rules of its source do not allow to redistribute
+data/tables/mercedes/*.csv

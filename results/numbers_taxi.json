@@ -1,0 +1,20 @@
+{
+"TaxiMonths": "72",
+"TaxiRecords": "$2.59\\times 10^8$",
+"TaxiRuleLo": "4.2",
+"TaxiRuleHi": "23.7",
+"TaxiHorizon": "48",
+"TaxiRzero": "0.868",
+"TaxiRlate": "0.786",
+"TaxiDropPre": "0.011",
+"TaxiNPre": "3",
+"TaxiDropCovid": "0.267",
+"TaxiNCovid": "1",
+"TaxiFilterGain": "0.005",
+"TaxiCorrMed": "$-$0.60",
+"TaxiTrigN": "6",
+"TaxiTrigHit": "4",
+"TaxiRestN": "52",
+"TaxiRestHit": "3",
+"RunsTaxi": "288"
+}

@@ -1,0 +1,16 @@
+{
+"VisNoisyAcc": "0.576",
+"VisCleanAcc": "0.756",
+"VisGain": "0.180",
+"VisDelGap": "6.5",
+"VisCovGap": "56",
+"VisCovGapB": "56",
+"VisCovK": "1",
+"VisScaleDrop": "17",
+"VisUnseenDrop": "55",
+"VisCovDrop": "43",
+"RunsVisionN": "520",
+"RunsVisionC": "180",
+"FairShare": "8.9",
+"FairDrop": "26.0"
+}

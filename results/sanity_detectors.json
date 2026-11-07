@@ -1,0 +1,307 @@
+[
+{
+"check": "closed form 30 10 20 140 at p 0.25 gives 0.2",
+"passed": true,
+"value": 0.2
+},
+{
+"check": "Wilson equals the package",
+"passed": true,
+"gap": 0.0
+},
+{
+"check": "corrected against calibrate_from_audit on hospitals D5",
+"passed": true,
+"point_gap": 0.0,
+"mean_low_gap": 0.013566,
+"mean_high_gap": 0.013395
+},
+{
+"check": "hospitals flags from the dirty file alone equal the stored flags",
+"passed": true
+},
+{
+"check": "flights flags from the dirty file alone equal the stored flags",
+"passed": true
+},
+{
+"check": "breast_cancer flags from the dirty file alone equal the stored flags",
+"passed": true
+},
+{
+"check": "synthetic populations",
+"passed": true,
+"table": [
+{
+"method": "corrected",
+"coverage": 0.938822,
+"low": 0.712,
+"mae": 0.034598,
+"half": 0.087451,
+"bias": 0.004312
+},
+{
+"method": "pooled",
+"coverage": 0.220311,
+"low": 0.0,
+"mae": 0.137252,
+"half": 0.06938,
+"bias": 0.135571
+},
+{
+"method": "poststratified",
+"coverage": 0.960444,
+"low": 0.93,
+"mae": 0.018024,
+"half": 0.047802,
+"bias": 0.000665
+},
+{
+"method": "sample",
+"coverage": 0.953133,
+"low": 0.933,
+"mae": 0.02346,
+"half": 0.05788,
+"bias": 0.000771
+},
+{
+"method": "stratified",
+"coverage": 0.967844,
+"low": 0.939,
+"mae": 0.018355,
+"half": 0.052719,
+"bias": 0.000596
+}
+],
+"weakest": [
+{
+"pi": 0.5,
+"se": 0.4,
+"sp": 0.98,
+"n": 50,
+"method": "stratified",
+"coverage": 0.939,
+"mae": 0.060045,
+"half": 0.143744,
+"bias": -0.003873,
+"undefined": null
+},
+{
+"pi": 0.5,
+"se": 0.4,
+"sp": 0.98,
+"n": 200,
+"method": "stratified",
+"coverage": 0.941,
+"mae": 0.029907,
+"half": 0.074553,
+"bias": -0.000161,
+"undefined": null
+},
+{
+"pi": 0.5,
+"se": 0.4,
+"sp": 0.98,
+"n": 800,
+"method": "stratified",
+"coverage": 0.943,
+"mae": 0.015595,
+"half": 0.037601,
+"bias": -0.000243,
+"undefined": null
+},
+{
+"pi": 0.8,
+"se": 0.4,
+"sp": 0.98,
+"n": 200,
+"method": "stratified",
+"coverage": 0.943,
+"mae": 0.024103,
+"half": 0.059466,
+"bias": 0.000991,
+"undefined": null
+},
+{
+"pi": 0.1,
+"se": 0.4,
+"sp": 0.98,
+"n": 200,
+"method": "stratified",
+"coverage": 0.944,
+"mae": 0.018151,
+"half": 0.046976,
+"bias": -0.000256,
+"undefined": null
+}
+]
+},
+{
+"check": "no flags falls back to the sample in all repeats",
+"passed": true,
+"raw_error": 0.388,
+"corrected_mae": 0.026032,
+"stratified_mae": 0.023,
+"sample_half": 0.066728,
+"stratified_half": 0.066796,
+"stratified_coverage": 0.98
+},
+{
+"check": "post-stratification without flags is the sample",
+"passed": true,
+"post_mae": 0.026032
+},
+{
+"check": "post-stratification with an oracle has no error",
+"passed": true,
+"post_mae": 0.0,
+"post_coverage": 1.0,
+"post_half": 0.018779
+},
+{
+"check": "flags on everything falls back in all repeats",
+"passed": true,
+"corrected_mae": 0.026032
+},
+{
+"check": "an oracle gives the truth with no error",
+"passed": true,
+"stratified_half": 0.019086,
+"pooled_bias": 0.112
+},
+{
+"check": "a coin has no power, the correction is undefined about half the time and worse than the sample",
+"passed": true,
+"undefined": 0.648,
+"corrected_mae": 0.150817,
+"sample_mae": 0.026032,
+"se": 0.283505,
+"sp": 0.702614
+},
+{
+"check": "same seed, same rows",
+"passed": true
+},
+{
+"check": "hypergeometric counts agree with a physical draw",
+"passed": true,
+"hyper": 0.388126,
+"physical": 0.387673,
+"hyper_pooled": 0.380376,
+"physical_pooled": 0.37991,
+"truth": 0.388
+},
+{
+"check": "adult record at the end of the scale",
+"passed": true,
+"true_rate": 0.0,
+"undefined": 1.0,
+"corrected_mae": 0.0,
+"sample_mae": 0.0,
+"sample_half": 0.009423,
+"stratified_half": 0.013221,
+"positive_rates": {
+"D1": 0.001504,
+"D2_3sd": 0.084627,
+"D2_iqr": 0.387179,
+"D3": 0.011985,
+"D4": 0.251493,
+"D5": 0.395648
+}
+},
+{
+"check": "adult cell at the end of the scale",
+"passed": true,
+"true_rate": 0.0,
+"undefined": 1.0,
+"corrected_mae": 0.0,
+"sample_mae": 0.0,
+"sample_half": 0.009423,
+"stratified_half": 0.017135,
+"positive_rates": {
+"D1": 0.000107,
+"D2_3sd": 0.006225,
+"D2_iqr": 0.031153,
+"D3": 0.001038,
+"D5": 0.032298
+}
+},
+{
+"check": "soilmoisture record at the end of the scale",
+"passed": true,
+"true_rate": 1.0,
+"undefined": 1.0,
+"corrected_mae": 0.0,
+"sample_mae": 0.0,
+"sample_half": 0.009423,
+"stratified_half": 0.009815,
+"positive_rates": {
+"D1": 0.310751,
+"D2_3sd": 0.946981,
+"D2_iqr": 1.0,
+"D3": 0.0,
+"D4": 0.0,
+"D5": 1.0,
+"D6": 1.0
+}
+},
+{
+"check": "mercedes record at the end of the scale",
+"passed": true,
+"true_rate": 1.0,
+"undefined": 1.0,
+"corrected_mae": 0.0,
+"sample_mae": 0.0,
+"sample_half": 0.009423,
+"stratified_half": 0.009517,
+"positive_rates": {
+"D1": 0.376574,
+"D2_3sd": 1.0,
+"D2_iqr": 1.0,
+"D3": 0.0,
+"D4": 0.0,
+"D5": 1.0
+}
+},
+{
+"check": "beers record at the end of the scale",
+"passed": true,
+"true_rate": 0.999585,
+"undefined": 0.988,
+"corrected_mae": 0.00186,
+"sample_mae": 0.000765,
+"sample_half": 0.009761,
+"stratified_half": 0.011801,
+"positive_rates": {
+"D1": 0.641079,
+"D2_3sd": 0.00249,
+"D2_iqr": 0.017012,
+"D3": 0.071369,
+"D4": 0.164315,
+"D5": 0.658506,
+"D6": 1.0
+}
+},
+{
+"check": "the error of the correction follows its first order variance, and that variance predicts when it beats the sample",
+"passed": true,
+"pairs": 154,
+"median_ratio": 1.034105,
+"q1": 1.007649,
+"q3": 1.074165,
+"break_even_agreement": 0.993506
+},
+{
+"check": "adult has label errors and no wrong feature cell",
+"passed": true,
+"label_rate": 0.037614,
+"positive_rates": {
+"D1": 0.001504,
+"D2_iqr": 0.387179,
+"D2_3sd": 0.084627,
+"D3": 0.011985,
+"D4": 0.251493,
+"D5": 0.395648
+}
+}
+]

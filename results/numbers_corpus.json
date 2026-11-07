@@ -1,0 +1,9 @@
+{
+"RunsCorpus": "370",
+"CorpusDocs": "$1.07\\times 10^6$",
+"LeakLeaked": "1.873",
+"LeakUnseen": "1.971",
+"LeakDrop": "0.073",
+"LeakGap": "0.098",
+"RunsText": "161"
+}

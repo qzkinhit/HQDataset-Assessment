@@ -1,0 +1,28 @@
+# The package hqd_assess and its tests
+numpy>=1.22
+scipy>=1.9
+pytest>=7
+
+# The examples and the table experiments
+pandas>=1.5
+scikit-learn>=1.3
+
+# Analysis and figures
+matplotlib>=3.7
+
+# The large tabular experiments
+lightgbm>=4.0
+xgboost>=2.0
+pyarrow>=14
+rdata>=0.11
+
+# The stage raha of study/run_detectors.py also needs the raha package
+
+# The GPU tracks and the data preparation
+torch>=2.3
+transformers>=4.40
+tokenizers>=0.19
+datasets>=2.18
+huggingface_hub>=0.23
+pillow>=10
+zstandard>=0.22

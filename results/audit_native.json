@@ -1,0 +1,233 @@
+{
+"cleanml": {
+"rows": 3175,
+"unique_ids": 3175,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 3175,
+"missing": [],
+"missing_count": 0,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": [],
+"fallback": [],
+"per_dataset": {
+"Airbnb": 575,
+"Citation": 75,
+"Company": 50,
+"Credit": 500,
+"EEG": 275,
+"KDD": 450,
+"Marketing": 225,
+"Movie": 125,
+"Restaurant": 125,
+"Sensor": 275,
+"Titanic": 225,
+"USCensus": 225,
+"University": 50
+},
+"per_model": {
+"gb": 635,
+"knn": 635,
+"linear": 635,
+"mlp": 635,
+"rf": 635
+},
+"per_seed": {
+"0": 635,
+"1": 635,
+"2": 635,
+"3": 635,
+"4": 635
+},
+"arms_not_25": {},
+"arms_identical_to_dirty": [],
+"small_test_parts": [
+[
+"Titanic",
+"delete",
+27,
+31
+],
+[
+"Titanic",
+"delete",
+29,
+29
+],
+[
+"Titanic",
+"delete",
+31,
+27
+],
+[
+"Titanic",
+"delete",
+34,
+24
+],
+[
+"University",
+"clean",
+31,
+32
+],
+[
+"University",
+"dirty",
+31,
+32
+]
+]
+},
+"datacomp": {
+"rows": 215,
+"unique_ids": 215,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 215,
+"missing": [],
+"missing_count": 0,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": [],
+"kept_less_than_asked": [
+[
+"dedup",
+0.9,
+0.759
+],
+[
+"text_rule",
+0.9,
+0.784
+]
+],
+"per_arm": {
+"all": 5,
+"dedup": 35,
+"random": 35,
+"sim_bottom": 35,
+"sim_mid": 35,
+"sim_top": 35,
+"text_rule": 35
+},
+"per_seed": {
+"0": 43,
+"1": 43,
+"2": 43,
+"3": 43,
+"4": 43
+}
+},
+"mirflickr": {
+"rows": 215,
+"unique_ids": 215,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 215,
+"missing": [],
+"missing_count": 0,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": [],
+"kept_less_than_asked": [
+[
+"text_rule",
+0.9,
+0.872
+]
+],
+"per_arm": {
+"all": 5,
+"dedup": 35,
+"random": 35,
+"sim_bottom": 35,
+"sim_mid": 35,
+"sim_top": 35,
+"text_rule": 35
+},
+"per_seed": {
+"0": 43,
+"1": 43,
+"2": 43,
+"3": 43,
+"4": 43
+}
+},
+"wilds": {
+"rows": 15,
+"unique_ids": 15,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 15,
+"missing": [],
+"missing_count": 0,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": []
+},
+"dclm": {
+"rows": 1,
+"unique_ids": 1,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 24,
+"missing": [
+"c_s0_L_dclm_baseline_30M",
+"c_s0_L_dclm_pool_30M",
+"c_s0_M_dclm_baseline_30M",
+"c_s0_M_dclm_pool_30M",
+"c_s0_S_dclm_baseline_30M",
+"c_s0_S_dclm_pool_30M",
+"c_s0_XS_dclm_baseline_30M",
+"c_s1_L_dclm_baseline_30M",
+"c_s1_L_dclm_pool_30M",
+"c_s1_M_dclm_baseline_30M",
+"c_s1_M_dclm_pool_30M",
+"c_s1_S_dclm_baseline_30M",
+"c_s1_S_dclm_pool_30M",
+"c_s1_XS_dclm_baseline_30M",
+"c_s1_XS_dclm_pool_30M",
+"c_s2_L_dclm_baseline_30M",
+"c_s2_L_dclm_pool_30M",
+"c_s2_M_dclm_baseline_30M",
+"c_s2_M_dclm_pool_30M",
+"c_s2_S_dclm_baseline_30M",
+"c_s2_S_dclm_pool_30M",
+"c_s2_XS_dclm_baseline_30M",
+"c_s2_XS_dclm_pool_30M"
+],
+"missing_count": 23,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": []
+},
+"synth": {
+"rows": 114,
+"unique_ids": 114,
+"repeated_ids": [],
+"error_rows": [],
+"expected": 127,
+"missing": [
+"sy_cifake_resnet18_s2_add10000",
+"sy_cifake_resnet18_s2_add100000",
+"sy_cifake_resnet18_s2_add25000",
+"sy_cifake_resnet18_s2_add50000",
+"sy_cifake_resnet18_s2_share0.1",
+"sy_cifake_resnet18_s2_share0.25",
+"sy_cifake_resnet18_s2_share0.75",
+"sy_cifake_resnet18_s2_share0.9",
+"sy_cifake_vgg11_s2_add50000",
+"sy_cifake_vgg11_s2_share0.5",
+"sy_cifake_vgg11_s2_share1.0",
+"sy_edm_resnet18_s2_add100000",
+"sy_edm_vgg11_s2_add50000"
+],
+"missing_count": 13,
+"unexpected": [],
+"not_finite": [],
+"metric_out_of_range": []
+}
+}

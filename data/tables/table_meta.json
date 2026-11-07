@@ -1,0 +1,127 @@
+{
+  "adult": {
+    "label_col": "income",
+    "task": "cls",
+    "categorical_cols": [
+      "education",
+      "gender",
+      "marital_status",
+      "native_country",
+      "occupation",
+      "race",
+      "relationship",
+      "workclass"
+    ]
+  },
+  "beers": {
+    "label_col": "style",
+    "task": "cls",
+    "categorical_cols": [
+      "beer_name",
+      "brewery_name",
+      "city",
+      "state"
+    ]
+  },
+  "bike": {
+    "label_col": "cnt",
+    "task": "reg",
+    "categorical_cols": [],
+    "drop_cols": [
+      "casual",
+      "registered"
+    ]
+  },
+  "breast_cancer": {
+    "label_col": "class",
+    "task": "cls",
+    "categorical_cols": []
+  },
+  "flights": {
+    "label_col": "arrival_delay_bucket",
+    "task": "cls",
+    "categorical_cols": [
+      "act_arr_time",
+      "act_dep_time",
+      "flight",
+      "sched_arr_time",
+      "sched_dep_time",
+      "src"
+    ],
+    "drop_cols": [
+      "flight"
+    ],
+    "time_cols": [
+      "sched_dep_time",
+      "act_dep_time",
+      "sched_arr_time",
+      "act_arr_time"
+    ]
+  },
+  "hospitals": {
+    "label_col": "Condition",
+    "task": "cls",
+    "categorical_cols": [
+      "Address1",
+      "Address2",
+      "Address3",
+      "City",
+      "CountyName",
+      "EmergencyService",
+      "HospitalName",
+      "HospitalOwner",
+      "HospitalType",
+      "MeasureCode",
+      "MeasureName",
+      "PhoneNumber",
+      "ProviderNumber",
+      "Sample",
+      "Score",
+      "State",
+      "Stateavg",
+      "ZipCode"
+    ]
+  },
+  "mercedes": {
+    "label_col": "y",
+    "task": "reg",
+    "categorical_cols": [
+      "X0",
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6",
+      "X8"
+    ]
+  },
+  "nasa": {
+    "label_col": "sound_pressure_level",
+    "task": "reg",
+    "categorical_cols": []
+  },
+  "smartfactory": {
+    "label_col": "labels",
+    "task": "cls",
+    "categorical_cols": []
+  },
+  "soilmoisture": {
+    "label_col": "soil_moisture",
+    "task": "reg",
+    "categorical_cols": []
+  },
+  "soccer_full": {
+    "label_col": "manager",
+    "task": "cls",
+    "categorical_cols": [
+      "birthplace",
+      "city",
+      "name",
+      "position",
+      "stadium",
+      "surname",
+      "team"
+    ]
+  }
+}

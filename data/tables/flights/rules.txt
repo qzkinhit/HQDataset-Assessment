@@ -1,0 +1,5 @@
+# Dataset: flights (native errors, UniClean benchmark)
+# Clean and dirty tables as published, with an appended index column, missing values written as "empty".
+
+[DOMAIN]
+arrival_delay_bucket: ENUM {early, late, on_time}

@@ -1,0 +1,162 @@
+{
+"mnist": {
+"n": 10000,
+"flagged": 100,
+"wrong": 10,
+"given_rejected": 15,
+"rate": 0.001,
+"rate_rejected": 0.0015,
+"rate_lower_bound": false,
+"cv_disagree": 0.0087,
+"acc_original": 0.9913,
+"acc_corrected": 0.9923,
+"id_agreement": 1.0
+},
+"cifar10": {
+"n": 10000,
+"flagged": 275,
+"wrong": 18,
+"given_rejected": 54,
+"rate": 0.0018,
+"rate_rejected": 0.0054,
+"rate_lower_bound": false,
+"cv_disagree": 0.0706,
+"acc_original": 0.9294,
+"acc_corrected": 0.9312,
+"id_agreement": 1.0,
+"own_original": 0.92792,
+"own_corrected": 0.9282649999999999,
+"own_runs": 20
+},
+"cifar100": {
+"n": 10000,
+"flagged": 2235,
+"wrong": 318,
+"given_rejected": 585,
+"rate": 0.0318,
+"rate_rejected": 0.0585,
+"rate_lower_bound": false,
+"cv_disagree": 0.3071,
+"acc_original": 0.6929,
+"acc_corrected": 0.7247,
+"id_agreement": 1.0,
+"own_original": 0.728845,
+"own_corrected": 0.7382949999999999,
+"own_runs": 20
+},
+"caltech256": {
+"n": 29780,
+"flagged": 2360,
+"wrong": 221,
+"given_rejected": 458,
+"rate": 0.007421087978509066,
+"rate_rejected": 0.015379449294828745,
+"rate_lower_bound": false,
+"cv_disagree": 0.15077233042310276,
+"acc_original": 0.8492276695768972,
+"acc_corrected": 0.8566487575554063,
+"id_agreement": 1.0
+},
+"imagenet": {
+"n": 50000,
+"flagged": 5440,
+"wrong": 1428,
+"given_rejected": 2916,
+"rate": 0.02856,
+"rate_rejected": 0.05832,
+"rate_lower_bound": false,
+"cv_disagree": 0.27268,
+"acc_original": 0.72732,
+"acc_corrected": 0.75588,
+"id_agreement": 1.0
+},
+"quickdraw": {
+"n": 50426266,
+"flagged": 2500,
+"wrong": 1047,
+"given_rejected": 1870,
+"rate": 2.07629888756784e-05,
+"rate_rejected": 3.7083848326187784e-05,
+"rate_lower_bound": true,
+"cv_disagree": 0.22481944231206807,
+"acc_original": 0.7751805576879319,
+"acc_corrected": 0.7752013206768076,
+"id_agreement": 1.0
+},
+"20news": {
+"n": 7532,
+"flagged": 93,
+"wrong": 22,
+"given_rejected": 82,
+"rate": 0.0029208709506107276,
+"rate_rejected": 0.01088688263409453,
+"rate_lower_bound": false,
+"cv_disagree": 0.0766064790228359,
+"acc_original": 0.9233935209771641,
+"acc_corrected": 0.9263143919277749,
+"id_agreement": 1.0
+},
+"imdb": {
+"n": 25000,
+"flagged": 1310,
+"wrong": 173,
+"given_rejected": 725,
+"rate": 0.00692,
+"rate_rejected": 0.029,
+"rate_lower_bound": false,
+"cv_disagree": 0.10424,
+"acc_original": 0.89576,
+"acc_corrected": 0.90268,
+"coding": {
+"Negative": 0,
+"Positive": 1
+},
+"coding_agreement": 1.0,
+"coding_seen": {
+"Negative": {
+"0": 706
+},
+"Positive": {
+"1": 604
+}
+}
+},
+"amazon": {
+"n": 9996437,
+"flagged": 1000,
+"wrong": 404,
+"given_rejected": 732,
+"rate": 4.0414399650595505e-05,
+"rate_rejected": 7.322609045602949e-05,
+"rate_lower_bound": true,
+"cv_disagree": 0.09558615734786305,
+"acc_original": 0.904413842652137,
+"acc_corrected": 0.9044440534162322,
+"coding": {
+"Positive": 2,
+"Neutral": 1,
+"Negative": 0
+},
+"coding_agreement": 1.0,
+"coding_seen": {
+"Positive": {
+"2": 192
+},
+"Neutral": {
+"1": 559
+},
+"Negative": {
+"0": 249
+}
+}
+},
+"audioset": {
+"n": 20371,
+"flagged": 307,
+"wrong": 231,
+"given_rejected": 275,
+"multi_label": true,
+"rate": 0.011339649501742674,
+"rate_rejected": 0.013499582740169849
+}
+}

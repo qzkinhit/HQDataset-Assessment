@@ -1,0 +1,1464 @@
+{
+"n_runs": 25000,
+"n_ds": 11,
+"by_task": {
+"adult": "cls",
+"beers": "cls",
+"bike": "reg",
+"breast_cancer": "cls",
+"flights": "cls",
+"hospitals": "cls",
+"mercedes": "reg",
+"nasa": "reg",
+"smartfactory": "cls",
+"soccer_full": "cls",
+"soilmoisture": "reg"
+},
+"base": {
+"adult": {
+"cell_error": 0.0,
+"rate_clean_records": 0.9625,
+"rate_missing": 0.0,
+"rate_domain": 0.0,
+"rate_value": 0.0,
+"rate_label": 0.0375,
+"P_data": 100.0,
+"n0": 31655.0
+},
+"beers": {
+"cell_error": 0.1548,
+"rate_clean_records": 0.0,
+"rate_missing": 0.0527,
+"rate_domain": 0.9997,
+"rate_value": 0.0004,
+"rate_label": 0.0008,
+"P_data": 86.8398,
+"n0": 1687.0
+},
+"bike": {
+"cell_error": 0.1282,
+"rate_clean_records": 0.0598,
+"rate_missing": 0.0,
+"rate_domain": 0.7421,
+"rate_value": 0.5464,
+"rate_label": 0.0,
+"P_data": 83.8934,
+"n0": 12165.0
+},
+"breast_cancer": {
+"cell_error": 0.0806,
+"rate_clean_records": 0.4298,
+"rate_missing": 0.2963,
+"rate_domain": 0.2058,
+"rate_value": 0.2196,
+"rate_label": 0.021,
+"P_data": 90.9778,
+"n0": 489.0
+},
+"flights": {
+"cell_error": 0.3457,
+"rate_clean_records": 0.198,
+"rate_missing": 0.4875,
+"rate_domain": 0.6019,
+"rate_value": 0.1237,
+"rate_label": 0.0,
+"P_data": 84.8376,
+"n0": 1663.0
+},
+"hospitals": {
+"cell_error": 0.0264,
+"rate_clean_records": 0.6124,
+"rate_missing": 0.0,
+"rate_domain": 0.3876,
+"rate_value": 0.0,
+"rate_label": 0.0,
+"P_data": 95.1545,
+"n0": 700.0
+},
+"mercedes": {
+"cell_error": 0.1902,
+"rate_clean_records": 0.0,
+"rate_missing": 0.3597,
+"rate_domain": 1.0,
+"rate_value": 1.0,
+"rate_label": 0.0,
+"P_data": 70.5032,
+"n0": 2946.0
+},
+"nasa": {
+"cell_error": 0.0973,
+"rate_clean_records": 0.5136,
+"rate_missing": 0.0203,
+"rate_domain": 0.4316,
+"rate_value": 0.0345,
+"rate_label": 0.0,
+"P_data": 93.9199,
+"n0": 1052.0
+},
+"smartfactory": {
+"cell_error": 0.0167,
+"rate_clean_records": 0.6995,
+"rate_missing": 0.3005,
+"rate_domain": 0.0,
+"rate_value": 0.0,
+"rate_label": 0.0,
+"P_data": 96.2441,
+"n0": 16551.0
+},
+"soccer_full": {
+"cell_error": 0.0174,
+"rate_clean_records": 0.8434,
+"rate_missing": 0.0,
+"rate_domain": 0.0241,
+"rate_value": 0.1325,
+"rate_label": 0.0,
+"P_data": 98.042,
+"n0": 40000.0
+},
+"soilmoisture": {
+"cell_error": 0.3014,
+"rate_clean_records": 0.0,
+"rate_missing": 0.2919,
+"rate_domain": 1.0,
+"rate_value": 1.0,
+"rate_label": 0.0,
+"P_data": 71.3513,
+"n0": 475.0
+}
+},
+"spearman": {
+"n": 50,
+"median": 0.5123035508116429,
+"q1": 0.2623384830326782,
+"q3": 0.6473431187531498,
+"neg": 8,
+"lt03": 14,
+"gt07": 10,
+"min": -0.7095179450440259,
+"max": 0.9570698251282861
+},
+"spearman_list": [
+{
+"ds": "beers",
+"model": "gb",
+"rho": 0.5129,
+"span": 0.0582
+},
+{
+"ds": "beers",
+"model": "knn",
+"rho": -0.1125,
+"span": 0.0136
+},
+{
+"ds": "beers",
+"model": "linear",
+"rho": 0.6667,
+"span": 0.0084
+},
+{
+"ds": "beers",
+"model": "mlp",
+"rho": 0.1069,
+"span": 0.0313
+},
+{
+"ds": "beers",
+"model": "rf",
+"rho": 0.5298,
+"span": 0.073
+},
+{
+"ds": "bike",
+"model": "gb",
+"rho": 0.5932,
+"span": 0.4535
+},
+{
+"ds": "bike",
+"model": "knn",
+"rho": 0.5422,
+"span": 0.3624
+},
+{
+"ds": "bike",
+"model": "linear",
+"rho": 0.6398,
+"span": 0.3607
+},
+{
+"ds": "bike",
+"model": "mlp",
+"rho": 0.508,
+"span": 2.3943
+},
+{
+"ds": "bike",
+"model": "rf",
+"rho": 0.5417,
+"span": 0.5028
+},
+{
+"ds": "breast_cancer",
+"model": "gb",
+"rho": -0.7085,
+"span": 0.0099
+},
+{
+"ds": "breast_cancer",
+"model": "knn",
+"rho": 0.4267,
+"span": 0.0163
+},
+{
+"ds": "breast_cancer",
+"model": "linear",
+"rho": 0.5622,
+"span": 0.0191
+},
+{
+"ds": "breast_cancer",
+"model": "mlp",
+"rho": 0.7105,
+"span": 0.0215
+},
+{
+"ds": "breast_cancer",
+"model": "rf",
+"rho": -0.6373,
+"span": 0.0092
+},
+{
+"ds": "flights",
+"model": "gb",
+"rho": 0.4151,
+"span": 0.1202
+},
+{
+"ds": "flights",
+"model": "knn",
+"rho": -0.7095,
+"span": 0.2229
+},
+{
+"ds": "flights",
+"model": "linear",
+"rho": 0.4737,
+"span": 0.2244
+},
+{
+"ds": "flights",
+"model": "mlp",
+"rho": 0.5117,
+"span": 0.0785
+},
+{
+"ds": "flights",
+"model": "rf",
+"rho": 0.5305,
+"span": 0.1455
+},
+{
+"ds": "hospitals",
+"model": "gb",
+"rho": 0.0199,
+"span": 0.5839
+},
+{
+"ds": "hospitals",
+"model": "knn",
+"rho": 0.2506,
+"span": 0.4897
+},
+{
+"ds": "hospitals",
+"model": "linear",
+"rho": 0.3028,
+"span": 0.0862
+},
+{
+"ds": "hospitals",
+"model": "mlp",
+"rho": -0.1044,
+"span": 0.1029
+},
+{
+"ds": "hospitals",
+"model": "rf",
+"rho": -0.4206,
+"span": 0.0708
+},
+{
+"ds": "mercedes",
+"model": "gb",
+"rho": 0.7906,
+"span": 0.5064
+},
+{
+"ds": "mercedes",
+"model": "knn",
+"rho": 0.772,
+"span": 0.1746
+},
+{
+"ds": "mercedes",
+"model": "linear",
+"rho": -0.0254,
+"span": 0.2016
+},
+{
+"ds": "mercedes",
+"model": "mlp",
+"rho": -0.5222,
+"span": 0.2026
+},
+{
+"ds": "mercedes",
+"model": "rf",
+"rho": 0.5674,
+"span": 0.0443
+},
+{
+"ds": "nasa",
+"model": "gb",
+"rho": 0.5848,
+"span": 0.0562
+},
+{
+"ds": "nasa",
+"model": "knn",
+"rho": 0.7526,
+"span": 0.5817
+},
+{
+"ds": "nasa",
+"model": "linear",
+"rho": 0.6265,
+"span": 0.5169
+},
+{
+"ds": "nasa",
+"model": "mlp",
+"rho": 0.8781,
+"span": 0.7942
+},
+{
+"ds": "nasa",
+"model": "rf",
+"rho": 0.9571,
+"span": 0.2951
+},
+{
+"ds": "smartfactory",
+"model": "gb",
+"rho": 0.4682,
+"span": 0.0097
+},
+{
+"ds": "smartfactory",
+"model": "knn",
+"rho": 0.4782,
+"span": 0.0299
+},
+{
+"ds": "smartfactory",
+"model": "linear",
+"rho": 0.8755,
+"span": 0.0175
+},
+{
+"ds": "smartfactory",
+"model": "mlp",
+"rho": 0.6499,
+"span": 0.0284
+},
+{
+"ds": "smartfactory",
+"model": "rf",
+"rho": 0.4822,
+"span": 0.0303
+},
+{
+"ds": "soccer_full",
+"model": "gb",
+"rho": 0.2954,
+"span": 0.0947
+},
+{
+"ds": "soccer_full",
+"model": "knn",
+"rho": 0.432,
+"span": 0.1439
+},
+{
+"ds": "soccer_full",
+"model": "linear",
+"rho": 0.1906,
+"span": 0.1077
+},
+{
+"ds": "soccer_full",
+"model": "mlp",
+"rho": 0.2513,
+"span": 0.1016
+},
+{
+"ds": "soccer_full",
+"model": "rf",
+"rho": 0.3451,
+"span": 0.0857
+},
+{
+"ds": "soilmoisture",
+"model": "gb",
+"rho": 0.7505,
+"span": 0.1408
+},
+{
+"ds": "soilmoisture",
+"model": "knn",
+"rho": 0.7245,
+"span": 0.375
+},
+{
+"ds": "soilmoisture",
+"model": "linear",
+"rho": 0.5708,
+"span": 0.2928
+},
+{
+"ds": "soilmoisture",
+"model": "mlp",
+"rho": 0.6968,
+"span": 0.3756
+},
+{
+"ds": "soilmoisture",
+"model": "rf",
+"rho": 0.7816,
+"span": 0.1195
+}
+],
+"spearman_by_ds": {
+"beers": 0.513,
+"bike": 0.542,
+"breast_cancer": 0.427,
+"flights": 0.474,
+"hospitals": 0.02,
+"mercedes": 0.567,
+"nasa": 0.753,
+"smartfactory": 0.482,
+"soccer_full": 0.295,
+"soilmoisture": 0.724
+},
+"spearman_by_model": {
+"gb": 0.491,
+"knn": 0.455,
+"linear": 0.566,
+"mlp": 0.51,
+"rf": 0.53
+},
+"psn_all": {
+"P": 409,
+"S": 651,
+"N": 135
+},
+"psn_by_action": {
+"delete_records": {
+"P": 9,
+"S": 10,
+"N": 21
+},
+"repair_labels": {
+"P": 0,
+"S": 52,
+"N": 3
+},
+"repair_records": {
+"P": 35,
+"S": 13,
+"N": 7
+},
+"repair_type_domain": {
+"P": 28,
+"S": 25,
+"N": 2
+},
+"repair_type_missing": {
+"P": 8,
+"S": 46,
+"N": 1
+},
+"repair_type_value": {
+"P": 16,
+"S": 38,
+"N": 1
+}
+},
+"static_up": {
+"n": 968,
+"task_down": 107,
+"task_up": 408,
+"task_same": 453
+},
+"flips": [
+{
+"ds": "breast_cancer",
+"action": "delete_records",
+"pos": {
+"model": "mlp",
+"delta": 0.016342883820000563
+},
+"neg": {
+"model": "rf",
+"delta": -0.009155831523582214
+}
+},
+{
+"ds": "breast_cancer",
+"action": "repair_records",
+"pos": {
+"model": "mlp",
+"delta": 0.018196875274579034
+},
+"neg": {
+"model": "rf",
+"delta": -0.004906696538517602
+}
+},
+{
+"ds": "flights",
+"action": "delete_records",
+"pos": {
+"model": "linear",
+"delta": 0.04573642465335899
+},
+"neg": {
+"model": "gb",
+"delta": -0.1142466663133201
+}
+},
+{
+"ds": "flights",
+"action": "repair_records",
+"pos": {
+"model": "linear",
+"delta": 0.21450675398869964
+},
+"neg": {
+"model": "knn",
+"delta": -0.10866636280966924
+}
+},
+{
+"ds": "flights",
+"action": "repair_type_domain",
+"pos": {
+"model": "rf",
+"delta": 0.025797520333980927
+},
+"neg": {
+"model": "knn",
+"delta": -0.027241619566095658
+}
+},
+{
+"ds": "flights",
+"action": "repair_type_missing",
+"pos": {
+"model": "rf",
+"delta": 0.0438465585442276
+},
+"neg": {
+"model": "knn",
+"delta": -0.08188432317915448
+}
+},
+{
+"ds": "hospitals",
+"action": "delete_records",
+"pos": {
+"model": "knn",
+"delta": 0.486999214480775
+},
+"neg": {
+"model": "gb",
+"delta": -0.5794957264617058
+}
+},
+{
+"ds": "mercedes",
+"action": "repair_records",
+"pos": {
+"model": "knn",
+"delta": 0.13519556510028466
+},
+"neg": {
+"model": "mlp",
+"delta": -0.1775399426050421
+}
+},
+{
+"ds": "mercedes",
+"action": "repair_type_domain",
+"pos": {
+"model": "knn",
+"delta": 0.11133790046567667
+},
+"neg": {
+"model": "linear",
+"delta": -0.015902752177843166
+}
+},
+{
+"ds": "smartfactory",
+"action": "delete_records",
+"pos": {
+"model": "linear",
+"delta": 0.013588677454432273
+},
+"neg": {
+"model": "rf",
+"delta": -0.024964401193437707
+}
+},
+{
+"ds": "soilmoisture",
+"action": "repair_type_value",
+"pos": {
+"model": "gb",
+"delta": 0.022809359557021663
+},
+"neg": {
+"model": "knn",
+"delta": -0.033044113543401865
+}
+}
+],
+"flips_of": 63,
+"interaction_list": [
+{
+"ds": "beers",
+"model": "gb",
+"joint": 0.01531,
+"single": 0.01303,
+"inter": 0.00228,
+"p": 0.528,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "beers",
+"model": "knn",
+"joint": 1e-05,
+"single": -0.00052,
+"inter": 0.00054,
+"p": 0.40806,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "beers",
+"model": "linear",
+"joint": 0.00124,
+"single": -0.00053,
+"inter": 0.00178,
+"p": 0.13959,
+"n": 20,
+"active": 3,
+"q": 0.92622
+},
+{
+"ds": "beers",
+"model": "mlp",
+"joint": -0.00036,
+"single": -0.00145,
+"inter": 0.00109,
+"p": 0.56078,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "beers",
+"model": "rf",
+"joint": 0.02069,
+"single": 0.02,
+"inter": 0.00069,
+"p": 0.81529,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "bike",
+"model": "gb",
+"joint": 0.07133,
+"single": 0.09952,
+"inter": -0.02818,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "bike",
+"model": "knn",
+"joint": 0.09538,
+"single": 0.11013,
+"inter": -0.01475,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "bike",
+"model": "linear",
+"joint": 0.04717,
+"single": 0.05387,
+"inter": -0.0067,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "bike",
+"model": "mlp",
+"joint": 0.13079,
+"single": 0.1202,
+"inter": 0.01059,
+"p": 0.02072,
+"n": 20,
+"active": 2,
+"q": 0.1719
+},
+{
+"ds": "bike",
+"model": "rf",
+"joint": 0.09792,
+"single": 0.12372,
+"inter": -0.0258,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "breast_cancer",
+"model": "gb",
+"joint": -0.00531,
+"single": -0.00719,
+"inter": 0.00188,
+"p": 0.65931,
+"n": 20,
+"active": 4,
+"q": 1.0
+},
+{
+"ds": "breast_cancer",
+"model": "knn",
+"joint": 0.01098,
+"single": 0.01289,
+"inter": -0.00191,
+"p": 0.46971,
+"n": 20,
+"active": 4,
+"q": 1.0
+},
+{
+"ds": "breast_cancer",
+"model": "linear",
+"joint": 0.01628,
+"single": 0.0118,
+"inter": 0.00448,
+"p": 0.14626,
+"n": 20,
+"active": 4,
+"q": 0.93321
+},
+{
+"ds": "breast_cancer",
+"model": "mlp",
+"joint": 0.0182,
+"single": 0.01394,
+"inter": 0.00426,
+"p": 0.08758,
+"n": 20,
+"active": 4,
+"q": 0.63165
+},
+{
+"ds": "breast_cancer",
+"model": "rf",
+"joint": -0.00491,
+"single": -0.00511,
+"inter": 0.0002,
+"p": 0.93181,
+"n": 20,
+"active": 4,
+"q": 1.0
+},
+{
+"ds": "flights",
+"model": "gb",
+"joint": 0.006,
+"single": 0.01218,
+"inter": -0.00619,
+"p": 0.04771,
+"n": 20,
+"active": 3,
+"q": 0.35977
+},
+{
+"ds": "flights",
+"model": "knn",
+"joint": -0.10867,
+"single": -0.10841,
+"inter": -0.00026,
+"p": 0.96021,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "flights",
+"model": "linear",
+"joint": 0.21451,
+"single": -0.00405,
+"inter": 0.21855,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "flights",
+"model": "mlp",
+"joint": 0.03187,
+"single": 0.02858,
+"inter": 0.00329,
+"p": 0.40019,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "flights",
+"model": "rf",
+"joint": 0.04423,
+"single": 0.07505,
+"inter": -0.03082,
+"p": 0.0001,
+"n": 20,
+"active": 3,
+"q": 0.0012
+},
+{
+"ds": "mercedes",
+"model": "gb",
+"joint": 0.07278,
+"single": 0.09177,
+"inter": -0.01899,
+"p": 0.00487,
+"n": 20,
+"active": 3,
+"q": 0.04748
+},
+{
+"ds": "mercedes",
+"model": "knn",
+"joint": 0.1352,
+"single": 0.14385,
+"inter": -0.00866,
+"p": 0.13655,
+"n": 20,
+"active": 3,
+"q": 0.92622
+},
+{
+"ds": "mercedes",
+"model": "linear",
+"joint": -0.0253,
+"single": -0.02101,
+"inter": -0.00429,
+"p": 0.03254,
+"n": 20,
+"active": 3,
+"q": 0.25702
+},
+{
+"ds": "mercedes",
+"model": "mlp",
+"joint": -0.17754,
+"single": -0.0479,
+"inter": -0.12964,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 5e-05
+},
+{
+"ds": "mercedes",
+"model": "rf",
+"joint": 0.01955,
+"single": 0.01724,
+"inter": 0.00231,
+"p": 0.76734,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "nasa",
+"model": "gb",
+"joint": 0.04814,
+"single": 0.0526,
+"inter": -0.00446,
+"p": 0.00532,
+"n": 20,
+"active": 3,
+"q": 0.04905
+},
+{
+"ds": "nasa",
+"model": "knn",
+"joint": 0.45803,
+"single": 0.46137,
+"inter": -0.00334,
+"p": 0.20301,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "nasa",
+"model": "linear",
+"joint": 0.51633,
+"single": 0.51649,
+"inter": -0.00017,
+"p": 0.61326,
+"n": 20,
+"active": 3,
+"q": 1.0
+},
+{
+"ds": "nasa",
+"model": "mlp",
+"joint": 0.79074,
+"single": 0.77954,
+"inter": 0.0112,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "nasa",
+"model": "rf",
+"joint": 0.29515,
+"single": 0.30411,
+"inter": -0.00897,
+"p": 0.00137,
+"n": 20,
+"active": 3,
+"q": 0.0142
+},
+{
+"ds": "soccer_full",
+"model": "knn",
+"joint": 0.01322,
+"single": 0.01393,
+"inter": -0.00071,
+"p": 0.16289,
+"n": 20,
+"active": 2,
+"q": 1.0
+},
+{
+"ds": "soccer_full",
+"model": "linear",
+"joint": 0.0361,
+"single": 0.05401,
+"inter": -0.01791,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "soccer_full",
+"model": "mlp",
+"joint": 0.03221,
+"single": 0.04913,
+"inter": -0.01692,
+"p": 0.0,
+"n": 20,
+"active": 2,
+"q": 0.0
+},
+{
+"ds": "soccer_full",
+"model": "rf",
+"joint": 0.01679,
+"single": 0.01858,
+"inter": -0.00179,
+"p": 0.00685,
+"n": 20,
+"active": 2,
+"q": 0.05976
+},
+{
+"ds": "soilmoisture",
+"model": "gb",
+"joint": 0.05031,
+"single": 0.0708,
+"inter": -0.02048,
+"p": 0.00041,
+"n": 20,
+"active": 3,
+"q": 0.00452
+},
+{
+"ds": "soilmoisture",
+"model": "knn",
+"joint": 0.31743,
+"single": 0.15926,
+"inter": 0.15816,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "soilmoisture",
+"model": "linear",
+"joint": 0.25318,
+"single": 0.17174,
+"inter": 0.08143,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "soilmoisture",
+"model": "mlp",
+"joint": 0.33569,
+"single": 0.23263,
+"inter": 0.10306,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "soilmoisture",
+"model": "rf",
+"joint": 0.04223,
+"single": 0.05698,
+"inter": -0.01474,
+"p": 4e-05,
+"n": 20,
+"active": 3,
+"q": 0.00054
+}
+],
+"interaction": {
+"n": 39,
+"sig": 18,
+"syn": 5,
+"ant": 13,
+"med_abs": 0.00618898530095543,
+"max_abs": 0.21855234584384356,
+"top": [
+{
+"ds": "flights",
+"model": "linear",
+"joint": 0.2145,
+"single": -0.004,
+"inter": 0.2186,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "soilmoisture",
+"model": "knn",
+"joint": 0.3174,
+"single": 0.1593,
+"inter": 0.1582,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "mercedes",
+"model": "mlp",
+"joint": -0.1775,
+"single": -0.0479,
+"inter": -0.1296,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0001
+},
+{
+"ds": "soilmoisture",
+"model": "mlp",
+"joint": 0.3357,
+"single": 0.2326,
+"inter": 0.1031,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "soilmoisture",
+"model": "linear",
+"joint": 0.2532,
+"single": 0.1717,
+"inter": 0.0814,
+"p": 0.0,
+"n": 20,
+"active": 3,
+"q": 0.0
+},
+{
+"ds": "flights",
+"model": "rf",
+"joint": 0.0442,
+"single": 0.075,
+"inter": -0.0308,
+"p": 0.0001,
+"n": 20,
+"active": 3,
+"q": 0.0012
+}
+]
+},
+"same_static": {
+"median": 0.09985436449918172,
+"q3": 0.21307534477074527,
+"max": 2.3943227724822873,
+"ge05": 35,
+"ge01": 46,
+"n": 55
+},
+"pass90": {
+"keep_pass": 6,
+"of": 11,
+"min_P": 70.50322471147318
+},
+"best_model_changes": {
+"adult": [
+"gb"
+],
+"beers": [
+"rf"
+],
+"bike": [
+"gb"
+],
+"breast_cancer": [
+"mlp",
+"rf"
+],
+"flights": [
+"gb"
+],
+"hospitals": [
+"gb",
+"mlp",
+"rf"
+],
+"mercedes": [
+"gb",
+"linear",
+"rf"
+],
+"nasa": [
+"gb",
+"rf"
+],
+"smartfactory": [
+"rf"
+],
+"soccer_full": [
+"gb",
+"rf"
+],
+"soilmoisture": [
+"gb",
+"rf"
+]
+},
+"table": {
+"adult|gb": {
+"delete_records": 0.817,
+"keep": 0.817,
+"repair_records": 0.815
+},
+"adult|knn": {
+"delete_records": 0.774,
+"keep": 0.775,
+"repair_records": 0.773
+},
+"adult|linear": {
+"delete_records": 0.785,
+"keep": 0.786,
+"repair_records": 0.783
+},
+"adult|mlp": {
+"delete_records": 0.79,
+"keep": 0.791,
+"repair_records": 0.79
+},
+"adult|rf": {
+"delete_records": 0.79,
+"keep": 0.789,
+"repair_records": 0.789
+},
+"beers|gb": {
+"keep": 0.089,
+"repair_records": 0.104
+},
+"beers|knn": {
+"keep": 0.035,
+"repair_records": 0.035
+},
+"beers|linear": {
+"keep": 0.042,
+"repair_records": 0.043
+},
+"beers|mlp": {
+"keep": 0.049,
+"repair_records": 0.049
+},
+"beers|rf": {
+"keep": 0.11,
+"repair_records": 0.131
+},
+"bike|gb": {
+"delete_records": 0.494,
+"keep": 0.876,
+"repair_records": 0.948
+},
+"bike|knn": {
+"delete_records": 0.24,
+"keep": 0.505,
+"repair_records": 0.601
+},
+"bike|linear": {
+"delete_records": 0.027,
+"keep": 0.341,
+"repair_records": 0.388
+},
+"bike|mlp": {
+"delete_records": -1.509,
+"keep": 0.755,
+"repair_records": 0.886
+},
+"bike|rf": {
+"delete_records": 0.441,
+"keep": 0.846,
+"repair_records": 0.944
+},
+"breast_cancer|gb": {
+"delete_records": 0.956,
+"keep": 0.962,
+"repair_records": 0.956
+},
+"breast_cancer|knn": {
+"delete_records": 0.951,
+"keep": 0.951,
+"repair_records": 0.962
+},
+"breast_cancer|linear": {
+"delete_records": 0.957,
+"keep": 0.944,
+"repair_records": 0.96
+},
+"breast_cancer|mlp": {
+"delete_records": 0.962,
+"keep": 0.946,
+"repair_records": 0.964
+},
+"breast_cancer|rf": {
+"delete_records": 0.957,
+"keep": 0.966,
+"repair_records": 0.961
+},
+"flights|gb": {
+"delete_records": 0.88,
+"keep": 0.994,
+"repair_records": 1.0
+},
+"flights|knn": {
+"delete_records": 0.482,
+"keep": 0.544,
+"repair_records": 0.435
+},
+"flights|linear": {
+"delete_records": 0.408,
+"keep": 0.362,
+"repair_records": 0.576
+},
+"flights|mlp": {
+"delete_records": 0.318,
+"keep": 0.365,
+"repair_records": 0.397
+},
+"flights|rf": {
+"delete_records": 0.853,
+"keep": 0.954,
+"repair_records": 0.999
+},
+"hospitals|gb": {
+"delete_records": 0.401,
+"keep": 0.98,
+"repair_records": 0.984
+},
+"hospitals|knn": {
+"delete_records": 0.683,
+"keep": 0.196,
+"repair_records": 0.199
+},
+"hospitals|linear": {
+"delete_records": 0.884,
+"keep": 0.962,
+"repair_records": 0.967
+},
+"hospitals|mlp": {
+"delete_records": 0.89,
+"keep": 0.987,
+"repair_records": 0.99
+},
+"hospitals|rf": {
+"delete_records": 0.892,
+"keep": 0.957,
+"repair_records": 0.945
+},
+"mercedes|gb": {
+"keep": 0.468,
+"repair_records": 0.54
+},
+"mercedes|knn": {
+"keep": 0.271,
+"repair_records": 0.407
+},
+"mercedes|linear": {
+"keep": 0.55,
+"repair_records": 0.525
+},
+"mercedes|mlp": {
+"keep": 0.421,
+"repair_records": 0.243
+},
+"mercedes|rf": {
+"keep": 0.486,
+"repair_records": 0.505
+},
+"nasa|gb": {
+"delete_records": 0.879,
+"keep": 0.874,
+"repair_records": 0.923
+},
+"nasa|knn": {
+"delete_records": 0.632,
+"keep": 0.223,
+"repair_records": 0.681
+},
+"nasa|linear": {
+"delete_records": 0.512,
+"keep": -0.002,
+"repair_records": 0.514
+},
+"nasa|mlp": {
+"delete_records": 0.733,
+"keep": -0.003,
+"repair_records": 0.788
+},
+"nasa|rf": {
+"delete_records": 0.869,
+"keep": 0.629,
+"repair_records": 0.924
+},
+"smartfactory|gb": {
+"delete_records": 0.797,
+"keep": 0.801,
+"repair_records": 0.806
+},
+"smartfactory|knn": {
+"delete_records": 0.612,
+"keep": 0.63,
+"repair_records": 0.642
+},
+"smartfactory|linear": {
+"delete_records": 0.454,
+"keep": 0.441,
+"repair_records": 0.458
+},
+"smartfactory|mlp": {
+"delete_records": 0.514,
+"keep": 0.511,
+"repair_records": 0.536
+},
+"smartfactory|rf": {
+"delete_records": 0.937,
+"keep": 0.962,
+"repair_records": 0.967
+},
+"soccer_full|gb": {
+"delete_records": 0.905,
+"keep": 0.996,
+"repair_records": 1.0
+},
+"soccer_full|knn": {
+"delete_records": 0.856,
+"keep": 0.987,
+"repair_records": 1.0
+},
+"soccer_full|linear": {
+"delete_records": 0.892,
+"keep": 0.964,
+"repair_records": 1.0
+},
+"soccer_full|mlp": {
+"delete_records": 0.898,
+"keep": 0.968,
+"repair_records": 1.0
+},
+"soccer_full|rf": {
+"delete_records": 0.914,
+"keep": 0.983,
+"repair_records": 1.0
+},
+"soilmoisture|gb": {
+"keep": 0.927,
+"repair_records": 0.977
+},
+"soilmoisture|knn": {
+"keep": 0.619,
+"repair_records": 0.937
+},
+"soilmoisture|linear": {
+"keep": 0.642,
+"repair_records": 0.896
+},
+"soilmoisture|mlp": {
+"keep": 0.594,
+"repair_records": 0.93
+},
+"soilmoisture|rf": {
+"keep": 0.929,
+"repair_records": 0.971
+}
+}
+}

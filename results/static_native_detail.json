@@ -1,0 +1,264 @@
+{
+"Titanic": {
+"records_raw": 891,
+"records_missing_values": 891,
+"rates": {
+"missing_values": 0.7946127946127947
+},
+"P": 90.06734006734007,
+"sec": 0.0
+},
+"Citation": {
+"records_raw": 5005,
+"records_duplicates": 5003,
+"duplicates_autoer": 0.036178293024185515,
+"rates": {
+"duplicates": 0.121726963821707
+},
+"P": 98.47841295222867,
+"sec": 0.0
+},
+"University": {
+"records_raw": 210,
+"records_inconsistency": 210,
+"rates": {
+"inconsistency": 0.16666666666666666
+},
+"P": 97.91666666666666,
+"sec": 0.0
+},
+"Marketing": {
+"records_raw": 8993,
+"records_missing_values": 8993,
+"rates": {
+"missing_values": 0.2354053152451907
+},
+"P": 97.05743355943511,
+"sec": 0.0
+},
+"USCensus": {
+"records_raw": 32561,
+"records_missing_values": 32561,
+"rates": {
+"missing_values": 0.07367709836921471
+},
+"P": 99.07903627038482,
+"sec": 0.1
+},
+"Movie": {
+"records_raw": 9329,
+"records_duplicates": 9327,
+"duplicates_autoer": 0.12479897073013835,
+"records_inconsistency": 9327,
+"rates": {
+"duplicates": 0.26782459526107005,
+"inconsistency": 0.5116328937493299
+},
+"P": 90.25678138737,
+"sec": 0.2
+},
+"Restaurant": {
+"records_raw": 12007,
+"records_duplicates": 12007,
+"duplicates_autoer": 0.04963771133505457,
+"records_inconsistency": 12007,
+"rates": {
+"duplicates": 0.0651286749396186,
+"inconsistency": 0.052136253851919716
+},
+"P": 98.53418839010577,
+"sec": 0.5
+},
+"Company": {
+"records_raw": 128889,
+"records_inconsistency": 63713,
+"rates": {
+"inconsistency": 0.0010045045752044323
+},
+"P": 99.98744369280995,
+"sec": 1.4
+},
+"EEG": {
+"records_raw": 14980,
+"records_outliers": 14980,
+"outlier_detectors": {
+"HC": 0.005874499332443258,
+"SD": 0.004806408544726302,
+"IQR": 0.20734312416555406,
+"IF": 0.04819759679572764
+},
+"rates": {
+"outliers": 0.02703604806408545
+},
+"P": 99.66204939919892,
+"sec": 4.4
+},
+"Sensor": {
+"records_raw": 62076,
+"records_outliers": 62076,
+"outlier_detectors": {
+"HC": 0.0004671692763709002,
+"SD": 0.0004671692763709002,
+"IQR": 0.19912687673174817,
+"IF": 0.03935498421290032
+},
+"rates": {
+"outliers": 0.01991107674463561
+},
+"P": 99.75111154069205,
+"sec": 10.4
+},
+"Airbnb": {
+"records_raw": 33145,
+"records_duplicates": 26288,
+"duplicates_autoer": 0.017232197200243493,
+"records_outliers": 26288,
+"outlier_detectors": {
+"HC": 0.32581405964698723,
+"SD": 0.3282486305538649,
+"IQR": 0.6559646987218503,
+"IF": 0.16090992087644554
+},
+"records_missing_values": 33145,
+"rates": {
+"duplicates": 0.08387857577601943,
+"outliers": 0.3270313451004261,
+"missing_values": 0.20687886559058682
+},
+"P": 92.27764016916208,
+"sec": 20.3
+},
+"Credit": {
+"records_raw": 150000,
+"records_outliers": 120269,
+"outlier_detectors": {
+"HC": 0.03942828160207535,
+"SD": 0.04079189150986538,
+"IQR": 0.3138630902393801,
+"IF": 0.07128187646026823
+},
+"records_missing_values": 150000,
+"rates": {
+"outliers": 0.05603688398506681,
+"missing_values": 0.19820666666666667
+},
+"P": 96.82195561685333,
+"sec": 23.2
+},
+"KDD": {
+"records_raw": 131329,
+"records_missing_values": 131329,
+"records_outliers": 31709,
+"outlier_detectors": {
+"SD": 0.4931092118956763,
+"IQR": 0.9435491500835725,
+"IF": 0.3758869721530165
+},
+"rates": {
+"missing_values": 0.7585529471784602,
+"outliers": 0.4931092118956763
+},
+"P": 84.3542230115733,
+"sec": 58.6
+},
+"datacomp": {
+"consistency_pool": 0.49993375139171514,
+"rates": {
+"consistency": 0.5000662486082849
+},
+"P": 93.74917189239645
+},
+"mirflickr": {
+"consistency_pool": 0.6837,
+"rates": {
+"consistency": 0.3163
+},
+"P": 96.04625
+},
+"edm": {
+"precision": 0.8818999528884888,
+"rates": {
+"precision": 0.11810004711151123
+},
+"P": 98.52374941110611
+},
+"ddpm": {
+"precision": 0.8810999989509583,
+"rates": {
+"precision": 0.11890000104904175
+},
+"P": 98.51374998688698
+},
+"cifake": {
+"precision": 0.5943999886512756,
+"rates": {
+"precision": 0.40560001134872437
+},
+"P": 94.92999985814095
+},
+"civil": {
+"records": 448000,
+"duplicate_records": 2706,
+"records_in_several_splits": 2139,
+"rates": {
+"missing": 4.464285714285715e-06,
+"format": 0.0,
+"duplicates": 0.006040178571428571
+},
+"P": 99.92444196428572
+},
+"camelyon": {
+"records": 100000,
+"official_records": 455954,
+"shape": [
+96,
+96,
+3
+],
+"duplicate_records": 0,
+"rates": {
+"missing": 0.0,
+"format": 0.0,
+"duplicates": 0.0
+},
+"P": 100.0
+},
+"tepl": {
+"records": 15330000,
+"variables": 52,
+"duplicate_records": 1957815,
+"constant_variables": [],
+"rates": {
+"missing": 0.0,
+"format": 0.0,
+"duplicates": 0.12771135029354208
+},
+"P": 98.40360812133072
+},
+"dclm": {
+"pool": {
+"docs": 251630,
+"rule_fail": 0.5483249215117434,
+"near_duplicate": 0.07789611731510551,
+"alpha_fail": 0.06003656161824902,
+"rep_fail": 0.09191670309581529,
+"stop_fail": 0.4446608115089616,
+"words_fail": 0.1641656400270238
+},
+"baseline": {
+"docs": 243763,
+"rule_fail": 0.009759479494427015,
+"near_duplicate": 0.001041995708946805,
+"alpha_fail": 0.002346541517785718,
+"rep_fail": 8.204690621628385e-06,
+"stop_fail": 0.0017804178648933595,
+"words_fail": 0.006116596858423961
+},
+"baseline_P": 99.86498155995783,
+"rates": {
+"rule_fail": 0.5483249215117434,
+"near_duplicate": 0.07789611731510551
+},
+"P": 92.17223701466439
+}
+}

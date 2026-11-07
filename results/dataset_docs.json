@@ -1,0 +1,5136 @@
+[
+{
+"name": "Adult",
+"urls": [
+"https://archive.ics.uci.edu/dataset/2/adult",
+"https://archive.ics.uci.edu/static/public/2/adult.zip",
+"https://cdn.aaai.org/KDD/1996/KDD96-033.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 UCI Adult 页面与压缩包内的 adult.names、old.adult.names。C2 只有人口范围与普查年份，没有逐特征统计，属判断项。UCI 页面的 Baseline Model Performance 区块在页面与渲染结果中都是空的，A4 依据 adult.names 的错误率表。C4 记 0，文档没有展示样本行。P5 记 0，只有 old.adult.names 文件和接收日期，没有版本或变更记录。 判断项: C2。",
+"source_quotes": {
+"B1": {
+"quote": "48842 instances, mix of continuous and discrete (train=32561, test=16281)",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"B2": {
+"quote": "marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"B3": {
+"quote": "adult.data 3.8 MB adult.test 1.9 MB adult.names 5.1 KB",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"B4": {
+"quote": "adult = fetch_ucirepo(id=2)",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"B5": {
+"quote": "e-mail: ronnyk@sgi.com for questions.",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"C1": {
+"quote": "Dataset Characteristics Multivariate Subject Area Social Science",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"C2": {
+"quote": "A set of reasonably clean records was extracted using the following conditions: ((AAGE>16) && (AGI>100) && (AFNLWGT>1)&& (HRSWK>0))",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"C3": {
+"quote": "Probability for the label '>50K' : 23.93% / 24.78% (without unknowns)",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"C5": {
+"quote": "Duplicate or conflicting instances : 6",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"P1": {
+"quote": "Extraction was done by Barry Becker from the 1994 Census database.",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"P2": {
+"quote": "The weights on the CPS files are controlled to independent estimates of the civilian noninstitutional population of the US.",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"P3": {
+"quote": "Run MLC++ GenCVFiles to generate data,test.",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"P4": {
+"quote": "Discretized agrossincome into two ranges with threshold 50,000.",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"A1": {
+"quote": "Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"A2": {
+"quote": "Prediction task is to determine whether a person's income is over $50,000 a year.",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+},
+"A3": {
+"quote": "all after removal of unknowns and using the original train/test split.",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"A4": {
+"quote": "8 NBTree 14.10",
+"url": "https://archive.ics.uci.edu/static/public/2/adult.zip"
+},
+"A5": {
+"quote": "Papers Citing this Dataset ... Fair k-Center Clustering for Data Summarization",
+"url": "https://archive.ics.uci.edu/dataset/2/adult"
+}
+}
+},
+{
+"name": "Breast Cancer Wisconsin",
+"urls": [
+"https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original",
+"https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip",
+"https://pmc.ncbi.nlm.nih.gov/articles/PMC55130/"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 95,
+"basic": 100,
+"content": 80,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 Original 版本（699 行，id 15），与 本仓库/data/tables/breast_cancer 的 699 行 11 列一致，未使用 Diagnostic 版本。B5 依据 names 文件中捐赠人的邮箱，文档没有说明它用于答疑，属判断项。P4 依据 PMC 摘要的分级说明，标签本身只给编码，属判断项。PNAS 全文 PDF 经代理只返回挑战页面，只读到摘要。C4 记 0。 判断项: B5、P4。",
+"source_quotes": {
+"B1": {
+"quote": "Number of Instances: 699 (as of 15 July 1992)",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"B2": {
+"quote": "Class: (2 for benign, 4 for malignant)",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"B3": {
+"quote": "wdbc.data 121.2 KB wpbc.data 43.2 KB unformatted-data 20.9 KB breast-cancer-wisconsin.data 19.4 KB",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"B4": {
+"quote": "fetch_ucirepo(id=15)",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"B5": {
+"quote": "Donor: Olvi Mangasarian (mangasarian@cs.wisc.edu)",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"C1": {
+"quote": "Dataset Characteristics Multivariate Subject Area Health and Medicine",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"C2": {
+"quote": "Group 1: 367 instances (January 1989)",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"C3": {
+"quote": "Benign: 458 (65.5%)",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"C5": {
+"quote": "There are 16 instances in Groups 1 to 6 that contain a single missing (i.e., unavailable) attribute value",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"P1": {
+"quote": "This breast cancer databases was obtained from the University of Wisconsin Hospitals, Madison from Dr. William H. Wolberg.",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"P2": {
+"quote": "Samples arrive periodically as Dr. Wolberg reports his clinical cases.",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"P3": {
+"quote": "This grouping information appears immediately below, having been removed from the data itself",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"P4": {
+"quote": "was graded 1 to 10 at the time of sample collection",
+"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC55130/"
+},
+"P5": {
+"quote": "Revised Nov 22,1991: Removed 765878,4,5,9,7,10,10,10,3,8,1 no record",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"A1": {
+"quote": "Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original"
+},
+"A2": {
+"quote": "Each instance has one of 2 possible classes: benign or malignant.",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"A3": {
+"quote": "trained on 200 instances, tested on the other 169",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"A4": {
+"quote": "Accuracy on remaining 33% of dataset: 95.9%",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+},
+"A5": {
+"quote": "Zhang,~J. (1992). Selecting typical instances in instance-based learning.",
+"url": "https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
+}
+}
+},
+{
+"name": "Bike Sharing",
+"urls": [
+"https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset",
+"https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip",
+"https://link.springer.com/article/10.1007/s13748-013-0040-3"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 100,
+"content": 60,
+"construction": 80,
+"application": 100,
+"note": "C3 和 P4 依据介绍论文对事件标签的统计和标注过程，这些事件标签不在 hour.csv、day.csv 中发布，属判断项。文档之间有不一致，UCI 页面写 17389 个实例而 Readme 和论文写 17379 小时，UCI 变量表的季节编码是 1:winter 而 Readme 是 1:springer，这些差异文档未说明。C4、C5、P5 记 0。 判断项: C3、P4。",
+"source_quotes": {
+"B1": {
+"quote": "Records: 17379 hours",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"B2": {
+"quote": "Both hour.csv and day.csv have the following fields, except hr which is not available in day.csv",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"B3": {
+"quote": "bike sharing counts aggregated on daily basis. Records: 731 days",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"B4": {
+"quote": "bike_sharing = fetch_ucirepo(id=275)",
+"url": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+},
+"B5": {
+"quote": "For further information about this dataset please contact Hadi Fanaee-T (hadi.fanaee@fe.up.pt)",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"C1": {
+"quote": "Dataset Characteristics Multivariate Subject Area Social Science",
+"url": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+},
+"C2": {
+"quote": "the two-year historical log corresponding to years 2011 and 2012 from Capital Bikeshare system, Washington D.C., USA",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"C3": {
+"quote": "The primary candidates list before verification phase contains 69 events and as it can be seen this number is decreased to 30 events.",
+"url": "https://link.springer.com/article/10.1007/s13748-013-0040-3"
+},
+"P1": {
+"quote": "which is publicly available in http://capitalbikeshare.com/system-data",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"P2": {
+"quote": "In the CBS system when a rental occurs, the operation software collects basic data about the trip such as duration, start date, end date, start station, end station, bike number and member type.",
+"url": "https://link.springer.com/article/10.1007/s13748-013-0040-3"
+},
+"P3": {
+"quote": "We aggregated the data on two hourly and daily basis and then extracted and added the corresponding weather and seasonal information.",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"P4": {
+"quote": "To validate this result we ask a domain specialist to rate the impact of each detected event corresponding date from 0 to 5.",
+"url": "https://link.springer.com/article/10.1007/s13748-013-0040-3"
+},
+"A1": {
+"quote": "Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+},
+"A2": {
+"quote": "Predication of bike rental count hourly or daily based on the environmental and seasonal settings.",
+"url": "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+},
+"A3": {
+"quote": "evaluate the performance of the ensemble and individual detectors on the labeled data set using ROC analysis and static evaluation metrics",
+"url": "https://link.springer.com/article/10.1007/s13748-013-0040-3"
+},
+"A4": {
+"quote": "detector 10 could reproduce the same result as our system with accuracy of 75 %",
+"url": "https://link.springer.com/article/10.1007/s13748-013-0040-3"
+},
+"A5": {
+"quote": "Papers Citing this Dataset ... Anchor regression: heterogeneous data meets causality",
+"url": "https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset"
+}
+}
+},
+{
+"name": "Airfoil Self-Noise (NASA)",
+"urls": [
+"https://archive.ics.uci.edu/dataset/291/airfoil+self+noise",
+"https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf",
+"https://ntrs.nasa.gov/citations/19890016302"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 0,
+"A4": 0,
+"A5": 1
+},
+"score": 65,
+"basic": 80,
+"content": 60,
+"construction": 60,
+"application": 60,
+"note": "NTRS 经代理返回 403，NASA RP-1218 从 Internet Archive 的同名副本读取。A5 依据报告中预测方法在直升机旋翼上的应用，它是由该数据拟合的方法的应用，属判断项。UCI 页面显示 0 citations。B5 记 0，页面只有全站 Contact 入口，创建者条目没有邮箱。C3、C4、P4、P5、A3、A4 记 0，报告把预测谱与实测谱比较，没有给出指标或数值基准。 判断项: A5。",
+"source_quotes": {
+"B1": {
+"quote": "# Instances 1503",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"B2": {
+"quote": "1. Frequency, in Hertzs.",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"B3": {
+"quote": "airfoil_self_noise.dat 58.6 KB",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"B4": {
+"quote": "airfoil_self_noise = fetch_ucirepo(id=291)",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"C1": {
+"quote": "Dataset Characteristics Multivariate Subject Area Physics and Chemistry",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"C2": {
+"quote": "seven NACA 0012 airfoil blade sections of different sizes (chord lengths from 2.5 to 61 cm) tested at wind tunnel speeds up to Mach 0.21",
+"url": "https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf"
+},
+"C5": {
+"quote": "This task is complicated by the unavoidable presence of extraneous tunnel test rig noise.",
+"url": "https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf"
+},
+"P1": {
+"quote": "NASA data set, obtained from a series of aerodynamic and acoustic tests of two and three-dimensional airfoil blade sections conducted in an anechoic wind tunnel.",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"P2": {
+"quote": "cross-correlations between microphones are examined to identify the self-noise",
+"url": "https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf"
+},
+"P3": {
+"quote": "a special correlation editing procedure is used to extract clean self-noise spectra from data containing extraneous test rig noise.",
+"url": "https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf"
+},
+"A1": {
+"quote": "Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"A2": {
+"quote": "The only output is: 6. Scaled sound pressure level, in decibels.",
+"url": "https://archive.ics.uci.edu/dataset/291/airfoil+self+noise"
+},
+"A5": {
+"quote": "An application of the prediction method is reported for a large-scale-model helicopter",
+"url": "https://archive.org/download/NASA_NTRS_Archive_19890016302/NASA_NTRS_Archive_19890016302.pdf"
+}
+}
+},
+{
+"name": "Beers",
+"urls": [
+"https://www.kaggle.com/datasets/nickhould/craft-cans",
+"https://github.com/BigDaMa/raha",
+"https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf",
+"https://github.com/BigDaMa/raha/blob/master/documentation/baran_paper.pdf",
+"https://github.com/BigDaMa/raha/blob/master/documentation/raha_reproducibility_report.pdf",
+"https://web.archive.org/web/20190115225032/http://www.jeannicholashould.com/python-web-scraping-tutorial-for-craft-beers.html",
+"https://arxiv.org/abs/2302.04702"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 80,
+"content": 100,
+"construction": 80,
+"application": 100,
+"note": "Raha 仓库只有 datasets/beers/clean.csv 和 dirty.csv，没有说明文字，主要依据是 Raha 论文引用的数据所有者页面 Kaggle craft-cans。C2 来自 Kaggle 自动生成的列直方图，C3 来自错误率（脏单元格比例）以及 Kaggle 的 style 列占比，都属判断项。Kaggle 页面的博客链接已失效，P3 依据 2019 年 Wayback 快照。文档没有说明 dirty.csv 中 16% 的错误是怎样产生的。B5、P4 记 0。 判断项: C2、C3。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset contains a list of 2,410 US craft beers and 510 US breweries.",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"B2": {
+"quote": "The alcoholic content by volume with 0 being no alcohol and 1 being pure alcohol",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"B3": {
+"quote": "Contains data on 2000+ craft canned beers",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"B4": {
+"quote": "Raha, with its datasets and experiments, is available online at a GitHub repository",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_reproducibility_report.pdf"
+},
+"C1": {
+"quote": "be a relational dataset of size",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C2": {
+"quote": "[abv column histogram] 0.04 - 0.05 699 ... 0.05 - 0.06 857",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"C3": {
+"quote": "Beers 2410 × 11 0.16 MV, FI, VAD",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C4": {
+"quote": "Reprise Centennial Red American Amber / Red Ale",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"C5": {
+"quote": "These three datasets lack data redundancy, which makes it challenging to fix data errors.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/baran_paper.pdf"
+},
+"P1": {
+"quote": "This data was collected in January 2017 from CraftCans.com.",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"P2": {
+"quote": "Beers is a real-world dataset that has been collected by scraping the web and has been manually cleaned",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"P3": {
+"quote": "In the second part, we’ll apply the “tidy data” principles to this freshly scraped dataset.",
+"url": "https://web.archive.org/web/20190115225032/http://www.jeannicholashould.com/python-web-scraping-tutorial-for-craft-beers.html"
+},
+"P5": {
+"quote": "Version 1 (182.6 kB)",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"A1": {
+"quote": "Database: Open Database, Contents: Database Contents",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"A2": {
+"quote": "Can you predict the beer type from the characteristics provided in the dataset?",
+"url": "https://www.kaggle.com/datasets/nickhould/craft-cans"
+},
+"A3": {
+"quote": "We report precision, recall, and the F 1 score to evaluate the effectiveness.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A4": {
+"quote": "Table 5: Comparison with the stand-alone error detection tools. ... Raha 0.94 0.59 0.72 0.82 0.81 0.81 0.91 0.80 0.85 0.99 0.99 0.99",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A5": {
+"quote": "Beers [21], Rayyan [30], and IT [3] are also real-world datasets that were cleaned by the dataset owners.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/baran_paper.pdf"
+}
+}
+},
+{
+"name": "Flights",
+"urls": [
+"http://lunadong.com/fusionDataSets.htm",
+"http://lunadong.com/publication/webfusion_vldb.pdf",
+"https://github.com/BigDaMa/raha",
+"https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf",
+"https://github.com/BigDaMa/raha/blob/master/raha/pipeline_1_(minimal_and_sequential).ipynb"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 80,
+"content": 100,
+"construction": 80,
+"application": 80,
+"note": "Luna Dong 页面发布的是 38 个来源、超过 1200 个航班的数据，Raha 仓库的 flights 是 2376 行 7 列，文档没有说明两者之间的抽取过程。C3 依据错误率（脏单元格比例），没有类别统计，属判断项。A1 记 0，Luna 页面没有许可，Raha 仓库的 Apache-2.0 没有提到数据。B5、P5 记 0。 判断项: C3。",
+"source_quotes": {
+"B1": {
+"quote": "We collected information of over 1200 flights from 38 sources over 1-month period (December 2011).",
+"url": "http://lunadong.com/fusionDataSets.htm"
+},
+"B2": {
+"quote": "Source Flight# Scheduled departure Actual departure Departure gate Scheduled arrival Actual arrival Arrival gate",
+"url": "http://lunadong.com/fusionDataSets.htm"
+},
+"B3": {
+"quote": "\"path\": \"../datasets/flights/dirty.csv\"",
+"url": "https://github.com/BigDaMa/raha/blob/master/raha/pipeline_1_(minimal_and_sequential).ipynb"
+},
+"B4": {
+"quote": "Flight data set after manual schema mapping.",
+"url": "http://lunadong.com/fusionDataSets.htm"
+},
+"C1": {
+"quote": "be a relational dataset of size",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C2": {
+"quote": "6 global attributes (40%) are provided by more than half of the sources",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"C3": {
+"quote": "Flights 2376 × 7 0.30 MV, FI, VAD",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C4": {
+"quote": "Table 10: 20 tuples that the user labeled on the Flights dataset.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C5": {
+"quote": "for 70% data items more than one value is provided",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"P1": {
+"quote": "The sources we selected include 3 airline websites (AA, UA, Continental), 8 airport websites (such as SFO, DEN), and 27 third-party websites",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"P2": {
+"quote": "collected data for each batch one hour after the latest scheduled arrival time every day in Dec 2011.",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"P3": {
+"quote": "We extracted data and normalized the values in the same way as in the Stock domain.",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"P4": {
+"quote": "We took the data provided by the three airline websites on 100 randomly selected flights as the gold standard.",
+"url": "http://lunadong.com/publication/webfusion_vldb.pdf"
+},
+"A2": {
+"quote": "We list below several data sets we used for experiments on data fusion techniques.",
+"url": "http://lunadong.com/fusionDataSets.htm"
+},
+"A3": {
+"quote": "We report precision, recall, and the F 1 score to evaluate the effectiveness.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A4": {
+"quote": "Table 5: Comparison with the stand-alone error detection tools. ... Raha 0.94 0.59 0.72 0.82 0.81 0.81",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A5": {
+"quote": "Other papers using this data set:",
+"url": "http://lunadong.com/fusionDataSets.htm"
+}
+}
+},
+{
+"name": "Hospitals",
+"urls": [
+"https://github.com/BigDaMa/raha",
+"https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf",
+"https://github.com/BigDaMa/raha/blob/master/documentation/baran_paper.pdf",
+"https://github.com/BigDaMa/raha/blob/master/documentation/raha_reproducibility_report.pdf",
+"https://github.com/BigDaMa/raha/blob/master/raha/benchmark.py",
+"https://arxiv.org/abs/1702.00820",
+"https://db.unibas.it/projects/bart/files/p191-arocena.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 0,
+"P3": 0,
+"P4": 0,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 60,
+"basic": 80,
+"content": 60,
+"construction": 20,
+"application": 80,
+"note": "Raha 仓库没有 hospital 的说明文字。B2、B3 只依据 README 指向的 benchmark.py 中的路径，C3 依据错误率，P1 只说来自一个此前的研究项目，都属判断项。文档之间有不一致，Raha 写错误率 0.03 而 HoloClean 写约 5%，Raha 写 1000×20 而 HoloClean 表 2 写 19 个属性。这些文档没有写明 HoloClean 之前的原始来源。B5、C2、C4、P2、P3、P4、P5、A1 记 0。 判断项: B2、B3、C3、P1。",
+"source_quotes": {
+"B1": {
+"quote": "Hospital 1000 × 20 0.03 T, VAD",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"B2": {
+"quote": "\"datasets\", dataset_name, \"dirty.csv\"",
+"url": "https://github.com/BigDaMa/raha/blob/master/raha/benchmark.py"
+},
+"B3": {
+"quote": "self.DATASETS = [\"hospital\", \"flights\", \"beers\", \"rayyan\", \"movies_1\"] ... \"datasets\", dataset_name, \"clean.csv\"",
+"url": "https://github.com/BigDaMa/raha/blob/master/raha/benchmark.py"
+},
+"B4": {
+"quote": "Raha, with its datasets and experiments, is available online at a GitHub repository",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_reproducibility_report.pdf"
+},
+"C1": {
+"quote": "be a relational dataset of size",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C3": {
+"quote": "Hospital 1000 × 20 0.03 T, VAD",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"C5": {
+"quote": "Since the data errors of Hospital are scarce and randomly imposed, sampling informative tuples is particularly challenging on this dataset.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/baran_paper.pdf"
+},
+"P1": {
+"quote": "Hospital and Flights are two real-world datasets that we have obtained along with their ground truth from ... a previous research project [39].",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A2": {
+"quote": "This is a typical benchmark dataset used in the data cleaning literature",
+"url": "https://arxiv.org/abs/1702.00820"
+},
+"A3": {
+"quote": "We report precision, recall, and the F 1 score to evaluate the effectiveness.",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A4": {
+"quote": "Table 5: Comparison with the stand-alone error detection tools. ... Raha 0.94 0.59 0.72",
+"url": "https://github.com/BigDaMa/raha/blob/master/documentation/raha_paper.pdf"
+},
+"A5": {
+"quote": "Hospital is a real-world scenario used in several data repairing papers",
+"url": "https://db.unibas.it/projects/bart/files/p191-arocena.pdf"
+}
+}
+},
+{
+"name": "Soccer",
+"urls": [
+"https://db.unibas.it/projects/bart/",
+"https://db.unibas.it/projects/bart/files/BART-Datasets.zip",
+"https://github.com/dbunibas/BART",
+"https://github.com/dbunibas/BART/wiki/How-to-evaluate-a-data-cleaning-tool",
+"https://db.unibas.it/projects/bart/files/p191-arocena.pdf",
+"https://github.com/BigDaMa/raha",
+"https://arxiv.org/abs/2302.04702"
+],
+"items": {
+"B1": 0,
+"B2": 1,
+"B3": 0,
+"B4": 1,
+"B5": 1,
+"C1": 0,
+"C2": 0,
+"C3": 0,
+"C4": 0,
+"C5": 0,
+"P1": 0,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 0,
+"A5": 0
+},
+"score": 35,
+"basic": 60,
+"content": 0,
+"construction": 40,
+"application": 40,
+"note": "Raha 仓库和 Raha 论文都没有 Soccer。REIN 的 Soccer 是 180228 行 44 列，是另一张表。soccer_full 列名和首行与 BART-Datasets.zip 的 soccer_synth_10k.csv 一致，因此按 BART 材料评分。BART 没有 Soccer 的说明文字，B2、P2、P3 只依据压缩包里的 egtask 与 ToXgene 配置文件，B5、A2、A3 是 BART 项目级陈述，没有点名 Soccer，这六项都属判断项。B1 记 0，文件名和模板写 10k，文件实际有 100000 行，本地表为 200000 行。BART 的 PVLDB 论文没有提到 Soccer。He 等 2016 年的 Falcon 论文经代理返回 403，未读到，它是否描述 Soccer 未能核实。 判断项: B2、B5、P2、P3、A2、A3。",
+"source_quotes": {
+"B2": {
+"quote": "<input table=\"data\" type=\"csv\" separator=\",\">soccer_synth_10k.csv</input>",
+"url": "https://db.unibas.it/projects/bart/files/BART-Datasets.zip"
+},
+"B4": {
+"quote": "Example datasets (31 Aug, 2016)",
+"url": "https://db.unibas.it/projects/bart/"
+},
+"B5": {
+"quote": "Comments, Bugs, Requests unibas.dev[-at-]gmail.com",
+"url": "https://db.unibas.it/projects/bart/"
+},
+"P2": {
+"quote": "num_teams: different teams",
+"url": "https://db.unibas.it/projects/bart/files/BART-Datasets.zip"
+},
+"P3": {
+"quote": "//FD_1: name, surname, birthplace -> birthyear ... <defaultPercentage>0.1</defaultPercentage>",
+"url": "https://db.unibas.it/projects/bart/files/BART-Datasets.zip"
+},
+"A2": {
+"quote": "Its purpose is to introduce errors into clean databases for the purpose of benchmarking data-repairing algorithms.",
+"url": "https://db.unibas.it/projects/bart/"
+},
+"A3": {
+"quote": "In order to evaluate a tool, you need to compare expected changes w.r.t. generated changes.",
+"url": "https://github.com/dbunibas/BART/wiki/How-to-evaluate-a-data-cleaning-tool"
+}
+}
+},
+{
+"name": "SmartFactory",
+"urls": [
+"https://arxiv.org/abs/2302.04702",
+"https://github.com/mohamedyd/rein-benchmark",
+"https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 80,
+"content": 80,
+"construction": 100,
+"application": 100,
+"note": "REIN 论文把它指向 Kaggle 的 High Storage System Data for Energy Optimization，所有者文档以该页面为准。C2、C3、C4 依据 Kaggle 自动生成的预览和直方图（示例文件 HRSS_anomalous_optimized.csv），P3 依据 REIN 的错误注入流程，不是所有者对原始数据的处理，都属判断项。REIN 表 4 写 23645 行，Kaggle 单个文件的 Labels 直方图合计 19634 行，文档没有说明 REIN 版本由哪些文件组成。B5、C5 记 0。 判断项: C2、C3、C4、P3。",
+"source_quotes": {
+"B1": {
+"quote": "Smart Factory [8] 23645 19 19 0 0.153 MVs, Outliers Manufacturing C",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"B2": {
+"quote": "Mark rows with anomalies. 1 if anomaly is there",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"B3": {
+"quote": "HRSS_normal_standard.csv contains normal runs without failures and not optimized.",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"B4": {
+"quote": "Data Explorer Version 2 (7.46 MB)",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"C1": {
+"quote": "which deal with the most common attribute and class errors in tabular data",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"C2": {
+"quote": "[I_w_BLO_Weg column histogram] -41.19 - 24.58 7,741",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"C3": {
+"quote": "[Labels column histogram] 0.00 - 0.05 15,117 ... 0.95 - 1.00 4,517",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"C4": {
+"quote": "[Data Card row preview] 138 24268 97 778 1800",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"P1": {
+"quote": "is a demonstrator of a high storage system.",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"P2": {
+"quote": "This data was collected from a highstoragesystem, which transported one package between two spots",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"P3": {
+"quote": "To inject errors using BART, we use a set of denial constraints to generate different attribute and class errors",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"P4": {
+"quote": "column in each file marks the rows with anomalies.",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"P5": {
+"quote": "Last row deleted in all files",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"A1": {
+"quote": "CC BY-NC-SA 4.0",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"A2": {
+"quote": "Furthermore you can test anomaly detection with the normal and anomaly files.",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+},
+"A3": {
+"quote": "In the error detection phase, we leverage precision, recall, F1 score, IoU, and runtime",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"A4": {
+"quote": "Min-k outperforms (average F1 score of 0.75)",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"A5": {
+"quote": "It is also used to perform anomaly detection using timed automata.",
+"url": "https://www.kaggle.com/datasets/inIT-OWL/high-storage-system-data-for-energy-optimization"
+}
+}
+},
+{
+"name": "Mercedes",
+"urls": [
+"https://arxiv.org/abs/2302.04702",
+"https://github.com/mohamedyd/rein-benchmark",
+"https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/overview",
+"https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/data",
+"https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/rules",
+"https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/leaderboard"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 0,
+"P3": 1,
+"P4": 0,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 65,
+"basic": 80,
+"content": 40,
+"construction": 40,
+"application": 100,
+"note": "C3 依据 REIN 表 4 的错误率，P3 依据 REIN 的错误注入流程，A5 依据 REIN 把它列为 14 个基准数据集之一（论文正文没有单列它的结果），都属判断项。Kaggle 数据预览需要登录并接受规则，C4 记 0。变量是匿名的，文档只说 y 是通过测试的秒数，没有说明采集方式，P2 记 0。匿名化本身没有被写成局限，C5 记 0。B5、C2、P4、P5 记 0。 判断项: C3、P3、A5。",
+"source_quotes": {
+"B1": {
+"quote": "Mercedes [11] 4210 378 370 8 0.05 Outliers, MVs, Implicit MVs Manufacturing R",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"B2": {
+"quote": "Variables with letters are categorical. Variables with 0/1 are binary values.",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/data"
+},
+"B3": {
+"quote": "you must predict the 'y' variable for the 'ID's in this file",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/data"
+},
+"B4": {
+"quote": "To see this data you need to agree to the competition rules.",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/data"
+},
+"C1": {
+"quote": "Tags Automobiles and Vehicles Regression Tabular",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/overview"
+},
+"C3": {
+"quote": "Mercedes [11] 4210 378 370 8 0.05 Outliers, MVs, Implicit MVs Manufacturing R",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"P1": {
+"quote": "This dataset contains an anonymized set of variables, each representing a custom feature in a Mercedes car.",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/data"
+},
+"P3": {
+"quote": "To inject errors using BART, we use a set of denial constraints to generate different attribute and class errors",
+"url": "https://arxiv.org/abs/2302.04702"
+},
+"A1": {
+"quote": "Participants must use the Data solely for the purpose and duration of the Competition",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/rules"
+},
+"A2": {
+"quote": "to predict the time it takes to pass testing.",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/overview"
+},
+"A3": {
+"quote": "Submissions are evaluated on the R^2 value, also called the coefficient of determination.",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/overview"
+},
+"A4": {
+"quote": "gmobaz 0.55550",
+"url": "https://www.kaggle.com/competitions/mercedes-benz-greener-manufacturing/leaderboard"
+},
+"A5": {
+"quote": "we utilized a wide collection of ML models trained on 14 publicly-available datasets",
+"url": "https://arxiv.org/abs/2302.04702"
+}
+}
+},
+{
+"name": "Soil Moisture",
+"urls": [
+"https://arxiv.org/abs/2302.04702",
+"https://github.com/felixriese/hyperspectral-soilmoisture-dataset",
+"https://zenodo.org/records/2530634",
+"https://publikationen.bibliothek.kit.edu/1000087337",
+"https://arxiv.org/abs/1903.11114"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 100,
+"content": 60,
+"construction": 80,
+"application": 100,
+"note": "REIN 指向 Riese 和 Keller 2018 年的 IGARSS 论文，该文不开放，KIT 页面只有摘要，C3、A3、A4 依据同一作者的 SuSi 论文（arXiv 1903.11114）。B3 依据示例 notebook 中的文件路径，B5 依据 README 作者条目的邮箱，都属判断项。许可有矛盾，README 和 LICENSE 为 CC BY 4.0，CITATION.cff 写 BSD-3-Clause，Zenodo 记录写 other-open，这里按 README 记 1。C4、C5、P4 记 0，目标值是传感器测量，没有标注规范。 判断项: B3、B5。",
+"source_quotes": {
+"B1": {
+"quote": "The dataset consists of 679 datapoints collected by a Cubert UHD 285 camera.",
+"url": "https://arxiv.org/abs/1903.11114"
+},
+"B2": {
+"quote": "soil_moisture: soil moisture in %",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"B3": {
+"quote": "hyperspectral-soilmoisture-dataset/master/soilmoisture_dataset.csv",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset/blob/master/example.ipynb"
+},
+"B4": {
+"quote": "\"Hyperspectral benchmark dataset on soil moisture\", Dataset, Zenodo, 2018.",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"B5": {
+"quote": "Felix M. Riese, M.Sc.",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"C1": {
+"quote": "hyperspectral snapshot camera recording 50 by 50 images with 125 spectral bands",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"C2": {
+"quote": "This dataset was measured in a five-day field campaign in May 2017 in Karlsruhe, Germany.",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"C3": {
+"quote": "A soil moisture sensor measured the reference values in a range of 25 % to 42 % soil moisture.",
+"url": "https://arxiv.org/abs/1903.11114"
+},
+"P1": {
+"quote": "The soil sample consists of bare soil without any vegetation and was taken in the area near Waldbronn, Germany.",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"P2": {
+"quote": "TRIME-PICO time-domain reflectometry (TDR) sensor in a depth of 2 cm measuring the soil moisture in percent.",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"P3": {
+"quote": "The raw sensor data was processed with the Hyperspectral Processing Scripts for the HydReSGeo Dataset",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"P5": {
+"quote": "felixriese/hyperspectral-soilmoisture-dataset: Dataset with universal DOI",
+"url": "https://zenodo.org/records/2530634"
+},
+"A1": {
+"quote": "License: CC BY 4.0",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset"
+},
+"A2": {
+"quote": "Example: ML regression on hyperspectral dataset with Python",
+"url": "https://github.com/felixriese/hyperspectral-soilmoisture-dataset/blob/master/example.ipynb"
+},
+"A3": {
+"quote": "For the evaluation, we choose the coefficient of determination R2",
+"url": "https://arxiv.org/abs/1903.11114"
+},
+"A4": {
+"quote": "The regression SOM achieves R2 = 90.2 % on the test subset.",
+"url": "https://arxiv.org/abs/1903.11114"
+},
+"A5": {
+"quote": "For the Soil Moisture dataset, Figure 7l depicts that KNN outperforms other models",
+"url": "https://arxiv.org/abs/2302.04702"
+}
+}
+},
+{
+"name": "Tennessee Eastman classic",
+"urls": [
+"https://github.com/camaramm/tennessee-eastman-profBraatz",
+"https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 0,
+"P4": 1,
+"P5": 1,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 0,
+"A5": 1
+},
+"score": 75,
+"basic": 100,
+"content": 60,
+"construction": 80,
+"application": 60,
+"note": "B5 依据 Downs 和 Vogel 对源代码的索取说明，针对模拟器，属判断项。A3 只有测试协议，Downs 和 Vogel 明确写未给数学度量（have provided no mathematical measure），属判断项。A1 记 0，许可文本授权的是 Software，没有提到数据文件。仓库里 d00.dat 为 416049 字节，其余训练文件为 399840 字节，说明文字写每个训练文件 480 行，未交代这一差异。C2、C4、P3、A4 记 0。 判断项: B5、A3。",
+"source_quotes": {
+"B1": {
+"quote": "Each training data file contains 480 rows and 52 columns and each testing data file contains 960 rows and 52 columns.",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"B2": {
+"quote": "x = [XMEAS(1), XMEAS(2), ..., XMEAS(41), XMV(1), ..., XMV(11)]^T",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"B3": {
+"quote": "d01.dat | training file for Fault 1",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"B4": {
+"quote": "as well as the training and testing data files used for evaluating the data-driven methods",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"B5": {
+"quote": "The FORTRAN source code is available by request from either author.",
+"url": "https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+},
+"C1": {
+"quote": "An observation vector at a particular time instant is given by",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"C3": {
+"quote": "Each training data file contains 480 rows",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"C5": {
+"quote": "The model is not intended for simulating process start-up and shutdown procedures.",
+"url": "https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+},
+"P1": {
+"quote": "this test problem is based on an actual industrial process (not a contrived problem).",
+"url": "https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+},
+"P2": {
+"quote": "The program will generate 15 output files and all data are recorded every 180 seconds",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"P4": {
+"quote": "implement any of the 21 programmed disturbances. For example, to implement disturbance 2, type IDV(2)=1.",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"P5": {
+"quote": "Revised 4-4-91 to correct error in documentation of manipulated variables",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+},
+"A2": {
+"quote": "developing, studying and evaluating process control technology",
+"url": "https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+},
+"A3": {
+"quote": "The testing and evaluation of various process control technologies can be done with the setpoint changes listed in Table 7 or the load changes listed in Table 8.",
+"url": "https://www.abo.fi/~khaggblo/RS/Downs.pdf"
+},
+"A5": {
+"quote": "used for evaluating the data-driven methods (PCA, PLS, FDA, and CVA).",
+"url": "https://github.com/camaramm/tennessee-eastman-profBraatz"
+}
+}
+},
+{
+"name": "Tennessee Eastman large",
+"urls": [
+"https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1",
+"https://link.springer.com/chapter/10.1007/978-3-319-60384-1_6"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 0,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 0,
+"A5": 0
+},
+"score": 75,
+"basic": 100,
+"content": 60,
+"construction": 80,
+"application": 60,
+"note": "Rieth 等 2017 年的章节需要订阅，只读到摘要，A4、C4、C5、P3 可能被低估。这些项按未能核实记 0，不是确认缺失。A5 记 0，所有者文档没有点名其他使用。 判断项: 无。",
+"source_quotes": {
+"B1": {
+"quote": "Column 3 ('sample') ranges either from 1 to 500 (“Training” datasets) or 1 to 960 (“Testing” datasets).",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"B2": {
+"quote": "Each .RData file is an external representation of an R dataframe that can be read into an R environment with the 'load' function.",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"B3": {
+"quote": "The variables loaded are named ‘fault_free_training’, ‘fault_free_testing’, ‘faulty_testing’, and ‘faulty_training’, corresponding to the RData files.",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"B4": {
+"quote": "https://doi.org/10.7910/DVN/6C3JR1",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"B5": {
+"quote": "CoryRieth@pacific-science.com",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"C1": {
+"quote": "Columns 4 to 55 contain the process variables",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"C2": {
+"quote": "were sampled every 3 minutes for a total duration of 25 hours and 48 hours respectively.",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"C3": {
+"quote": "Column 1 ('faultNumber') ranges from 1 to 20 in the “Faulty” datasets and represents the fault type in the TEP.",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"P1": {
+"quote": "Additional Tennessee Eastman Process Simulation Data for Anomaly Detection Evaluation",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"P2": {
+"quote": "represents a different random number generator state from which a full TEP dataset was generated",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"P4": {
+"quote": "Note that the faults were introduced 1 and 8 hours into the Faulty Training and Faulty Testing datasets, respectively.",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"P5": {
+"quote": "[Dataverse version metadata] versionNumber 1, versionMinorNumber 0, releaseTime 2017-07-06",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"A1": {
+"quote": "dedicated the work to the public domain",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"A2": {
+"quote": "Automation evaluation, Anomaly detection, Tennessee Eastman process simulation",
+"url": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/6C3JR1"
+},
+"A3": {
+"quote": "We show how receiver operating characteristic curves can reveal performance tradeoffs",
+"url": "https://link.springer.com/chapter/10.1007/978-3-319-60384-1_6"
+}
+}
+},
+{
+"name": "NYC TLC yellow taxi",
+"urls": [
+"https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page",
+"https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf",
+"https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf",
+"https://data.cityofnewyork.us/Transportation/2023-Yellow-Taxi-Trip-Data/4b4i-vvec/about_data",
+"https://data.cityofnewyork.us/Transportation/2023-Yellow-Taxi-Trip-Data/4b4i-vvec/data_preview"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 0,
+"P4": 0,
+"P5": 1,
+"A1": 0,
+"A2": 0,
+"A3": 0,
+"A4": 0,
+"A5": 0
+},
+"score": 60,
+"basic": 100,
+"content": 80,
+"construction": 60,
+"application": 0,
+"note": "没有介绍论文。B1 的行数只来自 NYC Open Data 的 2023 年文件。C4 依据 TLC 页面链接的 NYC Open Data 数据预览，属判断项。A1 记 0，Open Data 页面明确写 The license for this dataset is unspecified。A2 到 A5 记 0，文档没有目标场景、评估方法、基准结果和具名应用。C3、P4 记 0，这是运营记录，没有标签。P3 记 0，黄色出租车数据没有处理流程说明，页面的例行审查一句只针对 FHV。 判断项: C4。",
+"source_quotes": {
+"B1": {
+"quote": "Rows 38.3M Columns 19",
+"url": "https://data.cityofnewyork.us/Transportation/2023-Yellow-Taxi-Trip-Data/4b4i-vvec/about_data"
+},
+"B2": {
+"quote": "the trip record files have been stored in the PARQUET format.",
+"url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
+},
+"B3": {
+"quote": "The data is separated by year, month, and type (yellow/green/FHV)",
+"url": "https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf"
+},
+"B4": {
+"quote": "Trip data is published monthly on this website, typically with a two-month delay to allow time for full vendor submissions.",
+"url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
+},
+"B5": {
+"quote": "Please email us @ research@tlc.nyc.gov with any questions or comments about the state of our data.",
+"url": "https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf"
+},
+"C1": {
+"quote": "In each trip record dataset, one row represents a single trip made by a TLC-licensed vehicle.",
+"url": "https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf"
+},
+"C2": {
+"quote": "Trips made by New York City’s iconic yellow taxis have been recorded and provided to the TLC since 2009.",
+"url": "https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf"
+},
+"C4": {
+"quote": "01/01/2023 12:32:10 AM 01/01/2023 12:40:36 AM",
+"url": "https://data.cityofnewyork.us/Transportation/2023-Yellow-Taxi-Trip-Data/4b4i-vvec/data_preview"
+},
+"C5": {
+"quote": "The trip data was not created by the TLC, and TLC makes no representations as to the accuracy of these data.",
+"url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
+},
+"P1": {
+"quote": "were collected and provided to the NYC Taxi and Limousine Commission (TLC) by technology providers authorized under the Taxicab & Livery Passenger Enhancement Programs (TPEP/LPEP).",
+"url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
+},
+"P2": {
+"quote": "We receive taxi trip data from the technology service providers (TSPs) that provide electronic metering in each cab",
+"url": "https://www.nyc.gov/assets/tlc/downloads/pdf/trip_record_user_guide.pdf"
+},
+"P5": {
+"quote": "TPEP and LPEP trip data PARQUETs from January through June 2015 have been updated to include a new field [improvement_surcharge]",
+"url": "https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page"
+}
+}
+},
+{
+"name": "CIFAR-N",
+"urls": [
+"https://github.com/UCSC-REAL/cifar-10-100n",
+"https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html",
+"https://web.archive.org/web/20240301232243/http://ucsc-real.soe.ucsc.edu:1995/Observations.html",
+"https://web.archive.org/web/20230922120045/http://ucsc-real.soe.ucsc.edu:1995/Leaderboard.html",
+"https://arxiv.org/abs/2110.12088",
+"http://www.noisylabels.com/"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 95,
+"basic": 100,
+"content": 100,
+"construction": 80,
+"application": 100,
+"note": "ucsc-real.soe.ucsc.edu:1995 在 2026-11-06 经代理和直连都返回空响应，noisylabels.com 只是指向它的框架页，站点内容来自 Wayback 2023 年到 2024 年的快照。P5 记 0，README 只有 Docta 演示的更新说明，没有数据版本记录。 判断项: 无。",
+"source_quotes": {
+"B1": {
+"quote": "a numpy array with length 50K",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n"
+},
+"B2": {
+"quote": "noise_file = torch.load('./data/CIFAR-10_human.pt')",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n"
+},
+"B3": {
+"quote": "We include additional side information during the noisy-label collection in side_info_cifar10N.csv and side_info_cifar100N.csv.",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n"
+},
+"B4": {
+"quote": "This repository is the official dataset release and Pytorch implementation",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n"
+},
+"B5": {
+"quote": "Please contact us via {yangliu, jiahengwei, zwzhu, haocheng}@ucsc.edu , if you have any concerns regarding this dataset.",
+"url": "https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html"
+},
+"C1": {
+"quote": "Human annotations on CIFAR-10, CIFAR-100 train images",
+"url": "https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html"
+},
+"C2": {
+"quote": "Although each clean class has the same amount of images, the number of human annotations for each clean category varies.",
+"url": "https://web.archive.org/web/20240301232243/http://ucsc-real.soe.ucsc.edu:1995/Observations.html"
+},
+"C3": {
+"quote": "Noise Rate 9.03% 17.23% 18.12% 17.64% 40.21% 25.60% 40.20%",
+"url": "https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html"
+},
+"C4": {
+"quote": "Here are some exemplary CIFAR-100 training images with multiple labels.",
+"url": "https://web.archive.org/web/20240301232243/http://ucsc-real.soe.ucsc.edu:1995/Observations.html"
+},
+"C5": {
+"quote": "one image may contain multiple classes which further lead to a new \"co-exist\" noise label pattern",
+"url": "https://web.archive.org/web/20240301232243/http://ucsc-real.soe.ucsc.edu:1995/Observations.html"
+},
+"P1": {
+"quote": "train images with human annotated noisy labels obtained from Amazon Mechanical Turk.",
+"url": "https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html"
+},
+"P2": {
+"quote": "Each HIT is then randomly assigned to three independent workers.",
+"url": "https://arxiv.org/abs/2110.12088"
+},
+"P3": {
+"quote": "aggregation of three noisy labels by majority voting.",
+"url": "https://web.archive.org/web/20231201122248/http://ucsc-real.soe.ucsc.edu:1995/Home.html"
+},
+"P4": {
+"quote": "We only block and reject workers who submit answers with fixed/regular distribution patterns.",
+"url": "https://arxiv.org/abs/2110.12088"
+},
+"A1": {
+"quote": "Creative Commons Attribution-NonCommercial 4.0 International",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n/blob/main/LICENSE.md"
+},
+"A2": {
+"quote": "We then initiate an effort to benchmarking a subset of the existing solutions using CIFAR-10N and CIFAR-100N.",
+"url": "https://arxiv.org/abs/2110.12088"
+},
+"A3": {
+"quote": "Rank Method Accuracy Method and Paper",
+"url": "https://web.archive.org/web/20230922120045/http://ucsc-real.soe.ucsc.edu:1995/Leaderboard.html"
+},
+"A4": {
+"quote": "ProMix 97.65±0.19",
+"url": "https://web.archive.org/web/20230922120045/http://ucsc-real.soe.ucsc.edu:1995/Leaderboard.html"
+},
+"A5": {
+"quote": "for details of 1st Learning with Noisy Labels Challenge in IJCAI 2022.",
+"url": "https://github.com/UCSC-REAL/cifar-10-100n"
+}
+}
+},
+{
+"name": "CIFAR-10 and CIFAR-100",
+"urls": [
+"https://www.cs.toronto.edu/~kriz/cifar.html",
+"https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 80,
+"content": 100,
+"construction": 80,
+"application": 80,
+"note": "两个数据集合为一行。C4 只对 CIFAR-10 成立，页面没有 CIFAR-100 的样例图。C5 依据页面对超类划分不准确的一句说明，属判断项。P5 记 0，下载表的 Version 列指 python、Matlab、binary 格式，只附 md5。A1 记 0，页面和技术报告都没有许可。B5 记 0。 判断项: C5。",
+"source_quotes": {
+"B1": {
+"quote": "There are 50000 training images and 10000 test images.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"B2": {
+"quote": "a 10000x3072 numpy array of uint8s.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"B3": {
+"quote": "The archive contains the files data_batch_1, data_batch_2, ..., data_batch_5, as well as test_batch.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"B4": {
+"quote": "CIFAR-10 python version 163 MB",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"C1": {
+"quote": "consists of 60000 32x32 colour images in 10 classes",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"C2": {
+"quote": "The test batch contains exactly 1000 randomly-selected images from each class.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"C3": {
+"quote": "it has 100 classes containing 600 images each.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"C4": {
+"quote": "Here are the classes in the dataset, as well as 10 random images from each:",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"C5": {
+"quote": "Yes, I know mushrooms aren't really fruit or vegetables, and bears aren't really carnivores.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"P1": {
+"quote": "are labeled subsets of the 80 million tiny images dataset.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"P2": {
+"quote": "We paid students to label a subset of the tiny images dataset.",
+"url": "https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+},
+"P3": {
+"quote": "We removed duplicate images from the dataset by comparing images with the L2 norm",
+"url": "https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+},
+"P4": {
+"quote": "The labelers were instructed to reject images which did not belong to their assigned class.",
+"url": "https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+},
+"A2": {
+"quote": "We compared several methods of classifying the images in the CIFAR-10 dataset.",
+"url": "https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+},
+"A3": {
+"quote": "we took the most probable class as the model's prediction.",
+"url": "https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf"
+},
+"A4": {
+"quote": "Briefly, they are 18% test error without data augmentation and 11% with.",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+},
+"A5": {
+"quote": "has collected results on CIFAR-10/100 and other datasets on his website",
+"url": "https://www.cs.toronto.edu/~kriz/cifar.html"
+}
+}
+},
+{
+"name": "CIFAR-10.1",
+"urls": [
+"https://github.com/modestyachts/CIFAR-10.1",
+"https://arxiv.org/abs/1806.00451"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 95,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 80,
+"note": "A1 只说图像数据可按 Tiny Images 的方式使用，没有说明标签数据，属判断项。DeepMind 的 adversarial_robustness README 写明官方 TinyImages-80M 已被撤回，所以这一条款实际指向一个已撤回的数据集。A5 记 0，文档只有介绍实验，没有点名其他使用。 判断项: A1。",
+"source_quotes": {
+"B1": {
+"quote": "v4 contains 2,021 images.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"B2": {
+"quote": "contains the dataset files in the NumPy binary format",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"B3": {
+"quote": "The v4 files are cifar10.1_v4_data.npy and cifar10.1_v4_labels.npy.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"B4": {
+"quote": "This repository contains the CIFAR-10.1 dataset",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"B5": {
+"quote": "please do not hesitate to contact Rebecca Roelofs (roelofs@cs.berkeley.edu) and Ludwig Schmidt (ludwigschmidt2@gmail.com).",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"C1": {
+"quote": "CIFAR-10.1 contains roughly 2,000 new test images",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"C2": {
+"quote": "the keyword-level distribution of our new dataset matches the keyword-level distribution of CIFAR-10",
+"url": "https://arxiv.org/abs/1806.00451"
+},
+"C3": {
+"quote": "The largest difference is that ships make up only 8% of the test set instead of 10%.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"C4": {
+"quote": "Figure 1: Class-balanced random draws from the new and original test sets.",
+"url": "https://arxiv.org/abs/1806.00451"
+},
+"C5": {
+"quote": "which led to a slight class imbalance.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"P1": {
+"quote": "The images in CIFAR-10.1 are a subset of the TinyImages dataset.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"P2": {
+"quote": "in order to collect a set of candidate images.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"P3": {
+"quote": "this notebook checks for near-duplicates both within the new test set and in CIFAR-10",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"P4": {
+"quote": "Author A followed the labeling guidelines in the original instruction sheet [12].",
+"url": "https://arxiv.org/abs/1806.00451"
+},
+"P5": {
+"quote": "There are currently two versions of the CIFAR-10.1 dataset",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"A1": {
+"quote": "The image data is part of the Tiny Images dataset and can be used the same way as the Tiny Images dataset.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"A2": {
+"quote": "which is a new test set for CIFAR-10.",
+"url": "https://github.com/modestyachts/CIFAR-10.1"
+},
+"A3": {
+"quote": "Table 1: Model accuracy on the original CIFAR-10 test set and the new test set, with the gap reported as the difference between the two accuracies.",
+"url": "https://arxiv.org/abs/1806.00451"
+},
+"A4": {
+"quote": "VGG and ResNet architectures see a gap of about 8%",
+"url": "https://arxiv.org/abs/1806.00451"
+}
+}
+},
+{
+"name": "ciFAIR",
+"urls": [
+"https://cvjena.github.io/cifair/",
+"https://arxiv.org/abs/1902.00423",
+"https://github.com/cvjena/cifair/blob/master/meta/README.md",
+"https://github.com/cvjena/cifair/releases/tag/v1.0"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 80,
+"content": 100,
+"construction": 100,
+"application": 80,
+"note": "C4 依据论文图 1 的重复图像对，它们来自原 CIFAR，没有展示 ciFAIR 替换后的新图，属判断项。P5 依据 GitHub Release v1.0 的 Initial Release 记录，A5 依据社区榜单，都属判断项。B5 记 0，imprint 只有运营方地址图片，论文署名邮箱按规则不计。A1 记 0，页面和仓库都没有许可。 判断项: C4、P5、A5。",
+"source_quotes": {
+"B1": {
+"quote": "Both contain 50,000 training and 10,000 test images.",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"B2": {
+"quote": "Both datasets have the same structure as CIFAR and are intended to be used as drop-in replacements.",
+"url": "https://cvjena.github.io/cifair/"
+},
+"B3": {
+"quote": "duplicates_cifar10.csv and duplicates_cifar100.csv list images from the test sets that have near-duplicates in the training set.",
+"url": "https://github.com/cvjena/cifair/blob/master/meta/README.md"
+},
+"B4": {
+"quote": "Download ciFAIR-10",
+"url": "https://cvjena.github.io/cifair/"
+},
+"C1": {
+"quote": "where all these duplicates have been replaced with new images.",
+"url": "https://cvjena.github.io/cifair/"
+},
+"C2": {
+"quote": "Table 1: The top 14 classes with the most duplicates.",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"C3": {
+"quote": "CIFAR-10, which comprises 10 classes, and CIFAR-100, which comprises 100 classes.",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"C4": {
+"quote": "Figure 1: Examples for different types of duplicates between the CIFAR-100 test and training set.",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"C5": {
+"quote": "The test set pickle files cannot be loaded with Python 2.",
+"url": "https://cvjena.github.io/cifair/"
+},
+"P1": {
+"quote": "with new images sampled from the Tiny Images dataset",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"P2": {
+"quote": "each replacement candidate was inspected manually in a graphical user interface",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"P3": {
+"quote": "we search for nearest neighbor pairs between test and training set in a CNN feature space and inspect the results manually",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"P4": {
+"quote": "We used a single annotator and stopped the annotation once the class “Different” has been assigned to 20 pairs in a row.",
+"url": "https://arxiv.org/abs/1902.00423"
+},
+"P5": {
+"quote": "[GitHub release metadata] v1.0, Initial Release, 2019-02-01",
+"url": "https://github.com/cvjena/cifair/releases/tag/v1.0"
+},
+"A2": {
+"quote": "We encourage everyone training models on CIFAR to evaluate them on the ciFAIR test sets for an unbiased comparison.",
+"url": "https://cvjena.github.io/cifair/"
+},
+"A3": {
+"quote": "Methods are sorted by their error rate on the ciFAIR-100 test set",
+"url": "https://cvjena.github.io/cifair/"
+},
+"A4": {
+"quote": "PyramidNet-272-200 PyTorch 26.6 M 3.58% 4.00% 17.05% 19.38%",
+"url": "https://cvjena.github.io/cifair/"
+},
+"A5": {
+"quote": "We maintain a community-driven leaderboard of CNN architectures for image classification on ciFAIR.",
+"url": "https://cvjena.github.io/cifair/"
+}
+}
+},
+{
+"name": "C4",
+"urls": [
+"https://www.tensorflow.org/datasets/catalog/c4",
+"https://arxiv.org/abs/2104.08758",
+"https://arxiv.org/abs/1910.10683",
+"https://github.com/google-research/text-to-text-transfer-transformer",
+"https://github.com/allenai/c4-documentation",
+"https://github.com/allenai/allennlp/discussions/5056",
+"https://huggingface.co/datasets/allenai/c4"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "TFDS 页面的 Examples 框架只显示 Display examples，样例和文件结构依据 Dodge 等的配套仓库指向的 AllenNLP 发布说明与 Hugging Face 数据卡。P5 只有版本号，页面对每个版本都写 No release notes，属判断项。C3、P4 记 0，语料无标注，HF 数据卡写 no-annotation。 判断项: P5。",
+"source_quotes": {
+"B1": {
+"quote": "Dataset size : 806.87 GiB",
+"url": "https://www.tensorflow.org/datasets/catalog/c4"
+},
+"B2": {
+"quote": "text: text content as a string",
+"url": "https://huggingface.co/datasets/allenai/c4"
+},
+"B3": {
+"quote": "git lfs pull --include \"multilingual/c4-nl.*.json.gz\"",
+"url": "https://github.com/allenai/allennlp/discussions/5056"
+},
+"B4": {
+"quote": "we have made the raw C4 data available to download",
+"url": "https://github.com/allenai/c4-documentation"
+},
+"B5": {
+"quote": "We hope the discussions page on this github repository will be a welcome place to document and discuss further issues with the data.",
+"url": "https://github.com/allenai/c4-documentation"
+},
+"C1": {
+"quote": "a data set consisting of hundreds of gigabytes of clean English text scraped from the web",
+"url": "https://arxiv.org/abs/1910.10683"
+},
+"C2": {
+"quote": "Figure 2: Number of tokens from the 25 most represented top-level domains (left) and websites (right) in C4. EN.",
+"url": "https://arxiv.org/abs/2104.08758"
+},
+"C4": {
+"quote": "An example form the en config is:",
+"url": "https://huggingface.co/datasets/allenai/c4"
+},
+"C5": {
+"quote": "blocklist filtering disproportionately removes text from and about minority individuals",
+"url": "https://arxiv.org/abs/2104.08758"
+},
+"P1": {
+"quote": "C4 is created by taking the April 2019 snapshot of Common Crawl",
+"url": "https://arxiv.org/abs/2104.08758"
+},
+"P2": {
+"quote": "are created by crawling and scraping the web",
+"url": "https://arxiv.org/abs/2104.08758"
+},
+"P3": {
+"quote": "discarding documents with less than five sentences or that contain Lorem ipsum placeholder text",
+"url": "https://arxiv.org/abs/2104.08758"
+},
+"P5": {
+"quote": "3.1.0 (default): No release notes.",
+"url": "https://www.tensorflow.org/datasets/catalog/c4"
+},
+"A1": {
+"quote": "We are releasing this dataset under the terms of ODC-BY",
+"url": "https://github.com/allenai/allennlp/discussions/5056"
+},
+"A2": {
+"quote": "The C4 dataset we created for unsupervised pre-training",
+"url": "https://github.com/google-research/text-to-text-transfer-transformer"
+},
+"A3": {
+"quote": "we compare the performance of our baseline model after pre-training on the following data sets",
+"url": "https://arxiv.org/abs/1910.10683"
+},
+"A4": {
+"quote": "Table 8: Performance resulting from pre-training on different data sets.",
+"url": "https://arxiv.org/abs/1910.10683"
+},
+"A5": {
+"quote": "C4 has been used to train models such as T5 and the Switch Transformer",
+"url": "https://arxiv.org/abs/2104.08758"
+}
+}
+},
+{
+"name": "COCO",
+"urls": [
+"https://cocodataset.org/#home",
+"https://cocodataset.org/#overview",
+"https://cocodataset.org/#download",
+"https://cocodataset.org/#format-data",
+"https://cocodataset.org/#detection-eval",
+"https://cocodataset.org/#termsofuse",
+"https://cocodataset.org/#external",
+"https://cocodataset.org/#detection-2020",
+"https://cocodataset.org/#explore",
+"https://cocodataset.org/leaderboard/bbox_challenge2017.json",
+"https://github.com/cocodataset/cocoapi",
+"https://arxiv.org/abs/1405.0312"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 100,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "20 项都有依据。C5 依据论文关于 crowd 标注的说明，论文没有把它列为局限，属判断项。B5 的联系方式只在 2020 年挑战赛页面出现，外部数据页写 contact us 但没有地址。 判断项: C5。",
+"source_quotes": {
+"B1": {
+"quote": "330K images (>200K labeled)",
+"url": "https://cocodataset.org/#home"
+},
+"B2": {
+"quote": "The annotations are stored using JSON.",
+"url": "https://cocodataset.org/#format-data"
+},
+"B3": {
+"quote": "the images and annotations should go in coco/images/ and coco/annotations/",
+"url": "https://cocodataset.org/#download"
+},
+"B4": {
+"quote": "2017 Train images [118K/18GB]",
+"url": "https://cocodataset.org/#download"
+},
+"B5": {
+"quote": "For additional questions, please contact info@cocodataset.org.",
+"url": "https://cocodataset.org/#detection-2020"
+},
+"C1": {
+"quote": "COCO is a large-scale object detection, segmentation, and captioning dataset.",
+"url": "https://cocodataset.org/#home"
+},
+"C2": {
+"quote": "MS COCO contains considerably more object instances per image (7.7) as compared to ImageNet (3.0) and PASCAL (2.3).",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"C3": {
+"quote": "In total the dataset has 2,500,000 labeled instances in 328,000 images.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"C4": {
+"quote": "Fig. 6: Samples of annotated images in the MS COCO dataset.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"C5": {
+"quote": "the remaining instances were marked as “crowds” using a single (possibly multipart) segment.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"P1": {
+"quote": "we collected images from Flickr which tends to have fewer iconic images.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"P2": {
+"quote": "we did not search for object categories in isolation.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"P3": {
+"quote": "performed an explicit filtering stage to remove iconic images.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"P4": {
+"quote": "8 workers were asked to label each image.",
+"url": "https://arxiv.org/abs/1405.0312"
+},
+"P5": {
+"quote": "Note: the split year refers to the year the image splits were released, not the year in which the annotations were released.",
+"url": "https://cocodataset.org/#download"
+},
+"A1": {
+"quote": "are licensed under a Creative Commons Attribution 4.0 License.",
+"url": "https://cocodataset.org/#termsofuse"
+},
+"A2": {
+"quote": "COCO is a large image dataset designed for object detection, segmentation, person keypoints detection, stuff segmentation, and caption generation.",
+"url": "https://github.com/cocodataset/cocoapi"
+},
+"A3": {
+"quote": "The following 12 metrics are used for characterizing the performance of an object detector on COCO:",
+"url": "https://cocodataset.org/#detection-eval"
+},
+"A4": {
+"quote": "\"AP\": 0.503",
+"url": "https://cocodataset.org/leaderboard/bbox_challenge2017.json"
+},
+"A5": {
+"quote": "Download external datasets that complement or extend COCO",
+"url": "https://cocodataset.org/#overview"
+}
+}
+},
+{
+"name": "MIRFLICKR-25000",
+"urls": [
+"https://press.liacs.nl/mirflickr/",
+"https://press.liacs.nl/mirflickr/mirdownload.html",
+"https://press.liacs.nl/mirflickr/mirflickr.pdf",
+"http://press.liacs.nl/mirflickr/mirflickr25k.v3b/mirflickr25k_annotations_v080.zip"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 0,
+"A5": 1
+},
+"score": 95,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 80,
+"note": "C3 依据论文表 1 的 Flickr 标签频次，人工标注概念的逐类数量只能从标注文件计算，文档没有写出，属判断项。A4 记 0，论文定义了三个标准挑战，没有报告结果。 判断项: C3。",
+"source_quotes": {
+"B1": {
+"quote": "consists of 25000 images",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"B2": {
+"quote": "The annotation files are plain text files.",
+"url": "http://press.liacs.nl/mirflickr/mirflickr25k.v3b/mirflickr25k_annotations_v080.zip"
+},
+"B3": {
+"quote": "These are in the text files: sky.txt, clouds.txt etc.",
+"url": "http://press.liacs.nl/mirflickr/mirflickr25k.v3b/mirflickr25k_annotations_v080.zip"
+},
+"B4": {
+"quote": "Collection in 1 large file (md5: A23D0A8564EE84CDA5622A6C2F947785)",
+"url": "https://press.liacs.nl/mirflickr/mirdownload.html"
+},
+"B5": {
+"quote": "Please send feedback or suggestions for improvement to mark.huiskes@liacs.nl.",
+"url": "http://press.liacs.nl/mirflickr/mirflickr25k.v3b/mirflickr25k_annotations_v080.zip"
+},
+"C1": {
+"quote": "consists of 25000 images downloaded from the social photography site Flickr",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"C2": {
+"quote": "The 25000 images were collected for original upload dates from March 21, 2007 to June 30, 2008",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"C3": {
+"quote": "Table 1: Frequency of tags in the MIR Flickr set",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"C4": {
+"quote": "Figure 1 shows a number of example images from the collection.",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"C5": {
+"quote": "EXIF geolocation fields are particularly scarce and are available for only 152 images.",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"P1": {
+"quote": "downloaded from the social photography site Flickr through its public API",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"P2": {
+"quote": "the 500 most interesting images uploaded at that date were requested",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"P3": {
+"quote": "This process includes for instance removing capitalization, spaces and various special characters.",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"P4": {
+"quote": "For an image to receive a label, the concept does not need to appear prominently",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"P5": {
+"quote": "MIRFLICKR-25k Annotations v0.80, 3 July 2009",
+"url": "http://press.liacs.nl/mirflickr/mirflickr25k.v3b/mirflickr25k_annotations_v080.zip"
+},
+"A1": {
+"quote": "The image collection presented here consists only of images with one of the Creative Commons attribution licenses.",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"A2": {
+"quote": "In particular for the research community dedicated to improving image retrieval.",
+"url": "https://press.liacs.nl/mirflickr/"
+},
+"A3": {
+"quote": "Report performance on the test set by means of precision-recall graphs and average precision for each topic.",
+"url": "https://press.liacs.nl/mirflickr/mirflickr.pdf"
+},
+"A5": {
+"quote": "In 2009, the MIRFLICKR-25000 collection will be used in ImageCLEF 2009",
+"url": "https://press.liacs.nl/mirflickr/"
+}
+}
+},
+{
+"name": "Synthetic CIFAR-10 by EDM",
+"urls": [
+"https://github.com/wzekai99/DM-Improves-AT",
+"https://github.com/wzekai99/DM-Improves-AT/blob/main/edm/README.md",
+"https://arxiv.org/abs/2302.04638",
+"https://huggingface.co/datasets/P2333/DM-Improves-AT"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 70,
+"basic": 80,
+"content": 40,
+"construction": 80,
+"application": 80,
+"note": "A1 只来自 Hugging Face 数据仓库元数据里的 apache-2.0，GitHub 的 MIT 针对代码，属判断项。C2 记 0，只有逐类数量（计入 C3）和 FID。C4 记 0，README 和论文都没有展示生成样本。C5、P5、B5 记 0。A5 记 0，文档只有介绍实验和模型上传 RobustBench，没有点名其他研究使用这份数据。 判断项: A1。",
+"source_quotes": {
+"B1": {
+"quote": "CIFAR-10 | 1M | npz",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+},
+"B2": {
+"quote": "The name of .npy file indicates the label of images in the file",
+"url": "https://github.com/wzekai99/DM-Improves-AT/blob/main/edm/README.md"
+},
+"B3": {
+"quote": "Since 20M and 50M data files are too large, we split them into several parts",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+},
+"B4": {
+"quote": "Download EDM generated data to ./edm_data.",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+},
+"C1": {
+"quote": "To generate new images, we use the elucidating diffusion model (EDM)",
+"url": "https://arxiv.org/abs/2302.04638"
+},
+"C3": {
+"quote": "select the top 100K images for each class",
+"url": "https://github.com/wzekai99/DM-Improves-AT/blob/main/edm/README.md"
+},
+"P1": {
+"quote": "we generate images using the pre-trained model provided by EDM, which yields a new state-of-the-art FID of 1.79.",
+"url": "https://github.com/wzekai99/DM-Improves-AT/blob/main/edm/README.md"
+},
+"P2": {
+"quote": "using deterministic sampling with 20 steps",
+"url": "https://github.com/wzekai99/DM-Improves-AT/blob/main/edm/README.md"
+},
+"P3": {
+"quote": "We select the top 20% scoring images for each class.",
+"url": "https://arxiv.org/abs/2302.04638"
+},
+"P4": {
+"quote": "the pseudo-labels of the generated images are directly determined by the class conditioning in our implementation.",
+"url": "https://arxiv.org/abs/2302.04638"
+},
+"A1": {
+"quote": "license: apache-2.0",
+"url": "https://huggingface.co/datasets/P2333/DM-Improves-AT"
+},
+"A2": {
+"quote": "via TRADES on CIFAR-10 with the 1M additional generated data",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+},
+"A3": {
+"quote": "The robust accuracy is measured using AutoAttack.",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+},
+"A4": {
+"quote": "WRN-28-10 | 92.44% | 67.31%",
+"url": "https://github.com/wzekai99/DM-Improves-AT"
+}
+}
+},
+{
+"name": "Synthetic CIFAR-10 by DDPM",
+"urls": [
+"https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness",
+"https://arxiv.org/abs/2110.09468",
+"https://arxiv.org/abs/2103.01946"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 80,
+"basic": 80,
+"content": 80,
+"construction": 80,
+"application": 80,
+"note": "A5 依据 README 点名的 Rebuffi 2021 和 Gowal 2021 两项研究，两者同一实验室，其中 Rebuffi 2021 是这份数据的介绍论文，属判断项。A1 记 0，仓库 Apache-2.0 没有提到生成数据。B5 记 0，联系 Sven Gowal 一句针对 TinyImages 抽取数据，不针对生成数据。C5 记 0，Gowal 2021 第 4.2 节讨论方法的局限，没有写这份数据的缺陷。P5 记 0。 判断项: A5。",
+"source_quotes": {
+"B1": {
+"quote": "CIFAR-10 | DDPM | 1M",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"B2": {
+"quote": "labels = npzfile['label']",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"B3": {
+"quote": "The following table links to datasets of 1M generated samples for CIFAR-10, CIFAR-100 and SVHN.",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"B4": {
+"quote": "https://storage.googleapis.com/dm-adversarial-robustness/cifar10_ddpm.npz",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"C1": {
+"quote": "use samples generated by a Denoising Diffusion Probabilistic Model",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"C2": {
+"quote": "To estimate coverage, we report the proportion of unique neighbors in the train and test set.",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"C3": {
+"quote": "until we have 100K images for each class",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"C4": {
+"quote": "Fig. 12 shows a random subset of this additional data for each generative model.",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"P1": {
+"quote": "The DDPM is solely trained on the original training data and does not use additional external data.",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"P2": {
+"quote": "We sample images from each model",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"P3": {
+"quote": "the generated dataset is constructed by drawing samples from the generative model and pseudo-labeling them",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"P4": {
+"quote": "we use a pretrained W RN-28-10 to give pseudo-labels",
+"url": "https://arxiv.org/abs/2110.09468"
+},
+"A2": {
+"quote": "to improve robustness.",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"A3": {
+"quote": "The robust accuracy is measured using AutoAttack.",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"A4": {
+"quote": "88.54% | 64.25%",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+},
+"A5": {
+"quote": "Rebuffi et al. (2021) and Gowal et al. (2021) use samples generated by a",
+"url": "https://github.com/google-deepmind/deepmind-research/tree/master/adversarial_robustness"
+}
+}
+},
+{
+"name": "CIFAKE",
+"urls": [
+"https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images",
+"https://arxiv.org/abs/2303.14126",
+"https://ieeexplore.ieee.org/abstract/document/10409290"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 95,
+"basic": 80,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "论文依据 arXiv v1，未核对 IEEE Access 终稿。A1 写与 CIFAR-10 相同的 MIT 许可，但链接指向第三方代码仓库，多伦多大学的 CIFAR 页面没有许可，属判断项。A5 依据 Papers with Code 链接，该地址在 2026-11-06 已跳转到 Hugging Face 的 trending 页，属判断项。B5 记 0，论文署名邮箱按规则不计。 判断项: A1、A5。",
+"source_quotes": {
+"B1": {
+"quote": "CIFAKE is a dataset that contains 60,000 synthetically-generated images and 60,000 real images (collected from CIFAR-10).",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"B2": {
+"quote": "the file formats \".jpeg\" were renamed \".jpg\"",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"B3": {
+"quote": "Data Explorer Version 3 (110.72 MB) ... Directory containing the validation data",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"B4": {
+"quote": "is made publicly available to the research community for future work.",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"C1": {
+"quote": "Tags Image Computer Vision Deep Learning",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"C2": {
+"quote": "modifiers are used equally for the 6000 images.",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"C3": {
+"quote": "There are 100,000 images for training (50k per class) and 20,000 for testing (10k per class)",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"C4": {
+"quote": "Figure 2: Examples of AI-generated images within the dataset contributed by this study",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"C5": {
+"quote": "Figure 3: Examples of visual defects found within the synthetic image dataset.",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"P1": {
+"quote": "For REAL, we collected the images from Krizhevsky & Hinton's CIFAR-10 dataset",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"P2": {
+"quote": "For the FAKE images, we generated the equivalent of CIFAR-10 with Stable Diffusion version 1.4",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"P3": {
+"quote": "Synthetic images were rendered at a resolution of 512px before resizing to 32px by bilinear interpolation",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"P4": {
+"quote": "For the class label “REAL”, interpreted as a positive class value “1”",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"P5": {
+"quote": "The updates to the dataset on the 28th of March 2023 did not change anything",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"A1": {
+"quote": "This dataset is published under the same MIT license as CIFAR-10",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"A2": {
+"quote": "Can computer vision techniques be used to detect when an image is real or has been generated by AI?",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+},
+"A3": {
+"quote": "Table 6: Observed validation F1-Score for the filters within the Convolutional Neural Network.",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"A4": {
+"quote": "the optimal approach could correctly classify the images with 92.98% accuracy.",
+"url": "https://arxiv.org/abs/2303.14126"
+},
+"A5": {
+"quote": "The dataset and all studies using it are linked using Papers with Code",
+"url": "https://www.kaggle.com/datasets/birdy654/cifake-real-and-ai-generated-synthetic-images"
+}
+}
+},
+{
+"name": "Airbnb",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 65,
+"basic": 80,
+"content": 40,
+"construction": 80,
+"application": 60,
+"note": "评分对象为 CleanML 仓库、DatasetDescriptions.pdf、CleanML 论文和压缩包内的 Readme。DatasetDescriptions.pdf 写 42,492 条并称自有数据，压缩包 Readme 写 over 40,000 条并称由 Jenny Blase 提供，raw.csv 实有 33,145 行。Airbnb/raw/edit.py 删除了评分为空的记录，文档没有说明这一步。B2、B3 依据仓库 README 对 raw.csv 路径的说明，没有字段级说明。A5 记 0，这份数据由 CleanML 作者方发布，文档没有列出其他使用。B5、C3、C4、C5、P5、A1 记 0。 判断项: B2、B3。",
+"source_quotes": {
+"B1": {
+"quote": "This is our own dataset with 42,492 records on hotels in the top 10 tourist destinations and major US metropolitan areas, scraped from Airbnb.com.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B3": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "Each record has 40 attributes, including the number of bedrooms, price, location, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C2": {
+"quote": "hotels in the top 10 tourist destinations and major US metropolitan areas",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P1": {
+"quote": "Demographic and economic attributes were scraped from city-data.com.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P2": {
+"quote": "by filtering based on neighborhood",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"P3": {
+"quote": "we identified the closest zip code",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"P4": {
+"quote": "The classification task is to determine whether the rating of each hotel is 5 or not.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A2": {
+"quote": "predict rating = 5 or not",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Airbnb 6% (3) 88% (43) 6% (3)",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Citation",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 0,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 0,
+"P3": 0,
+"P4": 0,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 50,
+"basic": 80,
+"content": 20,
+"construction": 20,
+"application": 80,
+"note": "评分对象为 CleanML 仓库、DatasetDescriptions.pdf、CleanML 论文和压缩包。压缩包中 Citation 目录没有 Readme。DatasetDescriptions.pdf 引用的 anhaidgroup useful-stuff/data 地址已返回 404。Magellan 数据仓库页面列有 Google Scholar 与 DBLP 的 Citations 实体匹配条目，输入表为 3122 与 12418 条，或 DBLP 与 Google Scholar 的 2616 与 64263 条，都与 5,005 个标题对不上，文档没有说明抽取过程，这些条目不计入本行。B2、B3 依据仓库 README 对 raw.csv 路径的说明。A5 依据 CleanML 论文表 3 列入这份数据，属于介绍实验本身。文档没有说明计算机类标签如何产生，P4 记 0。B5、C2、C3、C4、C5、P2、P3、P5、A1 记 0。 判断项: B2、B3、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [1] consists of titles of 5,005 publications from Google Scholar and DBLP.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B3": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "This dataset [1] consists of titles of 5,005 publications from Google Scholar and DBLP.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P1": {
+"quote": "This dataset [1] consists of titles of 5,005 publications from Google Scholar and DBLP.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A2": {
+"quote": "Given a publication title, the classification task is to determine whether the paper is related to Computer Science or not.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Citation 11% (3) 71% (20) 18% (5)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Company",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 0,
+"P1": 1,
+"P2": 0,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 80,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 CleanML 文档和 Kaggle 数据页。Kaggle 页面写 No description available，可用性 3.53，所以 C2、C3、C4 只能依据 Kaggle 自动生成的列统计和预览，P1 只能依据 DatasetDescriptions.pdf 对原始记录数的说明，这份数据的真实采集者和采集方式没有写明，P2 记 0。P4 依据预测负面情绪的任务说明，情感标签本身的生成规则没有写明。DatasetDescriptions.pdf 写 seven attributes，raw.csv 有 9 列，其中含索引列和标签列。A5 依据 CleanML 论文列入这份数据。B5、C5 记 0。 判断项: C2、C3、C4、P1、P4、A5。",
+"source_quotes": {
+"B1": {
+"quote": "We randomly sampled 5% records (128,889 records) from the original dataset.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "Each record has seven attributes including company name, country, city, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B3": {
+"quote": "data-ALL.csv(271.3 MB)",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "Each record has seven attributes including company name, country, city, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C2": {
+"quote": "05/29/2016 - 06/09/2016 ... 2016-05-29 ... 2017-11-29",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"C3": {
+"quote": "Negative ... 56% ... Neutral ... 37%",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"C4": {
+"quote": "52.3555183411 ... -1.17431974411 ... Positive ... GSK ... United Kingdom ... Rugby",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"P1": {
+"quote": "The original dataset [2] contains over 2.5 million records.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P3": {
+"quote": "We randomly sampled 5% records (128,889 records) from the original dataset.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P4": {
+"quote": "The classification task is to predict whether the public sentiment about a company is negative or not.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P5": {
+"quote": "Added State and Country column",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"A1": {
+"quote": "CC0: Public Domain",
+"url": "https://www.kaggle.com/datasets/jacksapper/company-sentiment-by-location"
+},
+"A2": {
+"quote": "The classification task is to predict whether the public sentiment about a company is negative or not.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Company 29% (4) 71% (10) 0% (0)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Credit",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://www.kaggle.com/competitions/GiveMeSomeCredit/overview",
+"https://www.kaggle.com/competitions/GiveMeSomeCredit/data"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 0,
+"P3": 1,
+"P4": 0,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 70,
+"basic": 80,
+"content": 60,
+"construction": 40,
+"application": 100,
+"note": "评分对象为 CleanML 文档和 Kaggle Give Me Some Credit 竞赛页。Kaggle 写 Historical data are provided on 250,000 borrowers，DatasetDescriptions.pdf 写 150,000 条，cs-training.csv 与测试集的关系没有写在 CleanML 文档里。Kaggle 把 AUC 作为竞赛指标，CleanML 改用 F1。P1 只写到竞赛主办方 Credit Fusion 和 historical data，没有说明数据来自哪个机构，属判断项。Data Dictionary.xls 需要接受竞赛规则后才能查看，违约标签的定义没有读到，P4 记 0。B5、C2、C4、P2、P5 记 0。 判断项: P1。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [3] consists of 150,000 credit records with 10 attributes",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "Type ... csv, xls ... Data Dictionary.xls(14.85 kB)",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/data"
+},
+"B3": {
+"quote": "Training, Test, Sample Entry and Submission Files are provided.",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/data"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "with 10 attributes including monthly income, age, then number of dependents, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C3": {
+"quote": "only 6.7% records in the minority class",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C5": {
+"quote": "This dataset has a class imbalance problem",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P1": {
+"quote": "Historical data are provided on 250,000 borrowers ... Competition Host ... Credit Fusion",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/overview"
+},
+"P3": {
+"quote": "We follow standard procedure to over-sample the minority and down-sample the majority class before training",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A1": {
+"quote": "Subject to Competition Rules",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/data"
+},
+"A2": {
+"quote": "predicting the probability that somebody will experience financial distress in the next two years.",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/overview"
+},
+"A3": {
+"quote": "we use F1 score as the performance metric for evaluation.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A4": {
+"quote": "Credit 29% (14) 67% (33) 4% (2)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "996 Participants ... 924 Teams ... 7,722 Submissions",
+"url": "https://www.kaggle.com/competitions/GiveMeSomeCredit/overview"
+}
+}
+},
+{
+"name": "EEG",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 1,
+"P3": 0,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 70,
+"basic": 80,
+"content": 40,
+"construction": 60,
+"application": 100,
+"note": "评分对象为 CleanML 文档和 UCI EEG Eye State 页面。压缩包 Readme 把这份数据描述成 Preictal 与 Interictal 癫痫片段，共 2406 条，16 个属性并特征化成 32 个属性，这段文字属于另一份数据。DatasetDescriptions.pdf、UCI 页面和 raw.csv 都是 14,980 条、14 个 EEG 属性加眼睛状态。C2 只有 117 秒的测量时长，没有逐通道统计，属判断项。UCI 页面显示 0 citations，A5 只能依据 CleanML 论文列入这份数据。文档没有眼睛开闭的类别比例，C3 记 0。B5、C4、C5、P3、P5 记 0。 判断项: C2、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This is a dataset[4] of 14,980 EEG recordings with 14 EEG attributes.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "EEG Eye State.arff ... 1.6 MB",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"B3": {
+"quote": "EEG Eye State.arff ... 1.6 MB",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"B4": {
+"quote": "eeg_eye_state = fetch_ucirepo(id=264)",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"C1": {
+"quote": "Multivariate, Sequential, Time-Series",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"C2": {
+"quote": "The duration of the measurement was 117 seconds.",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"P1": {
+"quote": "All data is from one continuous EEG measurement with the Emotiv EEG Neuroheadset.",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"P2": {
+"quote": "All data is from one continuous EEG measurement with the Emotiv EEG Neuroheadset.",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"P4": {
+"quote": "The eye state was detected via a camera during the EEG measurement and added later manually to the file after analysing the video frames.",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"A1": {
+"quote": "This dataset is licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/264/eeg+eye+state"
+},
+"A2": {
+"quote": "The classification task is to predict whether the eye-state is closed or open.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "EEG 57% (80) 41% (57) 2% (3)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "KDD",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/overview",
+"https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data",
+"https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/leaderboard",
+"https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/rules"
+],
+"items": {
+"B1": 0,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 0,
+"P3": 0,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 70,
+"basic": 60,
+"content": 60,
+"construction": 60,
+"application": 100,
+"note": "评分对象为 CleanML 压缩包内的 Readme 和 Kaggle KDD Cup 2014 竞赛页。这张表只存在于压缩包，CleanML 论文表 3 和 DatasetDescriptions.pdf 没有它，schema/dataset.py 的 datasets 数组也没有它，所以 A3、A4 只能依据 Kaggle 竞赛。raw.csv 有 131,329 行、101 列，文档没有写出这个规模，B1 记 0。标签列 is_exciting_20 在文档里没有定义，Kaggle 只定义 is_exciting，P4 属判断项。Kaggle 写 2026-07-07 已应主办方要求移除数据，官方下载渠道失效，B4 依据 CleanML 压缩包链接，属判断项。P5 依据这条移除说明，没有版本记录，属判断项。B5、C3、C4、P2、P3 记 0。 判断项: B4、C2、P4、P5。",
+"source_quotes": {
+"B2": {
+"quote": "The data is provided in a relational format and split by dates.",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"B3": {
+"quote": "essays.csv ... projects.csv",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "The data is provided in a relational format and split by dates.",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"C2": {
+"quote": "Any project posted prior to 2014-01-01 is in the training set",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"C5": {
+"quote": "Note that the term \"exciting\" is meant as a business construct",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"P1": {
+"quote": "This dataset contains the related data about projects, donations and so on from DonorsChoose.org.",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"P4": {
+"quote": "To be exciting, a project must meet all of the following five criteria.",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"P5": {
+"quote": "Update 2026-07-07: this dataset has been removed at the request of the host.",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/data"
+},
+"A1": {
+"quote": "'Data' means the Data or Datasets linked from the Competition Website for the purpose of use by Participants in the Competition. ... Participants must use the Data only as permitted by these",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/rules"
+},
+"A2": {
+"quote": "predict whether a project is exciting",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"A3": {
+"quote": "Submissions are evaluated on area under the ROC curve between the predicted probability that a project is exciting and the observed outcomes.",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/overview"
+},
+"A4": {
+"quote": "'STRAYA ... 0.67813",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/leaderboard"
+},
+"A5": {
+"quote": "The 2014 KDD Cup asks participants to help DonorsChoose.org identify projects",
+"url": "https://www.kaggle.com/competitions/kdd-cup-2014-predicting-excitement-at-donors-choose/overview"
+}
+}
+},
+{
+"name": "Marketing",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://web.archive.org/web/20210418011240/https://web.stanford.edu/~hastie/ElemStatLearn/datasets/marketing.info.txt",
+"https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 0,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 70,
+"basic": 80,
+"content": 60,
+"construction": 60,
+"application": 80,
+"note": "评分对象为 CleanML 文档、压缩包 Readme 和 Elements of Statistical Learning 的 marketing.info.txt。DatasetDescriptions.pdf 引用的 anhaidgroup useful-stuff/data 地址已返回 404，Magellan 数据仓库页面的数据表没有 Marketing，压缩包 Readme 和 ESL 把来源写作 Impact Resources。DatasetDescriptions.pdf 写 14 个人口属性，Readme 写其余 13 个属性加收入标签，raw.csv 为 14 列。B3 依据仓库 README 对 raw.csv 路径的说明。A5 依据 CleanML 论文列入这份数据。文档没有类别计数，C3 记 0。B5、C4、P3、P5、A1 记 0。 判断项: B3、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [6] consists of 8,993 records about household income from a survey.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "ANNUAL INCOME OF HOUSEHOLD (PERSONAL INCOME IF SINGLE)",
+"url": "https://web.archive.org/web/20210418011240/https://web.stanford.edu/~hastie/ElemStatLearn/datasets/marketing.info.txt"
+},
+"B3": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "Each record has 14 demographic attributes",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C2": {
+"quote": "filled out by shopping mall customers in the San Francisco Bay area.",
+"url": "https://web.archive.org/web/20210418011240/https://web.stanford.edu/~hastie/ElemStatLearn/datasets/marketing.info.txt"
+},
+"C5": {
+"quote": "with a lot of missing data.",
+"url": "https://web.archive.org/web/20210418011240/https://web.stanford.edu/~hastie/ElemStatLearn/datasets/marketing.info.txt"
+},
+"P1": {
+"quote": "Source: Impact Resources, Inc., Columbus, OH (1987).",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"P2": {
+"quote": "A total of N=9409 questionnaires containg 502 questions",
+"url": "https://web.archive.org/web/20210418011240/https://web.stanford.edu/~hastie/ElemStatLearn/datasets/marketing.info.txt"
+},
+"P4": {
+"quote": "The classification task is to predict if the annual household income is less than $25,000.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A2": {
+"quote": "The goal is to predict the Anual Income <=4 of Household from the other 13 demographics attributes.",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Marketing 49% (24) 8% (4) 43% (21)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Movie",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 80,
+"content": 60,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 CleanML 文档、压缩包内的 merge.py 和 Kaggle TMDB 5000 页面。DatasetDescriptions.pdf 写分类任务是 romance or comedy，Movie/raw/merge.py 实际生成的是是否喜剧的二值标签。DatasetDescriptions.pdf 写 9,329 movie reviews，raw.csv 每行是一部电影。DatasetDescriptions.pdf 引用的 data.world IMDB 5000 页面已于 2026-07-13 退役，Kaggle 页面写原 IMDB 数据因 DMCA 请求被移除。B2 依据 Kaggle 对 json 列的说明。Kaggle 页面的列直方图只有 movie_id，C2 记 0。A5 依据 CleanML 论文列入这份数据。B5、C2、C3 记 0。 判断项: B2、C4、P4、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [10, 5] consists of 9,329 movie reviews, which we obtained by merging data from IMDB and TMDB datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "Several of the new columns contain json.",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"B3": {
+"quote": "There's now a separate file containing the full credits for both the cast and crew.",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "Each record has seven attributes including title, language, score, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C4": {
+"quote": "character ... Jay Gatsby ... credit_id",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"C5": {
+"quote": "All fields are filled out by users so don't expect them to agree on keywords, genres, ratings, or the like.",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"P1": {
+"quote": "we obtained by merging data from IMDB and TMDB datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P2": {
+"quote": "If you are curious about how this dataset was prepared, the code to access TMDb's API is posted here.",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"P3": {
+"quote": "we obtained by merging data from IMDB and TMDB datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P4": {
+"quote": "The classification task is to predict the genre of the movie (romance or comedy).",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P5": {
+"quote": "Update the dataset to use themovedb.org as the source",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"A1": {
+"quote": "Other (specified in description)",
+"url": "https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata"
+},
+"A2": {
+"quote": "The classification task is to predict the genre of the movie (romance or comedy).",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Movie 29% (8) 21% (6) 50% (14)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Restaurant",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://sites.google.com/site/anhaidgroup/useful-stuff/the-magellan-data-repository"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 0,
+"C4": 0,
+"C5": 0,
+"P1": 1,
+"P2": 0,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 60,
+"basic": 80,
+"content": 20,
+"construction": 60,
+"application": 80,
+"note": "评分对象为 CleanML 仓库、DatasetDescriptions.pdf、CleanML 论文和压缩包。压缩包中 Restaurant 目录没有 Readme。DatasetDescriptions.pdf 引用的 anhaidgroup useful-stuff/data 地址已返回 404。Magellan 数据仓库页面列有 Yelp 与 Yellow Pages 的实体匹配条目 Restaurants3 和 Restaurants4，输入表为 9947 与 28787 条、11840 与 5223 条，都与 12,007 条对不上，文档没有说明合并过程，这些条目不计入本行。B2、B3 依据仓库 README 对 raw.csv 路径的说明。A5 依据 CleanML 论文列入这份数据。B5、C2、C3、C4、C5、P2、P5、A1 记 0。 判断项: B2、B3、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [7] contains 12,007 records about restaurants, which we obtained by merging data from the Yelp and Yellowpages datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B3": {
+"quote": "The `raw` folder must contain raw data named `raw.csv`.",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"C1": {
+"quote": "Each record has 10 attributes including city, category, rating, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P1": {
+"quote": "which we obtained by merging data from the Yelp and Yellowpages datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P3": {
+"quote": "which we obtained by merging data from the Yelp and Yellowpages datasets.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P4": {
+"quote": "predict whether the price range of a restaurant is “$” or not",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A2": {
+"quote": "predict whether the price range of a restaurant is “$” or not",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Restaurant 0% (0) 89% (25) 11% (3)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Sensor",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"http://db.csail.mit.edu/labdata/labdata.html"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 85,
+"basic": 100,
+"content": 60,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 CleanML 文档、压缩包 Readme 和 Intel Lab Data 页面。DatasetDescriptions.pdf 写原始 928,991 条，Intel 页面写约 2.3 million，压缩包 origin.txt 有 2,313,682 行。压缩包 Readme 写预测 sensor 49，同一文件又写 moteid = 1 or 2。DatasetDescriptions.pdf 写每传感器每小时 1 条，raw.csv 按传感器、日期、小时分组后中位数为 46 条。raw.csv 有 25,384 行日期为 2003 年，Intel 页面和 origin.txt 只覆盖 2004 年。B5 依据页面底部 Samuel Madden 的邮箱链接，页面没有写明这是技术支持入口。P4 依据传感器编号作为标签的任务说明。A5 依据 CleanML 论文列入这份数据。C3、C4、P5 记 0。 判断项: B5、P4、A5。",
+"source_quotes": {
+"B1": {
+"quote": "The sampled dataset contains 62,076 records.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "date:yyyy-mm-dd ... moteid:int ... temperature:real",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"B3": {
+"quote": "This file includes a log of about 2.3 million readings collected from these sensors.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"B4": {
+"quote": "This file includes a log of about 2.3 million readings collected from these sensors.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"B5": {
+"quote": "mailto:madden@csail.mit.edu",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"C1": {
+"quote": "sensor recordings with eight attributes including temperature, humidity, light, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C2": {
+"quote": "54 sensors deployed in the Intel Berkeley Research lab between February 28th and April 5th, 2004.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"C5": {
+"quote": "There are some missing epochs in this data set.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"P1": {
+"quote": "54 sensors deployed in the Intel Berkeley Research lab between February 28th and April 5th, 2004.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"P2": {
+"quote": "values once every 31 seconds.",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"P3": {
+"quote": "We only used recordings from sensor 1 and sensor 2 and sampled the dataset to include 1 observation per hour for each sensor.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"P4": {
+"quote": "predict whether the readings came from a particular sensor (sensor 1 or sensor 2).",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A1": {
+"quote": "Permission is granted to use or reproduce this data in any format or venue",
+"url": "http://db.csail.mit.edu/labdata/labdata.html"
+},
+"A2": {
+"quote": "predict whether the readings came from a particular sensor (sensor 1 or sensor 2).",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "Sensor 44% (62) 44% (62) 11% (16)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "with varying error types and error rates, as summarized in Table 3.",
+"url": "https://arxiv.org/abs/1904.09483"
+}
+}
+},
+{
+"name": "Titanic",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://www.kaggle.com/competitions/titanic/overview",
+"https://www.kaggle.com/competitions/titanic/data"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 0,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 0,
+"P3": 0,
+"P4": 0,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 65,
+"basic": 100,
+"content": 40,
+"construction": 20,
+"application": 100,
+"note": "评分对象为 CleanML 文档、压缩包 Readme 和 Kaggle Titanic 竞赛页。DatasetDescriptions.pdf 写 11 个属性，压缩包 Readme 写 12 个属性，raw.csv 为 12 列。DatasetDescriptions.pdf 引用的 Kaggle 地址 upendr/titanic-machine-learning-from-disaster 通过 Kaggle 接口返回 403。B5 依据竞赛页的 Discord 入口，这是平台社区而不是数据支持，属判断项。C5 依据数据字典对家庭关系定义的括注，没有成段写明局限，属判断项。A5 依据竞赛页的滚动榜单说明。乘客名单如何整理没有写明，P2、P3 记 0。C2、C3、C4、P4、P5 记 0。 判断项: B5、C5、A5。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [9] contains 891 records and 11 attributes from the Titanic including name, sex, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "pclass ... Ticket class ... 1 = 1st, 2 = 2nd, 3 = 3rd",
+"url": "https://www.kaggle.com/competitions/titanic/data"
+},
+"B3": {
+"quote": "training set (train.csv)",
+"url": "https://www.kaggle.com/competitions/titanic/data"
+},
+"B4": {
+"quote": "To run experiments, download and unzip the ... datasets",
+"url": "https://github.com/chu-data-lab/CleanML"
+},
+"B5": {
+"quote": "come join our Discord!",
+"url": "https://www.kaggle.com/competitions/titanic/overview"
+},
+"C1": {
+"quote": "This dataset contains 891 records from the Titanic manifest with 12 attributes.",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"C5": {
+"quote": "(mistresses and fiancés were ignored)",
+"url": "https://www.kaggle.com/competitions/titanic/data"
+},
+"P1": {
+"quote": "from the Titanic manifest",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"A1": {
+"quote": "Subject to Competition Rules",
+"url": "https://www.kaggle.com/competitions/titanic/data"
+},
+"A2": {
+"quote": "It is your job to predict if a passenger survived the sinking of the Titanic or not.",
+"url": "https://www.kaggle.com/competitions/titanic/overview"
+},
+"A3": {
+"quote": "Your score is the percentage of passengers you correctly predict. This is known as accuracy.",
+"url": "https://www.kaggle.com/competitions/titanic/overview"
+},
+"A4": {
+"quote": "Titanic major 21% (3) 79% (11) 0% (0)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "This competition runs indefinitely with a rolling leaderboard.",
+"url": "https://www.kaggle.com/competitions/titanic/overview"
+}
+}
+},
+{
+"name": "University",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://archive.ics.uci.edu/dataset/104/university"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 0,
+"C3": 0,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 0,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 70,
+"basic": 80,
+"content": 40,
+"construction": 60,
+"application": 100,
+"note": "评分对象为 CleanML 文档、压缩包内的 edit.py 和 UCI University 页面。DatasetDescriptions.pdf 写 286 条，UCI 页面写 285 条，university.csv 为 285 行加表头，raw.csv 只有 210 行，文档没有说明删去空值这一步。A4 依据 CleanML 论文表 14 中 University 一行。P1 只写到文件由 Steve Souders 提供，属判断项。P3 依据压缩包内 University/raw/edit.py 的代码，文档正文没有写，属判断项。B5、C2、C3、C4、P2、P5 记 0。 判断项: P1、P3。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [11] contains 286 records about universities.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "It is a LISP readable file with a few relevant functions at the end of the data file.",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"B3": {
+"quote": "university.data ... 156.7 KB ... university.names ... 1.6 KB",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"B4": {
+"quote": "from ucimlrepo import fetch_ucirepo",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"C1": {
+"quote": "Each record has 17 attributes including state, university name, SAT scores, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C5": {
+"quote": "Some duplicates may exist and a single observation may have more than one value for a given attribute",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"P1": {
+"quote": "The data file remains in the state as given to us by Steve Souders.",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"P3": {
+"quote": "data = data.dropna().reset_index(drop=True)",
+"url": "https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0"
+},
+"P4": {
+"quote": "The classification task is to predict whether the expenses are greater than 7, 000 for each university.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A1": {
+"quote": "This dataset is licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+},
+"A2": {
+"quote": "The classification task is to predict whether the expenses are greater than 7, 000 for each university.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "University ... 7% (1) ... 93% (13) ... Q5 (E = Inconsistencies)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "Papers Citing this Dataset ... Generating Data using Monte Carlo Dropout",
+"url": "https://archive.ics.uci.edu/dataset/104/university"
+}
+}
+},
+{
+"name": "USCensus",
+"urls": [
+"https://github.com/chu-data-lab/CleanML",
+"https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf",
+"https://arxiv.org/abs/1904.09483",
+"https://www.dropbox.com/s/nerfrhbrseev928/CleanML-datasets-2020.zip?dl=0",
+"https://archive.ics.uci.edu/dataset/20/census+income",
+"https://archive.ics.uci.edu/static/public/20/census+income.zip"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 0,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 CleanML 文档、压缩包 Readme 和 UCI Census Income 页面及压缩包内的 adult.names。DatasetDescriptions.pdf 把这张表引到 UCI US Census Data 1990（2,458,285 条、68 个属性、聚类任务），正文却写 32,561 条、14 个属性的收入预测，压缩包 Readme 和 raw.csv 都对应 Census Income。评分按实际数据对应的 Census Income。C2 只有人口范围与抽取条件，没有逐特征统计，属判断项。文档没有展示样本行，C4 记 0。只有 old.adult.names 文件和接收日期，没有版本记录，P5 记 0。 判断项: C2。",
+"source_quotes": {
+"B1": {
+"quote": "This dataset [12] contains 32,561 US Census records for adults.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"B2": {
+"quote": "marital-status: Married-civ-spouse, Divorced, Never-married, Separated, Widowed",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"B3": {
+"quote": "adult.data ... 3.8 MB ... adult.test ... 1.9 MB",
+"url": "https://archive.ics.uci.edu/dataset/20/census+income"
+},
+"B4": {
+"quote": "fetch_ucirepo(id=20)",
+"url": "https://archive.ics.uci.edu/dataset/20/census+income"
+},
+"B5": {
+"quote": "e-mail: ronnyk@sgi.com for questions.",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"C1": {
+"quote": "Each record has 14 attributes including age, education, sex, etc.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"C2": {
+"quote": "A set of reasonably clean records was extracted using the following conditions:",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"C3": {
+"quote": "Probability for the label '>50K' : 23.93% / 24.78% (without unknowns)",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"C5": {
+"quote": "Duplicate or conflicting instances : 6",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"P1": {
+"quote": "Extraction was done by Barry Becker from the 1994 Census database.",
+"url": "https://archive.ics.uci.edu/dataset/20/census+income"
+},
+"P2": {
+"quote": "The weights on the CPS files are controlled to independent estimates of the civilian noninstitutional population of the US.",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"P3": {
+"quote": "Run MLC++ GenCVFiles to generate data,test.",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"P4": {
+"quote": "Discretized agrossincome into two ranges with threshold 50,000.",
+"url": "https://archive.ics.uci.edu/static/public/20/census+income.zip"
+},
+"A1": {
+"quote": "This dataset is licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+"url": "https://archive.ics.uci.edu/dataset/20/census+income"
+},
+"A2": {
+"quote": "The classification goal is to predict whether the adult earns more than $50,000.",
+"url": "https://github.com/chu-data-lab/CleanML/blob/master/DatasetDescriptions.pdf"
+},
+"A3": {
+"quote": "select the model that has the best validation accuracy (or F1 score if the dataset has imbalanced classes)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A4": {
+"quote": "USCensus major 43% (6) 36% (5) 21% (3)",
+"url": "https://arxiv.org/abs/1904.09483"
+},
+"A5": {
+"quote": "Papers Citing this Dataset ... The What-If Tool: Interactive Probing of Machine Learning Models",
+"url": "https://archive.ics.uci.edu/dataset/20/census+income"
+}
+}
+},
+{
+"name": "DCLM",
+"urls": [
+"https://github.com/mlfoundations/dclm",
+"https://arxiv.org/abs/2406.11794",
+"https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0-parquet"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 DCLM 仓库、DataComp-LM 论文和 Hugging Face 数据卡。仓库 README 写 over 300T tokens，论文和 Hugging Face 写 240T。论文正文写 370TB，附录写 340TB。模型规模的最小档在 README 文字和论文一处写 411M，在 README 表格和论文另一处写 412M。B5 依据贡献指南中的 issue 说明，没有专门的联系入口，属判断项。P5 依据 Hugging Face 上 parquet 副本与原版的对应说明，没有版本记录，属判断项。无标注语料没有类别统计和标注规范，C3、P4 记 0。 判断项: B5、P5。",
+"source_quotes": {
+"B1": {
+"quote": "contains 200B documents (370TB after gzip compression), resulting in 240T GPT-NeoX [24] tokens.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"B2": {
+"quote": "We release DCLM-P OOL as a set of compressed .jsonl files",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"B3": {
+"quote": "This folder contains .txt files which list the S3 paths corresponding to the input data pools",
+"url": "https://github.com/mlfoundations/dclm"
+},
+"B4": {
+"quote": "which is available via the CommonCrawl S3 bucket.",
+"url": "https://github.com/mlfoundations/dclm"
+},
+"B5": {
+"quote": "Please follow our contributing guide for submitting pull requests and reporting issues.",
+"url": "https://github.com/mlfoundations/dclm"
+},
+"C1": {
+"quote": "The dataset is in plain text format.",
+"url": "https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0-parquet"
+},
+"C2": {
+"quote": "is an unfiltered web-text corpus comprised of all Common Crawl [45] data prior to 2023.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"C4": {
+"quote": "This is a digitized version of an article from The Times’s print archive",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"C5": {
+"quote": "it will contain some PII data.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"P1": {
+"quote": "a corpus of 240 trillion tokens derived from Common Crawl [45].",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"P2": {
+"quote": "we re-extract text from HTML using resiliparse [20, 21] instead of using Common Crawl’s pre-extracted text.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"P3": {
+"quote": "Deduplication using a Bloom filter",
+"url": "https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0-parquet"
+},
+"P5": {
+"quote": "this is an identical copy of https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0",
+"url": "https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0-parquet"
+},
+"A1": {
+"quote": "(all with CC-BY-4 license)",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"A2": {
+"quote": "DCLM-Baseline is intended to be used as a research baseline for the DCLM benchmark.",
+"url": "https://huggingface.co/datasets/mlfoundations/dclm-baseline-1.0-parquet"
+},
+"A3": {
+"quote": "a broad suite of 53 downstream evaluations.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"A4": {
+"quote": "to 64% 5-shot accuracy on MMLU with 2.6T training tokens.",
+"url": "https://arxiv.org/abs/2406.11794"
+},
+"A5": {
+"quote": "The leaderboard is updated regularly with the latest submissions from the community.",
+"url": "https://github.com/mlfoundations/dclm"
+}
+}
+},
+{
+"name": "DataComp",
+"urls": [
+"https://github.com/mlfoundations/datacomp",
+"https://www.datacomp.ai/dcclip/",
+"https://www.datacomp.ai/dcclip/leaderboard.html",
+"https://huggingface.co/datasets/mlfoundations/datacomp_small",
+"https://arxiv.org/abs/2304.14108"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 80,
+"application": 100,
+"note": "评分对象为 DataComp 仓库、官网、榜单、Hugging Face 数据卡和 DataComp 论文。没有发现文档之间的实质矛盾。B5 依据论文附带数据表中的联系邮箱。C4 依据论文中候选图像示例的图注，文档没有成段的样本展示，属判断项。P5 依据数据表对勘误和首个版本的说明，没有实际发布记录，属判断项。无标注图文对没有类别统计和标注规范，C3、P4 记 0。 判断项: C4、P5。",
+"source_quotes": {
+"B1": {
+"quote": "xlarge: 12.8B pool size, 12.8B examples seen",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"B2": {
+"quote": "which stores it as .tar shards with the images and captions",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"B3": {
+"quote": "The script will create two directories inside $data_dir: metadata and shards.",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"B4": {
+"quote": "python download_upstream.py --scale $scale --data_dir $data_dir",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"B5": {
+"quote": "We can be contacted at contact@datacomp.ai.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"C1": {
+"quote": "uncurated image-text pairs, crawled from the public internet.",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"C2": {
+"quote": "from all Common Crawl snapshots from 2014 to 2022.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"C4": {
+"quote": "Figure 4: Candidate images (top) that are detected as duplicates against images in the evaluation sets (bottom) are removed from the pool.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"C5": {
+"quote": "The internet contains unsafe, toxic, and sensitive content",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"P1": {
+"quote": "12.8 billion image-text pairs from Common Crawl",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"P2": {
+"quote": "to extract pairs of image urls and nonempty alt-text",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"P3": {
+"quote": "we preprocess our pool to remove NSFW content and blur human faces detected in images.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"P5": {
+"quote": "Currently there are no errata. If issues are discovered, we will communicate with the public via our website",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"A1": {
+"quote": "We distribute the image url-text samples and metadata under a standard Creative Common CC-BY-4.0 license.",
+"url": "https://huggingface.co/datasets/mlfoundations/datacomp_small"
+},
+"A2": {
+"quote": "DataComp is a competition about designing datasets for pre-training CLIP models.",
+"url": "https://github.com/mlfoundations/datacomp"
+},
+"A3": {
+"quote": "testing the resulting model on 38 downstream test sets.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"A4": {
+"quote": "Table 1: Zero-shot performance of CLIP models trained on different datasets.",
+"url": "https://arxiv.org/abs/2304.14108"
+},
+"A5": {
+"quote": "Metagradient Descent ... 0.041 ... Engstrom et. al.",
+"url": "https://www.datacomp.ai/dcclip/leaderboard.html"
+}
+}
+},
+{
+"name": "Camelyon17",
+"urls": [
+"https://wilds.stanford.edu/datasets/",
+"https://github.com/p-lambda/wilds",
+"https://arxiv.org/abs/2012.07421",
+"https://camelyon17.grand-challenge.org/Data/",
+"https://pmc.ncbi.nlm.nih.gov/articles/PMC6007545/",
+"https://wilds.stanford.edu/updates/"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 100,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 WILDS 官网与仓库、WILDS 论文、CAMELYON17 竞赛数据页和 Litjens 等的数据论文。竞赛 Data 页正文写通过 Google Drive 下载，页面列出的渠道实际是 GigaScience、AWS 和百度。B3 依据竞赛页按病人组织切片的说明和 WILDS 的切分说明，没有逐文件清单，属判断项。P5 依据 WILDS 更新页说明各版本的已标注划分保持不变。 判断项: B3。",
+"source_quotes": {
+"B1": {
+"quote": "Training: 302,436 patches taken from 30 WSIs",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"B2": {
+"quote": "WSI are provided as TIFF images. Lesion-level annotations are provided as XML files.",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"B3": {
+"quote": "we provide slides that are organised by patient.",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"B4": {
+"quote": "GigaScience Database",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"B5": {
+"quote": "then please report your findings at the forum",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"C1": {
+"quote": "the input x is a 96x96 histopathological image",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"C2": {
+"quote": "with 10 WSIs from each of 5 hospitals in the Netherlands.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"C3": {
+"quote": "so that each split has a 50/50 class balance",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"C4": {
+"quote": "Figure 4: The Camelyon17-wilds dataset comprises tissue patches from different hospitals.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"C5": {
+"quote": "Note however, ITCs are not annotated exhaustively.",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"P1": {
+"quote": "The data set for CAMELYON17 is collected from 5 medical centres in the Netherlands.",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"P2": {
+"quote": "Data were collected at five medical centers in the Netherlands",
+"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6007545/"
+},
+"P3": {
+"quote": "we pre-process the slides into patches and balance the dataset",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"P4": {
+"quote": "all annotations were inspected by one of two expert breast pathologists",
+"url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6007545/"
+},
+"P5": {
+"quote": "The labeled training, validation, and test data in all datasets have been kept exactly the same.",
+"url": "https://wilds.stanford.edu/updates/"
+},
+"A1": {
+"quote": "available under ... CC0",
+"url": "https://camelyon17.grand-challenge.org/Data/"
+},
+"A2": {
+"quote": "The task is to predict if a given region of tissue contains any tumor tissue, which we model as binary classification.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A3": {
+"quote": "We evaluate models by their average test accuracy across patches.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A4": {
+"quote": "Table 5: Baseline results on Camelyon17-wilds.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A5": {
+"quote": "We study this shift on a patch-based variant of the Camelyon17 dataset",
+"url": "https://arxiv.org/abs/2012.07421"
+}
+}
+},
+{
+"name": "CivilComments",
+"urls": [
+"https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data",
+"https://arxiv.org/abs/1903.04561",
+"https://arxiv.org/abs/2012.07421",
+"https://wilds.stanford.edu/datasets/",
+"https://www.tensorflow.org/datasets/catalog/civil_comments"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 95,
+"basic": 80,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 Kaggle Jigsaw 竞赛数据页、Borkan 等的论文、WILDS 论文与官网和 TFDS 目录页，覆盖原始语料和 WILDS 划分版本。WILDS 论文写每条评论至少由 10 名众包人员审读，Kaggle 写最多显示给 10 名标注者。Borkan 等写 1,804,875 条，TFDS 写 1,804,874 条。WILDS 官网的 wilds@cs.stanford.edu 只面向贡献新数据集的人，B5 记 0。 判断项: 无。",
+"source_quotes": {
+"B1": {
+"quote": "Training: 269,038 comments.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"B2": {
+"quote": "the text of the individual comment is found in the comment_text column.",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"B3": {
+"quote": "The following files have been added post-competition close ... test_public_expanded.csv",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"B4": {
+"quote": "Download size",
+"url": "https://www.tensorflow.org/datasets/catalog/civil_comments"
+},
+"C1": {
+"quote": "the input x is a comment on an online article",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"C2": {
+"quote": "male 44,484 15.03%",
+"url": "https://arxiv.org/abs/1903.04561"
+},
+"C3": {
+"quote": "all comments 1,804,875 8.00%",
+"url": "https://arxiv.org/abs/1903.04561"
+},
+"C4": {
+"quote": "Here are a few examples of comments and their associated toxicity and identity labels.",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"C5": {
+"quote": "Different comments that have the same text may have been labeled with different targets or subgroups.",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"P1": {
+"quote": "At the end of 2017 the Civil Comments platform shut down",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"P2": {
+"quote": "extended annotation of this data by human raters",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"P3": {
+"quote": "We randomly partitioned these articles into disjoint training, validation, and test splits",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"P4": {
+"quote": "each comment was shown to up to 10 annotators",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"P5": {
+"quote": "UPDATE (Nov 18, 2019):",
+"url": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/data"
+},
+"A1": {
+"quote": "This dataset is released under CC0, as is the underlying comment text.",
+"url": "https://www.tensorflow.org/datasets/catalog/civil_comments"
+},
+"A2": {
+"quote": "The task is a binary classification task of determining if a comment is toxic.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A3": {
+"quote": "We evaluate a model by its worst-group accuracy",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A4": {
+"quote": "Table 15: Baseline results on CivilComments-wilds.",
+"url": "https://arxiv.org/abs/2012.07421"
+},
+"A5": {
+"quote": "We study this issue through a modified variant of the CivilComments dataset",
+"url": "https://wilds.stanford.edu/datasets/"
+}
+}
+},
+{
+"name": "MNIST",
+"urls": [
+"https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/",
+"http://yann.lecun.com/exdb/mnist/",
+"https://web.archive.org/web/2020/http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 0,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 0,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 80,
+"basic": 100,
+"content": 80,
+"construction": 60,
+"application": 80,
+"note": "评分对象为 LeCun 主页 MNIST 页面的 2023 年 Wayback 快照和 LeCun 等 1998 年论文。存档页写 Four files are available on this site，当前的 http://yann.lecun.com/exdb/mnist/ 是空目录，四个文件返回 404，所以 B4 属判断项。B5 依据页面上作者姓名下方的邮箱图片（yann@cs.nyu.edu），页面没有写明这是联系入口，属判断项。类别只写到 0 到 9，没有逐类计数，C3 记 0。标签来自 NIST 原始数据，文档没有标注规范，P4 记 0。P5、A1 记 0。 判断项: B4、B5。",
+"source_quotes": {
+"B1": {
+"quote": "has a training set of 60,000 examples, and a test set of 10,000 examples.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"B2": {
+"quote": "The data is stored in a very simple file format designed for storing vectors and multidimensional matrices.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"B3": {
+"quote": "Four files are available on this site:",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"B4": {
+"quote": "available from this page",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"B5": {
+"quote": "Yann LeCun ... Professor ... New York University ... email.gif",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"C1": {
+"quote": "The digits have been size-normalized and centered in a fixed-size image.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"C2": {
+"quote": "The MNIST training set is composed of 30,000 patterns from SD-3 and 30,000 patterns from SD-1.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"C4": {
+"quote": "Fig. 4. Size-normalized examples from the MNIST database.",
+"url": "https://web.archive.org/web/2020/http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf"
+},
+"C5": {
+"quote": "SD-3 is much cleaner and easier to recognize than SD-1.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"P1": {
+"quote": "The MNIST database was constructed from NIST's Special Database 3 and Special Database 1",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"P2": {
+"quote": "SD-3 was collected among Census Bureau employees, while SD-1 was collected among high-school students.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"P3": {
+"quote": "were size normalized to fit in a 20x20 pixel box while preserving their aspect ratio.",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"A2": {
+"quote": "It is a good database for people who want to try learning techniques and pattern recognition methods on real-world data",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"A3": {
+"quote": "CLASSIFIER ... PREPROCESSING ... TEST ERROR RATE (%) ... Reference",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"A4": {
+"quote": "linear classifier (1-layer NN) ... none ... 12.0",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+},
+"A5": {
+"quote": "Belongie et al. IEEE",
+"url": "https://web.archive.org/web/20231229081350/http://yann.lecun.com/exdb/mnist/"
+}
+}
+},
+{
+"name": "Caltech-256",
+"urls": [
+"https://data.caltech.edu/records/nyy15-4j048",
+"https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 100,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 CaltechDATA 记录和 Griffin 等的技术报告。摘要和 CaltechDATA 写 256 个类别共 30607 张，报告图 2 显示 30607 包含第 257 类 clutter（827 张），256 个类别实为 29,780 张。技术报告的 PDF 文字不可提取，相关引文按页面图像读取。B2 只有压缩包名，属判断项。B5 依据报告中征集意见的邮箱，属判断项。A5 依据 CaltechDATA 的 isCitedBy 关联记录，只有一条 DOI，属判断项。 判断项: B2、B5、A5。",
+"source_quotes": {
+"B1": {
+"quote": "a challenging set of 256 object categories containing a total of 30607 images.",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"B2": {
+"quote": "256_ObjectCategories.tar",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"B3": {
+"quote": "256_ObjectCategories.tar",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"B4": {
+"quote": "10.22002/D1.20087",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"B5": {
+"quote": "please send them to caltech256@vision.caltech.edu.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"C1": {
+"quote": "object categories",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"C2": {
+"quote": "Overall in Caltech-256 the mean image size is 351 pixels while the mean aspect ratio is 1.17.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"C3": {
+"quote": "Figure 2: Summary of Caltech image datasets. There are actually 102 and 257 categories if the clutter categories in each set are included.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"C4": {
+"quote": "Figure 1: Examples of a 1, 2 and 3 rating for images downloaded using the keyword dice.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"C5": {
+"quote": "some visual categories such as grass, brick and clouds appear to be over-represented.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"P1": {
+"quote": "Images from each category were downloaded from both Google and PicSearch using scripts.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"P2": {
+"quote": "A small group of vision dataset users were asked to supply the names of roughly 300 object categories.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"P3": {
+"quote": "Duplicates were removed by detecting images which contained over 15 similar SIFT descriptors",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"P4": {
+"quote": "We asked 4 different subjects to rate these images using the following criteria:",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"P5": {
+"quote": "Version 1.0",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"A1": {
+"quote": "Creative Commons Attribution 4.0 International",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+},
+"A2": {
+"quote": "We suggest several testing paradigms to measure classification performance",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"A3": {
+"quote": "Specifically Ntrain = 5, 10, 15, 20, 25, 30, 40 and Ntest = 25.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"A4": {
+"quote": "achieves performance of 67.6% on the Caltech-101 as compared to 34.1% on Caltech-256.",
+"url": "https://authors.library.caltech.edu/records/5sv1j-ytw97/files/CNS-TR-2007-001.pdf"
+},
+"A5": {
+"quote": "10.3390/app12168103",
+"url": "https://data.caltech.edu/records/nyy15-4j048"
+}
+}
+},
+{
+"name": "ImageNet",
+"urls": [
+"https://web.archive.org/web/20241231200238/https://www.image-net.org/index.php",
+"https://web.archive.org/web/20250110225637/https://www.image-net.org/about.php",
+"https://web.archive.org/web/20250105191125/https://www.image-net.org/download.php",
+"https://web.archive.org/web/20241008041230/https://www.image-net.org/update-mar-11-2021.php",
+"https://web.archive.org/web/20241207082129/https://www.image-net.org/challenges/LSVRC/2012/index.php",
+"https://www.kaggle.com/competitions/imagenet-object-localization-challenge/data",
+"https://arxiv.org/abs/1409.0575"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 100,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 ImageNet 官网的 Wayback 快照、ILSVRC 2012 页面和 Russakovsky 等的论文，官网直连在本次访问时不可达。官网页头仍写 21841 synsets，2021 年更新页写已移除 2,702 个 synsets，两处数字不一致。规模和划分按 ILSVRC 2012 的下载页和论文计分。 判断项: 无。",
+"source_quotes": {
+"B1": {
+"quote": "contains 1,281,167 training images, 50,000 validation images and 100,000 test images.",
+"url": "https://web.archive.org/web/20250105191125/https://www.image-net.org/download.php"
+},
+"B2": {
+"quote": "The image annotations are saved in XML files in PASCAL VOC format.",
+"url": "https://www.kaggle.com/competitions/imagenet-object-localization-challenge/data"
+},
+"B3": {
+"quote": "The training images are under the folders with the names of their synsets.",
+"url": "https://www.kaggle.com/competitions/imagenet-object-localization-challenge/data"
+},
+"B4": {
+"quote": "This subset is available on ... Kaggle",
+"url": "https://web.archive.org/web/20250105191125/https://www.image-net.org/download.php"
+},
+"B5": {
+"quote": "Please feel free to send any questions or comments to ... imagenet.help.desk@gmail.com",
+"url": "https://web.archive.org/web/20241207082129/https://www.image-net.org/challenges/LSVRC/2012/index.php"
+},
+"C1": {
+"quote": "ImageNet is an image dataset organized according to the WordNet hierarchy.",
+"url": "https://web.archive.org/web/20250110225637/https://www.image-net.org/about.php"
+},
+"C2": {
+"quote": "Fig. 1 The diversity of data in the ILSVRC image classification and single-object localization tasks.",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"C3": {
+"quote": "Val images (per class) ... 50,000 (50)",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"C4": {
+"quote": "For each of the eight dimensions, we show example object categories along the range of that property.",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"C5": {
+"quote": "The major remaining source of annotation errors stem from fine-grained object classes",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"P1": {
+"quote": "photographs collected from Flickr4 and other search engines",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"P2": {
+"quote": "Image collection for ILSVRC classification task is the same as the strategy employed for constructing ImageNet",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"P3": {
+"quote": "we filtered 2,702 synsets",
+"url": "https://web.archive.org/web/20241008041230/https://www.image-net.org/update-mar-11-2021.php"
+},
+"P4": {
+"quote": "An image is considered positive only if it gets a convincing majority of the votes.",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"P5": {
+"quote": "October 10, 2019: The ILSVRC 2012 classification and localization test set has been updated.",
+"url": "https://web.archive.org/web/20250110225637/https://www.image-net.org/about.php"
+},
+"A1": {
+"quote": "Researcher shall use the Database only for non-commercial research and educational purposes.",
+"url": "https://web.archive.org/web/20250105191125/https://www.image-net.org/download.php"
+},
+"A2": {
+"quote": "ImageNet is an ongoing research effort to provide researchers around the world with image data for training large-scale object recognition models.",
+"url": "https://web.archive.org/web/20250110225637/https://www.image-net.org/about.php"
+},
+"A3": {
+"quote": "algorithms will produce a list of at most 5 object categories in the descending order of confidence.",
+"url": "https://web.archive.org/web/20241207082129/https://www.image-net.org/challenges/LSVRC/2012/index.php"
+},
+"A4": {
+"quote": "SuperVision ... 16.4 ... 34.2",
+"url": "https://arxiv.org/abs/1409.0575"
+},
+"A5": {
+"quote": "attracting participation from more than fifty institutions.",
+"url": "https://arxiv.org/abs/1409.0575"
+}
+}
+},
+{
+"name": "QuickDraw",
+"urls": [
+"https://github.com/googlecreativelab/quickdraw-dataset",
+"https://quickdraw.withgoogle.com/data",
+"https://arxiv.org/abs/1704.03477"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 0,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 1
+},
+"score": 95,
+"basic": 100,
+"content": 80,
+"construction": 100,
+"application": 100,
+"note": "评分对象为 Quick, Draw! 数据集仓库、官方数据页和 Sketch-RNN 论文。仓库写 50 million drawings，Northcutt 等（https://arxiv.org/abs/2103.14749）写 more than 1 billion doodles。文档没有绘制者地域、时间等非标签维度的统计，C2 记 0。 判断项: 无。",
+"source_quotes": {
+"B1": {
+"quote": "a collection of 50 million drawings across 345 categories",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"B2": {
+"quote": "The raw data is available as ndjson files seperated by category",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"B3": {
+"quote": "Full dataset seperated by categories",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"B4": {
+"quote": "The dataset is available on Google Cloud Storage",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"B5": {
+"quote": "please let us know by e-mail",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"C1": {
+"quote": "The drawings were captured as timestamped vectors",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"C3": {
+"quote": "In this dataset, 75K samples (70K Training, 2.5K Validation, 2.5K Test) has been randomly selected from each category",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"C4": {
+"quote": "Here's an example of a single drawing:",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"C5": {
+"quote": "it may still contain inappropriate content.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"P1": {
+"quote": "contributed by players of the game",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"P2": {
+"quote": "an online game where the players are asked to draw objects belonging to a particular object class in less than 20 seconds.",
+"url": "https://arxiv.org/abs/1704.03477"
+},
+"P3": {
+"quote": "Resample all strokes with a 1 pixel spacing.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"P4": {
+"quote": "Category the player was prompted to draw.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"P5": {
+"quote": "May 25, 2017: Updated Sketch-RNN QuickDraw dataset",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"A1": {
+"quote": "This data made available by Google, Inc. under the Creative Commons Attribution 4.0 International license.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"A2": {
+"quote": "We're sharing them here for developers, researchers, and artists to explore, study, and learn from.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+},
+"A3": {
+"quote": "Table 1: Loss figures (LR and LKL ) for various wKL settings.",
+"url": "https://arxiv.org/abs/1704.03477"
+},
+"A4": {
+"quote": "Table 1: Loss figures (LR and LKL ) for various wKL settings.",
+"url": "https://arxiv.org/abs/1704.03477"
+},
+"A5": {
+"quote": "Here are some projects and experiments that are using or featuring the dataset in interesting ways.",
+"url": "https://github.com/googlecreativelab/quickdraw-dataset"
+}
+}
+},
+{
+"name": "20 News",
+"urls": [
+"http://qwone.com/~jason/20Newsgroups/",
+"http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html",
+"https://archive.ics.uci.edu/dataset/113/twenty+newsgroups"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 0,
+"A5": 1
+},
+"score": 90,
+"basic": 100,
+"content": 80,
+"construction": 100,
+"application": 80,
+"note": "评分对象为 Jason Rennie 的 20 Newsgroups 页面、UCI KDD 的说明页和 UCI 新站页面。UCI 新站写 20000 篇，Rennie 页面的原始版写 19997 篇，bydate 版写 18846 篇。UCI KDD 把 Tom Mitchell 写成原始所有者，Rennie 页面写可能由 Ken Lang 收集，P1 属判断项。许可方面，UCI KDD 页写可免费用于教育用途，UCI 新站写 CC BY 4.0。B5 依据 UCI KDD 页的所有者邮箱，属判断项。C2 只有交叉发帖比例，P2 只写到从各新闻组抽取文章，A3 只建议使用 bydate 划分，都属判断项。文档没有展示样本，C4 记 0。A4 记 0，只有 scikit-learn 第三方文档给出结果。 判断项: B5、C2、P1、P2、A3。",
+"source_quotes": {
+"B1": {
+"quote": "(18846 documents)",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"B2": {
+"quote": "The data available here are in .tar.gz bundles.",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"B3": {
+"quote": "Each subdirectory in the bundle represents a newsgroup",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"B4": {
+"quote": "20news-bydate.tar.gz",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"B5": {
+"quote": "tom.mitchell@cmu.edu",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"C1": {
+"quote": "Data Type ... text",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"C2": {
+"quote": "Approximately 4% of the articles are crossposted.",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"C3": {
+"quote": "One thousand Usenet articles were taken from each of the following 20 newsgroups.",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"C5": {
+"quote": "The original version contains 1169 dupliate documents.",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"P1": {
+"quote": "To the best of my knowledge, it was originally collected by Ken Lang",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"P2": {
+"quote": "One thousand Usenet articles were taken from each of the following 20 newsgroups.",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"P3": {
+"quote": "does not include cross-posts (duplicates)",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"P4": {
+"quote": "each file in a subdirectory is the text of some newsgroup document that was posted to that newsgroup.",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"P5": {
+"quote": "[7/3/07] I had originally listed the bydate version as containing 18941 documents.",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"A1": {
+"quote": "You may use this material free of charge for any educational purpose, provided attribution is given",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+},
+"A2": {
+"quote": "such as text classification and text clustering.",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"A3": {
+"quote": "I recommend the \"bydate\" version since cross-experiment comparison is easier",
+"url": "http://qwone.com/~jason/20Newsgroups/"
+},
+"A5": {
+"quote": "T. Joachims (1996).",
+"url": "http://kdd.ics.uci.edu/databases/20newsgroups/20newsgroups.data.html"
+}
+}
+},
+{
+"name": "IMDB",
+"urls": [
+"https://web.archive.org/web/20241231000722/http://ai.stanford.edu/~amaas/data/sentiment/",
+"https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
+"https://aclanthology.org/P11-1015.pdf"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 0,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 0,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 85,
+"basic": 100,
+"content": 80,
+"construction": 100,
+"application": 60,
+"note": "评分对象为 Maas 的数据页 Wayback 快照、aclImdb_v1.tar.gz 内的 README 和 Maas 等 2011 年论文。没有发现文档之间的实质矛盾。P5 只有 Large Movie Review Dataset v1.0 这个版本名，没有更新记录，属判断项。文档没有展示评论样本，C4 记 0。文档没有写使用许可，A1 记 0。文档没有列出其他使用，A5 记 0。 判断项: P5。",
+"source_quotes": {
+"B1": {
+"quote": "The core dataset contains 50,000 reviews split evenly into 25k train and 25k test sets.",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"B2": {
+"quote": "Each .feat file is in LIBSVM format",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"B3": {
+"quote": "There are two top-level directories [train/, test/]",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"B4": {
+"quote": "aclImdb_v1.tar.gz",
+"url": "https://web.archive.org/web/20241231000722/http://ai.stanford.edu/~amaas/data/sentiment/"
+},
+"B5": {
+"quote": "For questions/comments/corrections please contact Andrew Maas",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"C1": {
+"quote": "This dataset contains movie reviews along with their associated binary sentiment polarity labels.",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"C2": {
+"quote": "no more than 30 reviews are allowed for any given movie",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"C3": {
+"quote": "The overall distribution of labels is balanced (25k pos and 25k neg).",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"C5": {
+"quote": "we are unable to link directly to the review",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"P1": {
+"quote": "a large dataset of informal movie reviews from the Internet Movie Database (IMDB).",
+"url": "https://aclanthology.org/P11-1015.pdf"
+},
+"P2": {
+"quote": "we limited ourselves to including at most 30 reviews from any movie in the collection.",
+"url": "https://aclanthology.org/P11-1015.pdf"
+},
+"P3": {
+"quote": "already-tokenized bag of words (BoW) features",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"P4": {
+"quote": "a negative review has a score <= 4 out of 10, and a positive review has a score >= 7 out of 10.",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"P5": {
+"quote": "Large Movie Review Dataset v1.0",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"A2": {
+"quote": "It is intended to serve as a benchmark for sentiment classification.",
+"url": "https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz"
+},
+"A3": {
+"quote": "Table 2: Classification accuracy on three tasks.",
+"url": "https://aclanthology.org/P11-1015.pdf"
+},
+"A4": {
+"quote": "88.89",
+"url": "https://aclanthology.org/P11-1015.pdf"
+}
+}
+},
+{
+"name": "Amazon",
+"urls": [
+"https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html",
+"https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/",
+"https://arxiv.org/abs/1506.04757",
+"https://arxiv.org/abs/2103.14749"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 0,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 0,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 85,
+"basic": 80,
+"content": 100,
+"construction": 80,
+"application": 80,
+"note": "评分对象为 McAuley 的 Amazon review data 2014 版页面和 McAuley 等 2015 年论文，Northcutt 等只用于识别版本。页面写 5-core 文件 9.9gb、共 41.13 million reviews，Northcutt 等写使用 5-core (9.9 GB) 并去掉 2 星和 4 星后得到 9,996,437 条，页面没有说明这个子集。页面上 contact me 的链接 amazon_readme.txt 返回 404，B5 记 0。C3 依据各品类评论数，没有星级分布，属判断项。A1 依据作者表述的学术使用，没有正式许可条款，属判断项。评分是用户自己给的，没有标注规范，P4 记 0。文档没有列出其他使用，A5 记 0。 判断项: C3、A1。",
+"source_quotes": {
+"B1": {
+"quote": "including 142.8 million reviews spanning May 1996 - July 2014.",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"B2": {
+"quote": "Format is one-review-per-line in (loose) json.",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"B3": {
+"quote": "Below are files for individual product categories",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"B4": {
+"quote": "subset of the data in which all users and items have at least 5 reviews (41.13 million reviews)",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"C1": {
+"quote": "product reviews and metadata",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"C2": {
+"quote": "including 142.8 million reviews spanning May 1996 - July 2014.",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"C3": {
+"quote": "(22,507,155 reviews)",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"C4": {
+"quote": "Sample review:",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"C5": {
+"quote": "The above file contains some duplicate reviews, mainly due to near-identical products whose reviews Amazon merges",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"P1": {
+"quote": "product reviews and metadata from Amazon",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"P2": {
+"quote": "These relationships are a result of visiting Amazon",
+"url": "https://arxiv.org/abs/1506.04757"
+},
+"P3": {
+"quote": "These data have been reduced to extract the k-core",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"P5": {
+"quote": "This (older) version is mainly here for the sake of reproducing past results",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"A1": {
+"quote": "for academic use, along with all code used in this paper",
+"url": "https://arxiv.org/abs/1506.04757"
+},
+"A2": {
+"quote": "though this dataset is probably preferable for sentiment analysis type tasks",
+"url": "https://cseweb.ucsd.edu/~jmcauley/datasets/amazon/links.html"
+},
+"A3": {
+"quote": "Table 4: Accuracy of link prediction on top-level categories",
+"url": "https://arxiv.org/abs/1506.04757"
+},
+"A4": {
+"quote": "Table 4: Accuracy of link prediction on top-level categories",
+"url": "https://arxiv.org/abs/1506.04757"
+}
+}
+},
+{
+"name": "AudioSet",
+"urls": [
+"https://research.google.com/audioset/",
+"https://research.google.com/audioset/dataset/index.html",
+"https://research.google.com/audioset/download.html",
+"https://research.google.com/pubs/archive/45857.pdf",
+"http://storage.googleapis.com/us_audioset/youtube_corpus/v1/csv/eval_segments.csv"
+],
+"items": {
+"B1": 1,
+"B2": 1,
+"B3": 1,
+"B4": 1,
+"B5": 1,
+"C1": 1,
+"C2": 1,
+"C3": 1,
+"C4": 1,
+"C5": 1,
+"P1": 1,
+"P2": 1,
+"P3": 1,
+"P4": 1,
+"P5": 1,
+"A1": 1,
+"A2": 1,
+"A3": 1,
+"A4": 1,
+"A5": 0
+},
+"score": 95,
+"basic": 100,
+"content": 100,
+"construction": 100,
+"application": 80,
+"note": "评分对象为 AudioSet 官网、数据页、下载页和 Gemmeke 等 2017 年论文。下载页写 20,383、22,176 和 2,042,985 个片段，合计 2,085,544。CSV 表头写 20,371、22,160 和 2,041,789，合计 2,084,320，与首页的 2,084,320 一致。论文写 1,789,621 条和 485 个类别，对应更早的发布。C2 依据官方类别表中的顶层类别时长与片段数，属判断项。文档没有列出其他使用，A5 记 0。 判断项: C2。",
+"source_quotes": {
+"B1": {
+"quote": "a collection of 2,084,320 human-labeled 10-second sound clips drawn from YouTube videos.",
+"url": "https://research.google.com/audioset/"
+},
+"B2": {
+"quote": "Text (csv) files describing, for each segment, the YouTube video ID, start time, end time, and one or more labels.",
+"url": "https://research.google.com/audioset/download.html"
+},
+"B3": {
+"quote": "The dataset is divided in three disjoint sets",
+"url": "https://research.google.com/audioset/download.html"
+},
+"B4": {
+"quote": "available at the download page.",
+"url": "https://research.google.com/audioset/"
+},
+"B5": {
+"quote": "The group should be used for discussions about the dataset and the starter code.",
+"url": "https://research.google.com/audioset/"
+},
+"C1": {
+"quote": "human-labeled 10-second sound clips",
+"url": "https://research.google.com/audioset/"
+},
+"C2": {
+"quote": "Music ... 100% ... 1,011,305 ... 2,801.8",
+"url": "https://research.google.com/audioset/dataset/index.html"
+},
+"C3": {
+"quote": "providing at least 59 examples for each of the 527 sound classes",
+"url": "https://research.google.com/audioset/download.html"
+},
+"C4": {
+"quote": "-0RWZT-miFs, 420.000, 430.000, \"/m/03v3yw,/m/0k4j\"",
+"url": "https://research.google.com/audioset/download.html"
+},
+"C5": {
+"quote": "a substantial number of sound classes had poor accuracy.",
+"url": "https://research.google.com/audioset/download.html"
+},
+"P1": {
+"quote": "drawn from YouTube videos.",
+"url": "https://research.google.com/audioset/"
+},
+"P2": {
+"quote": "we relied on YouTube metadata and content-based search.",
+"url": "https://research.google.com/audioset/"
+},
+"P3": {
+"quote": "The features were PCA-ed and quantized",
+"url": "https://research.google.com/audioset/download.html"
+},
+"P4": {
+"quote": "Each segment was rated by three raters and a majority vote was required to record an overall rating.",
+"url": "https://research.google.com/pubs/archive/45857.pdf"
+},
+"P5": {
+"quote": "For the May 2021 release of temporally-strong labels",
+"url": "https://research.google.com/audioset/download.html"
+},
+"A1": {
+"quote": "under a Creative Commons Attribution 4.0 International (CC BY 4.0) license",
+"url": "https://research.google.com/audioset/download.html"
+},
+"A2": {
+"quote": "a common, realistic-scale evaluation task for audio event detection",
+"url": "https://research.google.com/audioset/"
+},
+"A3": {
+"quote": "balanced mean Average Precision across the 485 categories of 0.314",
+"url": "https://research.google.com/pubs/archive/45857.pdf"
+},
+"A4": {
+"quote": "balanced mean Average Precision across the 485 categories of 0.314",
+"url": "https://research.google.com/pubs/archive/45857.pdf"
+}
+}
+}
+]

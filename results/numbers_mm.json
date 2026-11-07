@@ -1,0 +1,11 @@
+{
+"MMrecords": "5000",
+"MMauc": "0.996",
+"MMdrop": "23.7",
+"MMother": "6.2",
+"RunsMM": "953",
+"MMraw": "0.764",
+"MMtrue": "0.800",
+"MMcorr": "0.805",
+"MMgap": "3.6"
+}
