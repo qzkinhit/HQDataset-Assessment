@@ -1,6 +1,6 @@
 # 高质量数据集测评
 
-本仓库存放综述《高质量数据集测评: 标准、方法与实证分析》的代码、数据、结果和日志，同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有展开的文档，包括测评流程的算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
+本仓库存放综述《高质量数据集测评研究综述》的代码、数据、结果和日志，同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有展开的文档，包括测评流程的算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
 
 英文版见 [README.md](README.md)。
 
@@ -299,7 +299,7 @@ python analysis/stored_runs.py --update docs/parameters.md
 
 ```bibtex
 @article{hqd_assessment,
-  title   = {高质量数据集测评: 标准、方法与实证分析},
+  title   = {高质量数据集测评研究综述},
   author  = {Zekai Qian and Xiaoou Ding and Hongzhi Wang and Chen Wang},
   journal = {Scientia Sinica Informationis},
   year    = {2026}

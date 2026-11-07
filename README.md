@@ -1,6 +1,6 @@
 # Assessment of high-quality datasets
 
-This repository holds the code, the data, the results and the logs of the survey *Assessment of high-quality datasets: standards, methods and empirical analysis* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
+This repository holds the code, the data, the results and the logs of the survey *A survey on the assessment of high-quality datasets* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
 
 The Chinese version is [README_zh.md](README_zh.md).
 
@@ -299,7 +299,7 @@ The code, documents and result records are under the MIT license in `LICENSE`. D
 
 ```bibtex
 @article{hqd_assessment,
-  title   = {Assessment of high-quality datasets: standards, methods and empirical analysis},
+  title   = {A survey on the assessment of high-quality datasets},
   author  = {Zekai Qian and Xiaoou Ding and Hongzhi Wang and Chen Wang},
   journal = {Scientia Sinica Informationis},
   year    = {2026},

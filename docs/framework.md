@@ -1,6 +1,6 @@
 # The graded assessment framework
 
-This page states the framework of the survey *Assessment of high-quality datasets: standards, methods and empirical analysis*. It covers the quality claim, the five assessment levels, the three dimensions of the standard, the five method families, the six-stage procedure with its algorithms, and the three propositions. The package `hqd_assess` implements these parts, and every function named below is in that package. The survey describes the procedure in running text, and this page writes the steps as Algorithms 1 to 6.
+This page states the framework of the survey *A survey on the assessment of high-quality datasets*. It covers the quality claim, the five assessment levels, the three dimensions of the standard, the five method families, the six-stage procedure with its algorithms, and the three propositions. The package `hqd_assess` implements these parts, and every function named below is in that package. The survey describes the procedure in running text, and this page writes the steps as Algorithms 1 to 6.
 
 ## What is assessed
 
