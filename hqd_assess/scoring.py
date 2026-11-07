@@ -108,9 +108,9 @@ def data_quality_score(rate_missing: float, rate_domain: float, rate_value: floa
     return dimension_score(items)
 
 
-def model_fit_value(performance: float, expected: float) -> float:
-    """Model fit s_m, the ratio of the performance in the target scene to the expected one."""
-    return performance / expected
+def model_fit_value(performance: float, expected: float, higher_is_better: bool = True) -> float:
+    """Model fit s_m, the ratio of the performance in the target scene to the expected one, inverted for a measure where lower is better."""
+    return performance / expected if higher_is_better else expected / performance
 
 
 def model_fit_factor(s_m: float) -> float:

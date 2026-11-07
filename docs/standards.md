@@ -15,7 +15,7 @@ Each standard answers a different question. The column Status gives the date in 
 | [GB/T 25000.24-2017] | Data | Measures of data quality, adopts ISO/IEC 25024 | Measures without a rating range | Current |
 | [ISO/IEC 25012:2008] | Stored data | 15 characteristics, inherent and system dependent | Characteristics without a rating | Current |
 | [ISO/IEC 25024:2015] | Stored data | Measures of the 15 characteristics | Measures without a rating range | Current |
-| ISO/IEC 5259-1 to 6 [ISO/IEC 5259-1:2024, ISO/IEC 5259-2:2024, ISO/IEC 5259-3:2024] | Analytics and ML data | Characteristics and measures, management, process, governance | Quality reports and quality claims | 2024 to 2026 |
+| ISO/IEC 5259-1 to 3 [ISO/IEC 5259-1:2024, ISO/IEC 5259-2:2024, ISO/IEC 5259-3:2024] | Analytics and ML data | Characteristics and measures, management | Quality reports and quality claims | 2024 |
 | ISO 8000-1, 8000-61 [ISO 8000-1:2022, ISO 8000-61:2016] | Data | Principles of data quality, reference model of the process | Conformance of the process | Current |
 | [ISO/IEC TR 24027:2021] | AI systems | Sources and assessment of bias | Technical report without a threshold | Current |
 | [EU AI Act, Art. 10] | High-risk system data | Relevant, representative, free of errors and complete as far as possible | Qualitative requirements | 2027-12 |

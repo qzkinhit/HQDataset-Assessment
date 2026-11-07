@@ -45,7 +45,7 @@ GB/T 48562-2026 scores a dataset on three dimensions with a pass line of 90 poin
 |---|---|---|---|---|
 | Documentation | 0101 to 0104 | 4 | Aspects that meet the requirement against aspects required | L1 |
 | Data quality | 0201 to 0208 | 8 | Records that meet the requirement against all records | L1 to L3 |
-| Model application | 0301 to 0305 | 5 | Mixed, with model fit $s_m=\tfrac{a}{a^{*}}$ for performance $a$ and expected performance $a^{*}$ | L2 to L4 |
+| Model application | 0301 to 0305 | 5 | Mixed, with model fit $s_m=\tfrac{a}{a^{*}}$ for performance $a$ and expected performance $a^{*}$, or $\tfrac{a^{*}}{a}$ when lower is better | L2 to L4 |
 
 A dimension score is $P=100\sum_i w_i s_i$, and the standard recommends equal weights. The model application score is $P=100F_m\bar{s}$, where $F_m=\mathrm{e}^{s_m-1}$ for $s_m<1$, $F_m=1$ otherwise, and $\bar{s}$ is the mean of the other items. In the package these are `dimension_score`, `model_fit_value`, `model_fit_factor` and `model_application_score`.
 
