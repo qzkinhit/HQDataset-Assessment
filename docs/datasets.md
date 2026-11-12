@@ -113,7 +113,7 @@ Tables with real errors and the cleaned versions of the CleanML benchmark (Li et
 
 The Tennessee Eastman process simulation in the distribution of the Braatz group (Downs and Vogel, 1993, Russell et al., 2000).
 
-- Official source. The archive http://web.mit.edu/braatzgroup/TE_process.zip on the group page http://web.mit.edu/braatzgroup/links.html. The repository holds the 44 files of this archive, as `data/tep/SHA256SUMS.txt` records. A copy is at https://github.com/camaramm/tennessee-eastman-profBraatz.
+- Official source. The archive http://web.mit.edu/braatzgroup/TE_process.zip on the group page http://web.mit.edu/braatzgroup/links.html. The repository holds the 44 files of this archive. A copy is at https://github.com/camaramm/tennessee-eastman-profBraatz.
 - License. `data/tep/LICENSE` is the license text of the distribution. It names the software and does not name the data files.
 - Scale. 44 files, `d00` to `d21` for training and `d00_te` to `d21_te` for testing, 31700 records with 52 variables and 22 classes. A training file holds 480 records, or 500 for the normal class. A test file holds 960 records.
 - How errors arise. Records are simulated and the files have no injected defect. The file `d00.dat` is stored with rows and columns swapped. A test fault file holds the fault from record 161, and labels taken from file names mark the 160 records before as faulty, which is 16.7 percent of the file. Faults 3, 9 and 15 are hard to detect, as Russell et al. report. The files carry no field for the operating mode, while the process defines six modes. The experiments change only the evaluation protocol.

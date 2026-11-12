@@ -6,8 +6,6 @@ The datasets come from their official sources through `scripts/download_data.sh`
 |---|---|---|---|
 | `hqd-data-predictions.tar` | `preds/*.npy`, the saved test predictions of the image runs | 9 MiB | `study/run_vision.py`, `study/run_synth.py` |
 | `hqd-data-scores.tar` | `corpus/c4_ppl.npy`, `corpus/c4_llm_score.npy` and `corpus/c4_group.npy`, the perplexity, the Qwen score and the group of each C4 document, and `text_ppl.npz`, the perplexity of the text pool | 13 MiB | `corpus/prep_corpus.py`, `corpus/run_corpus.py`, `llm/judge_corpus.py`, `study/run_text.py` |
-| `SHA256SUMS-v1.txt` | SHA-256 of the two archives | | |
-| `MANIFEST-v1.json` | The members of each archive with size and SHA-256 | | |
 
 ## How to fetch and unpack
 
@@ -19,17 +17,8 @@ or by hand
 
 ```bash
 gh release download v1.0 --repo qzkinhit/HQDataset-Assessment
-sha256sum --check SHA256SUMS-v1.txt
 tar -xf hqd-data-predictions.tar -C downloads
 tar -xf hqd-data-scores.tar -C downloads
 ```
 
 The paths inside the archives follow the layout of `scripts/download_data.sh`, so the files land where the scripts read them.
-
-## How the archives are built
-
-```bash
-python scripts/package_release.py --data DATA_DIR --out OUT_DIR --only predictions,scores --label v1
-```
-
-Tar headers hold no owner and no time.

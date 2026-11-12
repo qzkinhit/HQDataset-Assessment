@@ -14,7 +14,7 @@
 | 下载数据 | 除 `data/` 中的文件外，`scripts/download_data.sh` 从官方来源下载 146 个文件，共约 17 GiB |
 | 测评做法 | 综述五类方法中的 66 种具体做法 |
 | 实验 | 11 组实验，40609 次模型训练，结果文件记录的运行时间累计约 850 小时，使用 64 核 CPU 服务器和 A6000 GPU |
-| 代码 | 实验和软件包 `hqd_assess` 共约 7200 行 Python 代码，165 项测试 |
+| 代码 | 实验和软件包 `hqd_assess` 共约 7200 行 Python 代码，153 项测试 |
 
 | 数据集分组 | 数据集数 | 记录数 |
 |---|---:|---:|
@@ -115,7 +115,6 @@ pytest
 | `figures/` | 实验结果图 |
 | `results/` | 实验结果记录 |
 | `scripts/download_data.sh` | 从来源下载数据集的命令 |
-| `scripts/package_release.py` | 把保存的预测和评分打成带 SHA-256 的发布归档包 |
 
 ## 实验
 
@@ -318,7 +317,7 @@ python analysis/stored_runs.py --update docs/parameters.md
 
 `results/` 存放每组实验的结果记录，JSONL 文件每行一次运行，JSON 文件中为运行列表。`docs/parameters.md` 给出每个文件的已计分运行数。`results/numbers_*.json` 存放正文中的数字，`results/tables_summary.json` 存放表格实验的汇总，`results/audit_native.json` 存放原生实验与作业清单的比较，`results/audit_cleanml_published.json` 存放 CleanML 实验的准确率与已发表数值的对照，`results/results_detectors.jsonl`、`results/detectors_summary.json` 和 `results/sanity_detectors.json` 存放检测器估计及其汇总和检查结果，`results/dataset_docs.json` 存放说明文档得分及其原文。`results/results_civilcomments.jsonl` 与 `results/results_wilds.jsonl` 中的 CivilComments 行相同。带 `error` 字段的行是未计分的运行，例如删除后不足 30 条记录。
 
-图像实验保存的测试预测和语料文档的评分需要 GPU 时间重新计算，它们放在 GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0) 中。`scripts/download_data.sh DIR release` 下载、检查并解包这些文件，[docs/release_assets.md](docs/release_assets.md) 列出其内容。
+图像实验保存的测试预测和语料文档的评分需要 GPU 时间重新计算，它们放在 GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0) 中。`scripts/download_data.sh DIR release` 下载并解包这些文件，[docs/release_assets.md](docs/release_assets.md) 列出其内容。
 
 ## 许可
 

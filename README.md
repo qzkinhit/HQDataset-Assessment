@@ -14,7 +14,7 @@ The Chinese version is [README_zh.md](README_zh.md).
 | Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
 | Assessment practices | 66 practices from the five method families of the survey |
 | Experiments | 11 experiment groups, 40609 model trainings, about 850 hours of run time in the result files, on a 64-core CPU server and A6000 GPUs |
-| Code | About 7200 lines of Python for the experiments and the package `hqd_assess`, and 165 tests |
+| Code | About 7200 lines of Python for the experiments and the package `hqd_assess`, and 153 tests |
 
 | Group of datasets | Datasets | Records |
 |---|---:|---:|
@@ -115,7 +115,6 @@ pytest
 | `figures/` | The result figures |
 | `results/` | Result records of the runs |
 | `scripts/download_data.sh` | Download commands for the datasets from their sources |
-| `scripts/package_release.py` | Packs the saved predictions and scores into release archives with checksums |
 
 ## Experiments
 
@@ -318,7 +317,7 @@ Figures 1 to 4 and the tables that summarize the literature are typeset with the
 
 `results/` holds the result record of each track, one JSON object per run in the JSONL files and a list of runs in the JSON files. `docs/parameters.md` gives the number of scored runs per file. The files `results/numbers_*.json` hold the numbers of the text, `results/tables_summary.json` holds the summary of the table runs, `results/audit_native.json` holds the comparison of the native tracks with their job lists, `results/audit_cleanml_published.json` holds the accuracies of the CleanML runs next to the published ones, `results/results_detectors.jsonl`, `results/detectors_summary.json` and `results/sanity_detectors.json` hold the detector estimates with their summary and checks, and `results/dataset_docs.json` holds the documentation scores with their quotations. `results/results_civilcomments.jsonl` holds the same CivilComments rows as `results/results_wilds.jsonl`. A row with an `error` field is a run that was not scored, for example a deletion that leaves fewer than 30 records.
 
-The saved test predictions of the image runs and the scores of the corpus documents, which take GPU time to compute again, are attached to the GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0). `scripts/download_data.sh DIR release` fetches, checks and unpacks them. [docs/release_assets.md](docs/release_assets.md) lists their content.
+The saved test predictions of the image runs and the scores of the corpus documents, which take GPU time to compute again, are attached to the GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0). `scripts/download_data.sh DIR release` fetches and unpacks them. [docs/release_assets.md](docs/release_assets.md) lists their content.
 
 ## License
 

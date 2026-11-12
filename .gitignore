@@ -23,8 +23,7 @@ preds/
 *.part
 *.log
 
-# output of the release packer and of the job lists
-release_assets/
+# output of the job lists
 jobs/
 llm_work/
 

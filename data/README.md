@@ -5,7 +5,7 @@ This folder holds the small files of the experiments. [docs/datasets.md](../docs
 | Folder | Content | Size | Source |
 |---|---|---|---|
 | `tables/` | 11 tables with a rule library and `table_meta.json`, the dirty version and the clean reference of 10 of them | 63 MB | REIN and UniClean benchmarks |
-| `tep/` | 44 files of classic TEP with `SHA256SUMS.txt` and the license text of the distribution | 25 MB | Braatz group |
+| `tep/` | 44 files of classic TEP and the license text of the distribution | 25 MB | Braatz group |
 | `cifair/` | `duplicates_cifar10.csv` and `duplicates_cifar100.csv`, near duplicates of the CIFAR test images | 40 KB | Barz and Denzler |
 | `label_errors/` | Reviewer votes `NAME_mturk.json` of ten test sets, `imdb_index.json` and `imagenet_index.json` | 8 MB | Northcutt et al. |
 

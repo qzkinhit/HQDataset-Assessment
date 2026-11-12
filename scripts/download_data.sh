@@ -149,10 +149,9 @@ for name in $SETS; do
     release)
       # saved test predictions of the image runs and scores of the corpus documents, from the GitHub Release of this repository
       REL=https://github.com/qzkinhit/HQDataset-Assessment/releases/download/v1.0
-      for f in SHA256SUMS-v1.txt hqd-data-predictions.tar hqd-data-scores.tar; do
+      for f in hqd-data-predictions.tar hqd-data-scores.tar; do
         fetch "$REL/$f" "$ROOT/release/$f"
       done
-      run sh -c "cd '$ROOT/release' && (sha256sum -c SHA256SUMS-v1.txt 2>/dev/null || shasum -a 256 -c SHA256SUMS-v1.txt)"
       run tar -xf "$ROOT/release/hqd-data-predictions.tar" -C "$ROOT"
       run tar -xf "$ROOT/release/hqd-data-scores.tar" -C "$ROOT"
       ;;

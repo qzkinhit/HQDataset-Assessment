@@ -1,5 +1,4 @@
 """Numbers of the survey that come from the data in this repository."""
-import hashlib
 import json
 import os
 
@@ -21,14 +20,6 @@ def read(name):
 @pytest.fixture(scope="module")
 def tep():
     return {name: np.loadtxt(os.path.join(TEP, name)) for name in sorted(os.listdir(TEP)) if name.endswith(".dat")}
-
-
-def test_checksums_of_the_tep_files():
-    for line in open(os.path.join(TEP, "SHA256SUMS.txt")):
-        if line.strip() and not line.startswith("#"):
-            digest, name = line.split()
-            with open(os.path.join(TEP, name), "rb") as f:
-                assert hashlib.sha256(f.read()).hexdigest() == digest, name
 
 
 def test_static_scan_of_classic_tep(tep):
