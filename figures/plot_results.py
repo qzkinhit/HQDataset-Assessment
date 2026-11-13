@@ -97,7 +97,7 @@ def zoom(ax, ys, pad=.08):
 # ======== figure A: quality and utility on tables, protocols and label noise
 T, C, Q = load("tables_summary.json"), load("case_tep.json"), load("results_rieth.json"); V = jsonl("results_vision.jsonl", "results_vision_fine.jsonl"); science = {}
 PH_B = PH; PH = PH_B; H = 6.21; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 4.90, 0.94; y2, y3 = 2.68, .46
-EX = .10; a = box(fig, .34, ty - EX, 1.56, th + EX); b = box(fig, 1.96, ty - EX, 1.56, th + EX); c = box(fig, 3.58, ty - EX, 1.46, th + EX); d = box(fig, 5.10, ty - EX, 1.78, th + EX)
+EX = .10; a = box(fig, .34, ty - EX, 1.56, th + EX); b = box(fig, 1.96, ty - EX, 1.56, th + EX); c = box(fig, 3.86, ty - EX, 1.22, th + EX); d = box(fig, 5.40, ty - EX, 1.40, th + EX)
 NORM = SymLogNorm(linthresh=2, linscale=1, vmin=-40, vmax=40, base=10); HMAP = plt.get_cmap("RdBu_r").copy(); HMAP.set_bad("#B9BFC5")
 def ink(v):
     """The colour of a number on a cell, from the luminance of the cell."""
@@ -171,16 +171,16 @@ for a_, n_, col, mk, off in PATHS:
             c.plot(rho, y_ + off, ls="none", marker=mk, ms=3.6 if mk == "o" else 3.2, color=col, mec="white", mew=.25, zorder=4)
     md = float(np.median(allr)); science["path_spearman"][n_ + "/median"] = md; science["path_spearman"][n_ + "/pairs"] = len(allr); science["path_spearman"][n_ + "/negative"] = sum(q < 0 for q in allr)
     c.axvline(md, color=col, ls=DASH, lw=1.1, zorder=3)
-pos = np.arange(len(DS)); c.axvline(0, color=DARK, lw=.7, zorder=2); c.set_ylim(len(DS) - .5, -.5); c.set_yticks(pos); c.set_xlim(-1.08, 1.08); c.set_xticks([-1, -.5, 0, .5, 1]); c.set_xticklabels(["−1", "−.5", "0", ".5", "1"]); frame(c, "x"); c.tick_params(labelleft=False)
+pos = np.arange(len(DS)); c.axvline(0, color=DARK, lw=.7, zorder=2); c.set_ylim(len(DS) - .5, -.5); c.set_yticks(pos); c.set_xlim(-1.08, 1.08); c.set_xticks([-1, -.5, 0, .5, 1]); c.set_xticklabels(["−1", "−.5", "0", ".5", "1"]); frame(c, "x"); c.set_yticklabels([n for _, n in DS], fontsize=6.6); c.tick_params(axis="y", length=0, pad=1.5); c.set_xlabel("Spearman, score vs. task", labelpad=1.5)
 key_over(fig, c, [Line2D([], [], ls="none", marker=mk, ms=3.4, color=col, label=n_) for _, n_, col, mk, _ in PATHS] + [hl(DARK, None, "Median", lw=1.1, ls=DASH)], cols=2, size=5.8)
 # (d) joint gain minus the sum of the single gains
 OFF = dict(linear=-.28, rf=-.14, gb=0, knn=.14, mlp=.28)
 I = T["interaction_list"]; rows_ = {n: i for i, (n, _) in enumerate(DS)}; science["interaction"] = I; d.axvline(0, color=DARK, lw=.7, zorder=1)
 for r in I:
     y_ = rows_[r["ds"]] + OFF[r["model"]]; v = 100 * r["inter"]; sig = r["q"] < .05
-    mc_ = MC[r["model"]][0]; d.plot(v, y_, marker="o", ms=4.0, ls="none", mfc=mc_ if sig else "white", mec=mc_ if not sig else "white", mew=.8 if not sig else .3, zorder=5 if sig else 4, clip_on=False)     # colour for the model class, filled when significant after correction
-d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.tick_params(labelleft=False)
-key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.0, mfc=MC[m][0], mec="white", mew=.3, label=n) for m, n, _, _ in MODS] + [Line2D([], [], ls="none", marker="o", ms=4.0, mfc=GRAY, mec="white", mew=.3, label="Filled: signif.")], cols=3, size=5.8)
+    mc_ = MC[r["model"]][0]; d.plot(v, y_, marker="o", ms=4.6, ls="none", fillstyle="left", mfc=DARK if sig else "white", mfcalt=mc_, mec=DARK, mew=.45, zorder=5 if sig else 4, clip_on=False)     # left half dark when significant after correction, right half the colour of the model class
+d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.set_yticklabels([n for _, n in DS], fontsize=6.6); d.tick_params(axis="y", length=0, pad=1.5); d.set_xlabel("Joint \u2212 sum of single (pp)", labelpad=1.5)
+key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="right", mfc=MC[m][0], mfcalt="white", mec=DARK, mew=.45, label=n) for m, n, _, _ in MODS] + [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc=DARK, mfcalt="white", mec=DARK, mew=.45, label="Signif."), Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc="white", mfcalt="white", mec=DARK, mew=.45, label="Not signif.")], cols=4, size=5.8, dx=-.10)
 titles(fig, [a, b, c, d], ["(a) Repair all errors", "(b) Delete dirty rows", "(c) Repair vs. delete", "(d) Joint minus single gains"])
 # second row
 e = cell(fig, 0, y2); f = cell(fig, 1, y2); j_ = box(fig, 3.98, y2, 1.08, PH); h = cell(fig, 3, y2)
