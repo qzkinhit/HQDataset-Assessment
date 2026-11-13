@@ -528,6 +528,9 @@ def macros_from(S):
         sz = t.get("size", {}); big = sz.get("2020-07", {}).get("raw", {}); small = sz.get("2019-07", {}).get("raw", {})
         if big: M["InsTaxiTwentyBig"] = f3(big[max(big, key=int)])     # the largest number of training records
         if small: M["InsTaxiNineteenSmall"] = f3(small[min(small, key=int)])     # the smallest number of training records
+        if small:     # training months with several training sizes before the test year, and those whose largest raw size stays below 2019-07 at its smallest size
+            ref = small[min(small, key=int)]; sized = {tm: v["raw"] for tm, v in sz.items() if tm < "2023-02" and len(v.get("raw", {})) >= 2}
+            M["InsTaxiSizedN"] = str(len(sized)); M["InsTaxiBelowN"] = str(sum(v[max(v, key=int)] < ref for v in sized.values()))
     s = S["7"]
     if "corpus" in s: M.update(InsCorpusMinP=f3(s["corpus"]["c4_min_p_better"]), InsCorpusLo=f2(s["corpus"]["c4_min"]), InsCorpusHi=f1(s["corpus"]["c4_max"]), InsCorpusN=str(len(s["corpus"]["filters"])))
     if "synth" in s:
@@ -555,6 +558,32 @@ def macros_from(S):
         if p["shift_n"]: M.update(InsShiftRowsLo=f3(p["shift_min"]), InsShiftRowsHi=f3(p["shift_max"]), InsShiftRowsMed=f3(p["shift_med"]), InsShiftRowsN=str(p["shift_n"]))
         if p["record_n"]: M["InsRecGapMed"] = f3(p["record_med"])
         if p["static_min"] is not None: M["InsLowStaticMin"] = f1(p["static_min"])
+    # ---- comparisons the text reports where the figures already show the numbers, from the unrounded values
+    def put(k, num, den=1.0, fmt=f1, scale=1.0):
+        if num is not None and den: M[k] = fmt(scale * num / den)
+    if "nasa" in b: put("InsNasaMercScoreGap", b["nasa"]["P"] - b["mercedes"]["P"]); put("InsNasaMercGainRatio", b["nasa"]["gain"], b["mercedes"]["gain"], f0)
+    if "nasa_linear" in b: put("InsNasaLinNinetyShare", b["nasa_linear"]["gain90"], b["nasa_linear"]["gain100"], f0, 100)
+    put("InsHalfOverLinear", h["tree_share"], h["linear_share"]); put("InsHalfOverMLP", h["tree_share"], h["mlp_share"])
+    if r and r["by_fraction"].get("1.0"):
+        x = r["by_fraction"]["1.0"]; put("InsRndShiftRatio", x["shift_selective"], x["shift_random"])
+        nk = x.get("n_train_deleted", {}); na = x.get("n_train_all", {})
+        if "bike" in nk and "bike" in na: put("InsBikeTrainKeptPct", nk["bike"], na["bike"], f0, 100)
+    a1 = S["1"]
+    if "titanic" in a1: put("InsTitanicRemovedPct", a1["titanic"]["removed"], a1["titanic"]["records"], f0, 100)
+    if ls:
+        q_ = [v["repair"] / v["delete"] for v in ls.values() if v["delete"]]; M.update(InsLabRatioLo=f1(min(q_)), InsLabRatioHi=f1(max(q_)))
+    if "rieth" in d: put("InsRunOverRec", d["rieth"]["gain_runs"], d["rieth"]["gain_rec500x16"])
+    if "rieth_split" in d: M["InsSplitGap"] = f"{abs(d['rieth_split']['record'] - d['rieth_split']['run']):.4f}"
+    if t:
+        tr = t["train_2023"]; M["InsTaxiGapNineteen"] = f3(abs(tr["2019-07"] - tr["2023-01"])); M["InsTaxiGapTwenty"] = f2(min(tr["2019-07"], tr["2023-01"]) - tr["2020-07"])
+        (ka, va), (kb, vb) = sorted(t["rises"].items()); put("InsTaxiRiseBShare", abs(vb["r2_change"]), abs(va["r2_change"]), f1, 100)
+        sz = t.get("size", {}); big = sz.get("2020-07", {}).get("raw", {}); small = sz.get("2019-07", {}).get("raw", {})
+        if big and small: M["InsTaxiBigGap"] = f2(small[min(small, key=int)] - big[max(big, key=int)])
+    if "synth" in s: put("InsDensRatio", s["synth"]["density"]["ddpm"], s["synth"]["density"]["real_test"])
+    if "llm" in g: put("InsLLMAdultRatio", g["llm"]["adult_changed_per100"], g["llm"]["adult_errors_per100"], f0)
+    if mt:
+        put("InsTaskGainOverLoss", mt["versions"]["task_gain_max"], mt["versions"]["task_loss_max"], f0)
+        if mt["practices"]["record_n"]: put("InsShiftOverRec", mt["practices"]["shift_med"], mt["practices"]["record_med"], f0)
     bad = [k for k in M if not k.isalpha()]
     if bad: raise ValueError(f"macro names must be letters only: {bad}")
     return M

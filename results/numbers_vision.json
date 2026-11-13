@@ -9,7 +9,8 @@
 "VisScaleDrop": "17",
 "VisUnseenDrop": "55",
 "VisCovDrop": "43",
-"RunsVisionN": "520",
+"VisCovOverScale": "2.5",
+"RunsVisionN": "600",
 "RunsVisionC": "180",
 "FairShare": "8.9",
 "FairDrop": "26.0"

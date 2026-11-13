@@ -60,19 +60,20 @@ if T:
     N["TRecBreast"] = f1(100 - pc("breast_cancer", "rate_clean_records")); N["TPBreast"] = f1(B["breast_cancer"]["P_data"])
     if T.get("interaction", {}).get("top"): x_ = T["interaction"]["top"][0]; N["TIntExSingle"] = f"{x_['single']:.3f}".replace("-", "$-$"); N["TIntExJoint"] = f"{x_['joint']:.3f}"
     if C:
-        lim = arm("rf", "window_random") - arm("rf", "window_run"); dl = [abs(v[a_] - v["keep"]) for k_, v in T["table"].items() if T["by_task"][k_.split("|")[0]] == "cls" for a_ in ("repair_records", "delete_records") if a_ in v and "keep" in v]; N["TProtoN"] = f"{len(dl)}"; N["TProtoBeat"] = f"{sum(1 for d_ in dl if d_ < lim)}"
+        lim = arm("rf", "window_random") - arm("rf", "window_run"); dl = [abs(v[a_] - v["keep"]) for k_, v in T["table"].items() if T["by_task"][k_.split("|")[0]] == "cls" for a_ in ("repair_records", "delete_records") if a_ in v and "keep" in v]; N["TProtoN"] = f"{len(dl)}"; N["TProtoBeat"] = f"{sum(1 for d_ in dl if d_ < lim)}"; lab_ = arm("rf", "official", "eval_onset_labels") - arm("rf", "official", "eval_file_name_labels"); N["TProtoBeatLabel"] = f"{sum(1 for d_ in dl if d_ < lab_)}"
     I = T.get("interaction")
     if I: N["TIntN"] = f"{I['n']}"; N["TIntSig"] = f"{I['sig']}"; N["TIntSyn"] = f"{I['syn']}"; N["TIntAnt"] = f"{I['ant']}"
     fl = sorted(T["flips"], key=lambda x: -min(x["pos"]["delta"], -x["neg"]["delta"]))
     if fl:
         x = fl[0]; ACT = dict(delete_records="删除全部错误记录", repair_records="修复全部错误", repair_labels="修复标签", repair_type_value="修复语义错误", repair_type_domain="修复语法错误", repair_type_missing="修复缺失值"); MOD = dict(linear="线性模型", rf="随机森林", gb="梯度提升", knn=" K 近邻 (k-nearest neighbors, \\textbf{KNN}) ", mlp="多层感知机"); DSN = dict(soccer_full="Soccer", breast_cancer="Breast Cancer", soilmoisture="Soil Moisture", smartfactory="SmartFactory", nasa="NASA")
-        ex = f"{DSN.get(x['ds'], x['ds'].capitalize())} 上{ACT.get(x['action'], x['action'])}使{MOD[x['pos']['model']]}提高 {x['pos']['delta']:.3f}, 使{MOD[x['neg']['model']]}降低 {-x['neg']['delta']:.3f}"; N["TFlipExample"] = ex; N["TFlipExampleA"] = ex
+        ex = f"{DSN.get(x['ds'], x['ds'].capitalize())} 上{ACT.get(x['action'], x['action'])}使{MOD[x['pos']['model']]}提高 {x['pos']['delta']:.3f}, 使{MOD[x['neg']['model']]}降低 {-x['neg']['delta']:.3f}"; N["TFlipExample"] = ex; N["TFlipExampleA"] = ex; p_, n_ = x["pos"]["delta"], -x["neg"]["delta"]; N["TFlipRegret"] = f"{p_ * n_ / (p_ + n_):.3f}"; N["TFlipDetRegret"] = f"{min(p_, n_):.3f}"     # theorem 1 (2) on the two uses of the flip
     n = next((v["n0"] for k, v in B.items() if k == "flights"), None)
     if n:
         te = round(n / .7 * .3); N["TFlightsTest"] = f"{te}"; L = math.log(2 * 20 / .05); lo, hi = 1e-4, 1
         for _ in range(60):
             g = (lo + hi) / 2; lo, hi = (lo, g) if (8 * .1 / g ** 2 + 8 / (3 * g)) * L <= te else (g, hi)
         N["TFlightsRes"] = f"{100 * g:.0f}"
+    d_, v_, K_ = .02, .1, 20; N["TSelN"] = f"{round((2 * v_ / d_ ** 2 + 4 / (3 * d_)) * math.log((K_ - 1) / .05), -2):.0f}"     # theorem 3 (1): candidates more than 2 points below the best are excluded
 # ---- taxi, vision, corpus, multimodal and decision numbers come from the files that summaries.py writes
 for extra in ("numbers_taxi.json", "numbers_vision.json", "numbers_corpus.json", "numbers_mm.json", "numbers_decision.json", "numbers_search.json", "numbers_totals.json"):
     e = load(extra)
@@ -164,6 +165,7 @@ Dt = [r for r in jsonl("results_detectors.jsonl") if r.get("unit") == "record" a
 if Dt:
     def dt(method, field="mean_abs_error", n=200): return mean(r[field] for r in Dt if r["method"] == method and (r["n"] == n or method == "raw") and r.get(field) is not None)
     for k_, m_ in (("DetRawMAE", "raw"), ("DetCorMAE", "corrected"), ("DetSamMAE", "sample"), ("DetPostMAE", "poststratified"), ("DetStrMAE", "stratified"), ("DetPoolMAE", "pooled")): N[k_] = f1(100 * dt(m_))
+    N["DetCorOverSam"] = f1(dt("corrected") / dt("sample"))
     N["DetPoolCov"] = f"{100 * dt('pooled', 'coverage'):.0f}"; N["DetSamCov"] = f"{100 * dt('sample', 'coverage'):.0f}"; N["DetPostCov"] = f"{100 * dt('poststratified', 'coverage'):.0f}"; N["DetTables"] = f"{len({r['ds'] for r in Dt})}"
 # ---- documentation scores of the public documents, judgment items are those whose quote needs a reading of the data
 Do = load("dataset_docs.json")
@@ -221,7 +223,7 @@ W_ = jsonl("results_wilds.jsonl")
 x_ = [r for r in W_ if str(r.get("ds", "")).startswith("camelyon")]
 if x_: N["CamID"] = f3(mean(r["score_id"] for r in x_)); N["CamOOD"] = f3(mean(r["score_ood"] for r in x_))
 x_ = [r for r in W_ if str(r.get("ds", "")).startswith("civil")]
-if x_: N["CivAvg"] = f3(mean(r["avg_acc"] for r in x_)); N["CivWorst"] = f3(mean(r["worst_group_acc"] for r in x_))
+if x_: N["CivAvg"] = f3(mean(r["avg_acc"] for r in x_)); N["CivWorst"] = f3(mean(r["worst_group_acc"] for r in x_)); N["CivGap"] = f3(mean(r["avg_acc"] for r in x_) - mean(r["worst_group_acc"] for r in x_))
 Sy = [r for r in jsonl("results_synth.jsonl") if "error" not in r]
 x_ = [r for r in Sy if r.get("gen") == "real" and "score_c101" in r]
 if x_: N["COneGap"] = f1(100 * mean(r["score"] - r["score_c101"] for r in x_))
@@ -263,7 +265,7 @@ if Co:
         v = [r[fld] - b_[r["seed"]] for r in Co if r["arm"] == arm_ and r["size"] == size and r.get("budget") == bud and r["seed"] in b_ and r.get(fld) is not None]; return 100 * mean(v) if v else float("nan")
     for k_, a_ in (("Low", "ppl_low"), ("High", "ppl_high"), ("Qwen", "llm_high"), ("Both", "rule_dedup")):
         N["Corpus" + k_ + "Web"] = f1(gap(a_, "nll_c4")); N["Corpus" + k_ + "Wiki"] = f1(gap(a_, "nll_wiki"))
-    N["CorpusLowWikiXS"] = f1(gap("ppl_low", "nll_wiki", "XS")); N["CorpusLowWikiL"] = f1(gap("ppl_low", "nll_wiki", "L")); N["CorpusHighWebXS"] = f1(gap("ppl_high", "nll_c4", "XS")); N["CorpusHighWebL"] = f1(gap("ppl_high", "nll_c4", "L"))
+    N["CorpusLowWikiXS"] = f1(gap("ppl_low", "nll_wiki", "XS")); N["CorpusLowWikiL"] = f1(gap("ppl_low", "nll_wiki", "L")); N["CorpusLowWikiRatio"] = f1(gap("ppl_low", "nll_wiki", "L") / gap("ppl_low", "nll_wiki", "XS")); N["CorpusHighWebXS"] = f1(gap("ppl_high", "nll_c4", "XS")); N["CorpusHighWebL"] = f1(gap("ppl_high", "nll_c4", "L"))
     N["CorpusLowWebThree"] = f1(gap("ppl_low", "nll_c4", "M", 3000000))
     for k_ in list(N):
         if k_.startswith("Corpus") and N[k_].startswith("-"): N[k_] = "$-$" + N[k_][1:]

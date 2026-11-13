@@ -34,7 +34,7 @@ if rows:
     if cov1:
         gap = 100 * (m(r["score_seen_sub"] for r in cov1) - m(r["score_unseen_sub"] for r in cov1)); V["VisCovGap"] = f"{gap:.0f}"; V["VisCovGapB"] = f"{gap:.0f}"; V["VisCovK"] = "1"
     if sc2 and cov5: V["VisScaleDrop"] = f"{100 * (m(r['score'] for r in cov5) - m(r['score'] for r in sc2)):.0f}"
-    if cov1 and cov5: V["VisUnseenDrop"] = f"{100 * (m(r['score'] for r in cov5) - m(r['score_unseen_sub'] for r in cov1)):.0f}"; V["VisCovDrop"] = f"{100 * (m(r['score'] for r in cov5) - m(r['score'] for r in cov1)):.0f}"
+    if cov1 and cov5: V["VisUnseenDrop"] = f"{100 * (m(r['score'] for r in cov5) - m(r['score_unseen_sub'] for r in cov1)):.0f}"; V["VisCovDrop"] = f"{100 * (m(r['score'] for r in cov5) - m(r['score'] for r in cov1)):.0f}"; V["VisCovOverScale"] = f"{(m(r['score'] for r in cov5) - m(r['score'] for r in cov1)) / (m(r['score'] for r in cov5) - m(r['score'] for r in sc2)):.1f}" if sc2 else ""
     V["RunsVisionN"] = f"{len(sel(lambda r: 'coverage' not in r and 'scale' not in r))}"; V["RunsVisionC"] = f"{len(sel(lambda r: 'coverage' in r or 'scale' in r))}"
 F = load("results_fair.json")
 if F and F["cifar100"]["runs"]:

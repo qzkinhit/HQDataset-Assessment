@@ -45,7 +45,7 @@ def key_groups(fig, ax, groups, size=LEGEND, gap=3 / 72, dx=0.0, max_lines=2, se
         for L in legs: L.remove()
         if more: lines[max(more, key=lambda i: ws[i])] += 1
         else: size *= .94
-    x = (p.x0 + p.x1) / 2 * W_ + dx - tot / 2; yc = p.y1 * H_ + gap + max(hs) / 2
+    x = (p.x0 + p.x1) / 2 * W_ + dx - tot / 2; x = min(max(x, .03), W_ - .03 - tot); yc = p.y1 * H_ + gap + max(hs) / 2     # kept inside the figure
     for L, w in zip(legs, ws): L.set_bbox_to_anchor((x / W_, yc / H_), transform=fig.transFigure); L._panel = ax; x += w + sep
     return legs
 def titles(fig, axes, names):
