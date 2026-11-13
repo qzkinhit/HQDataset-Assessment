@@ -288,14 +288,14 @@ python analysis/stored_runs.py --update docs/parameters.md
 | 图 3，分级测评框架 | `docs/framework_zh.md` | `hqd_assess/claim.py`，`hqd_assess/scoring.py` | 依据框架绘制 |
 | 图 4，测评流程和各组实验 | `docs/framework_zh.md`，`docs/parameters.md` | `hqd_assess/` | 依据框架绘制 |
 | 图 5(a)，版本选择 | `results/results_decision.jsonl`，`results/results_decision_fine.jsonl` | `study/run_decision.py`，`study/run_decision_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 5(b), (c)，$R^2$ 随时间变化和规则违反率 | `results/results_taxi.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 5(b), (c)，$R^2$ 随训练月份的变化和规则违反率 | `results/results_taxi.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
 | 图 5(d)，训练规模和时间 | `results/results_taxi.json`，`results/results_taxi_100k.json`，`results/results_taxi_sizes.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
 | 图 5(e), (f)，C4 上的筛选和模型规模 | `results/results_corpus.jsonl` | `corpus/run_corpus.py`，`figures/plot_results.py` | 网页语料和 DCLM，数字、表和图 |
 | 图 5(g)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
 | 图 5(h)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
-| 图 6(a) to (d)，增益、Spearman 相关、联合修复和单项修复 | `results/tables_summary.json`，`results/results_real_tables.jsonl` | `study/run_real_tables.py`，`analysis/tables_summary.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 6(a) to (d)，增益、沿修复路径和删除路径的 Spearman 相关、联合修复和单项修复 | `results/tables_summary.json`，`results/results_real_tables.jsonl` | `study/run_real_tables.py`，`analysis/tables_summary.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
 | 图 6(e)，Qwen 修复和破坏的单元格 | `results/results_llm_cells.json`，`results/results_llm_tables.jsonl` | `llm/repair_tables.py`，`llm/score_tables.py`，`figures/plot_results.py` | [llm/README.md](llm/README.md)，数字、表和图 |
-| 图 6(f)，修复比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 6(f)，部分修复增益占全部修复增益的比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
 | 图 6(g)，CleanML 表上的清洗方法 | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`，`native/run_cleanml.py`，`figures/plot_results.py` | CleanML 表，数字、表和图 |
 | 图 6(h)，评测协议和数据错误 | `results/tables_summary.json`，`results/case_tep.json` | `case_tep/run_case.py`，`figures/plot_results.py` | 经典 TEP，数字、表和图 |
 | 图 6(i)，独立运行数 | `results/results_rieth.json`，`results/results_rieth_models.jsonl` | `big/run_rieth.py`，`big/run_rieth_models.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
@@ -310,7 +310,7 @@ python analysis/stored_runs.py --update docs/parameters.md
 | 表 7，新型数据的测评要素 | `docs/datasets.md` | | 综述引用的文献 |
 | 表 8，实验使用的数据集 | `results/table_sizes.json`，`results/results_sizes_native.json`，`results/label_errors.json`，`results/results_audioset_labels.json`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_taxi.json`，`results/corpus_stats.json`，`results/results_cleanml.jsonl`，`results/results_datacomp.jsonl`，`results/results_wilds.jsonl`，`results/results_multimodal.jsonl` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
 | 表 9，全部数据集上的结果 | `results/tables_summary.json`，`results/static_native.json`，`results/corpus_static.json`，`results/dataset_docs.json`，`results/results_decision_fine.jsonl`，`results/results_versions.jsonl`，`results/results_cleanml.jsonl`，`results/results_corpus.jsonl`，`results/results_taxi.json`，`results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_wilds.jsonl`，`results/results_synth.jsonl`，`results/results_vision.jsonl`，`results/results_fair.json`，`results/results_multimodal.jsonl`，`results/label_errors.json` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
-| 正文中的数字 | `results/numbers_*.json`，`results/tables_summary.json` | `analysis/summaries.py`，`analysis/make_numbers.py` | 数字、表格和图 |
+| 正文中的数字 | `results/numbers_*.json`，`results/tables_summary.json`，`results/insights_summary.json` | `analysis/summaries.py`，`analysis/insights.py`，`analysis/make_numbers.py` | 数字、表格和图 |
 | 命题和例子中计算得到的数字 | | `hqd_assess/`，`tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## 结果

@@ -296,9 +296,14 @@ if Fp:
     N["FpCov"] = f"{100 * mean(r['coverage'] for r in Fp):.0f}"; N["FpHalf"] = f1(100 * mean(r["mean_half_width"] for r in Fp)); N["DetPostHalf"] = f1(100 * mean(r["mean_half_width"] for r in Dt if r["method"] == "poststratified" and r["n"] == 200))
     N["DetCorHalf"] = f1(100 * mean(r["mean_half_width"] for r in Dt if r["method"] == "corrected" and r["n"] == 200)); N["DetCorCovMin"] = f"{100 * min(r['coverage'] for r in jsonl('results_detectors.jsonl') if r.get('method') == 'corrected' and r.get('unit') == 'record' and r.get('n') == 50 and r.get('ds') == 'smartfactory' and r.get('detector') == 'D1'):.1f}"
 if num("MMcorr") is not None and num("MMtrue") is not None: N["MMcorrGap"] = f"{100 * abs(num('MMcorr') - num('MMtrue')):.1f}"
+# ---- cross-experiment findings, computed in insights.py; a name defined twice stops the script
+import insights
+INS = insights.macros(R); clash = sorted(set(INS) & set(N))
+if clash: raise SystemExit(f"macro names defined both here and in insights.py: {' '.join(clash)}")
+N.update(INS)
 if TEX is None:
     print(json.dumps(N, indent=1, ensure_ascii=False, sort_keys=True)); raise SystemExit
-s = open(TEX, encoding="utf-8").read(); used = sorted(set(re.findall(r"\\(Fp[A-Z][a-z]+|Dc[A-Z][A-Za-z]*|Det[A-Z][A-Za-z]*|Doc[A-Z][A-Za-z]*|CM[A-Z][a-z]+|Cam[A-Z]+|Civ[A-Z][a-z]+|COneGap|Syn[A-Z][A-Za-z]*|TopGain[A-Z]+|LowLoss[A-Z]+|LLM[A-Z][A-Za-z]*|TEP[A-Za-z]*|Srch[A-Za-z]*|Study[A-Za-z]*|Cards[A-Za-z]*|Refs[A-Za-z]*|T[A-Z][a-zA-Z]*|Vis[A-Z][A-Za-z]*|Rieth[A-Za-z]*|MM[A-Za-z]+|Corpus[A-Za-z]*|Taxi[A-Za-z]*|Runs[A-Za-z]*|Fair[A-Za-z]*|Dec[A-Z][A-Za-z]*|Leak[A-Z][a-z]*)\b", s[s.index("\\begin{document}"):])))
+s = open(TEX, encoding="utf-8").read(); used = sorted(set(re.findall(r"\\(Fp[A-Z][a-z]+|Dc[A-Z][A-Za-z]*|Det[A-Z][A-Za-z]*|Doc[A-Z][A-Za-z]*|CM[A-Z][a-z]+|Cam[A-Z]+|Civ[A-Z][a-z]+|COneGap|Syn[A-Z][A-Za-z]*|TopGain[A-Z]+|LowLoss[A-Z]+|LLM[A-Z][A-Za-z]*|TEP[A-Za-z]*|Srch[A-Za-z]*|Study[A-Za-z]*|Cards[A-Za-z]*|Refs[A-Za-z]*|T[A-Z][a-zA-Z]*|Vis[A-Z][A-Za-z]*|Rieth[A-Za-z]*|MM[A-Za-z]+|Corpus[A-Za-z]*|Taxi[A-Za-z]*|Runs[A-Za-z]*|Fair[A-Za-z]*|Dec[A-Z][A-Za-z]*|Leak[A-Z][a-z]*|Ins[A-Z][A-Za-z]*)\b", s[s.index("\\begin{document}"):])))
 used = [u for u in used if u not in ("TeX",)]
 lines = []; missing = []
 for k in used:

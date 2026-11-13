@@ -53,9 +53,9 @@ def zoom(ax, ys, pad=.08):
     if v: a, b = min(v), max(v); d = (b - a) or 1; ax.set_ylim(a - pad * d, b + pad * d)
 # ======== figure A: quality and utility on tables, protocols and label noise
 T, C, Q = load("tables_summary.json"), load("case_tep.json"), load("results_rieth.json"); V = jsonl("results_vision.jsonl", "results_vision_fine.jsonl"); science = {}
-PH_B = PH; PH = PH_B + .07; H = 5.53; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 3.96, 1.20; y2, y3 = 2.19, .34
+PH_B = PH; PH = PH_B; H = 5.02; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 3.72, 0.94; y2, y3 = 2.08, .34
 EX = .10; a = box(fig, .34, ty - EX, 1.56, th + EX); b = box(fig, 1.96, ty - EX, 1.56, th + EX); c = box(fig, 3.58, ty - EX, 1.46, th + EX); d = box(fig, 5.10, ty - EX, 1.78, th + EX)
-NORM = SymLogNorm(linthresh=2, linscale=1, vmin=-40, vmax=40, base=10); HMAP = plt.get_cmap("RdBu_r").copy(); HMAP.set_bad("#E8EAEC")
+NORM = SymLogNorm(linthresh=2, linscale=1, vmin=-40, vmax=40, base=10); HMAP = plt.get_cmap("RdBu_r").copy(); HMAP.set_bad("#B9BFC5")
 def ink(v):
     """The colour of a number on a cell, from the luminance of the cell."""
     r_, g_, b_, _ = HMAP(NORM(v)); return "white" if .299 * r_ + .587 * g_ + .114 * b_ < .46 else DARK
@@ -82,34 +82,44 @@ def heat(ax, action, show):
     return im
 im = heat(a, "repair_records", True); heat(b, "delete_records", False)
 scale(fig, im, .40, ty + th + .05, 2.90)
-# (c) rank correlation of the static score with the task score, per dataset and model
-L = collections.defaultdict(dict)
-for r in T["spearman_list"]: L[r["ds"]][r["model"]] = r["rho"]
-pos = np.arange(len(DS)); med = [np.median(list(L[d_].values())) if L[d_] else np.nan for d_, _ in DS]; science["spearman"] = {d_: L[d_] for d_, _ in DS}
-c.barh(pos, med, height=.70, color=[RED if m < 0 else BLUE for m in med], alpha=.35, edgecolor=DARK, lw=.3, hatch="///", zorder=2)
-OFF = dict(linear=-.28, rf=-.14, gb=0, knn=.14, mlp=.28)
-for y_, (d_, _) in zip(pos, DS):
-    for m_, v in L[d_].items(): c.plot(v, y_ + OFF[m_], ls="none", marker=MC[m_][1], ms=4.2 if m_ == "gb" else 2.8, color=MC[m_][0], mec="white", mew=.2, zorder=4)
-c.axvline(0, color=DARK, lw=.7); c.set_ylim(len(DS) - .5, -.5); c.set_yticks(pos); c.set_xlim(-1, 1); c.set_xticks([-1, -.5, 0, .5, 1]); c.set_xticklabels(["−1", "−.5", "0", ".5", "1"]); frame(c, "x"); c.tick_params(labelleft=False)
-key_over(fig, c, [Patch(facecolor=BLUE, alpha=.35, hatch="///", edgecolor=DARK, label="Median")] + [Line2D([], [], ls="none", marker=k, ms=3.0, color=col, label=n) for _, n, col, k in MODS], cols=3, size=5.8)
-# (d) joint gain minus the sum of the single gains
-I = T["interaction_list"]; rows_ = {n: i for i, (n, _) in enumerate(DS)}; science["interaction"] = I; d.axvline(0, color=DARK, lw=.7, zorder=1)
-for r in I:
-    y_ = rows_[r["ds"]] + OFF[r["model"]]; v = 100 * r["inter"]; sig = r["q"] < .05
-    d.plot(v, y_, marker="o", ms=4.6 if sig else 3.4, ls="none", color=RED if sig else GRAY, mfc=RED if sig else "white", mec="white" if sig else GRAY, mew=.5 if sig else .8, zorder=5 if sig else 4, clip_on=False)
-d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.tick_params(labelleft=False)
-key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, color=RED, mec="white", mew=.5, label="Significant"), Line2D([], [], ls="none", marker="o", ms=3.4, color=GRAY, mfc="white", mec=GRAY, mew=.8, label="Not significant")], cols=2)
-titles(fig, [a, b, c, d], ["(a) Repair all errors", "(b) Delete dirty rows", "(c) Static vs. task score", "(d) Joint minus single gains"])
-# second row
-e = cell(fig, 0, y2); f = box(fig, 2.00, y2, 1.50, PH); j_ = box(fig, 3.98, y2, 1.08, PH); h = cell(fig, 3, y2)
-RT = jsonl("results_real_tables.jsonl", "results_tables_fine.jsonl"); G = collections.defaultdict(dict); P = collections.defaultdict(list)
+# the table versions of (c) and (f), seed means of the task score and of the static score per table, model, operation and share
+RT = jsonl("results_real_tables.jsonl", "results_tables_fine.jsonl"); G = collections.defaultdict(dict); PS = collections.defaultdict(dict)
 seen = set()
 for r in RT:
     if "score" not in r: continue
     k = (r["ds"], r["model"], r["seed"], r["action"], r["f"])
     if k in seen: continue
     seen.add(k); G[(r["ds"], r["model"], r["action"], round(r["f"], 3))][r["seed"]] = r["score"]
-    if r.get("rate_missing") is not None: P[(r["ds"], r["model"], r["action"], round(r["f"], 3))].append((100 * (8 - r["rate_missing"] - r["rate_domain"] - r["rate_value"]) / 8, r["score"]))
+    if r.get("rate_missing") is not None: PS[(r["ds"], r["model"], r["action"], round(r["f"], 3))][r["seed"]] = 100 * (8 - r["rate_missing"] - r["rate_domain"] - r["rate_value"]) / 8
+def path(ds, m, action):
+    """The raw table and every share of one operation, as (share, static score, task score), seed means."""
+    return sorted((k[3], mean(PS[k].values()), mean(G[k].values())) for k in G if k[:2] == (ds, m) and k[2] in ("keep", action) and PS.get(k))
+# (c) rank correlation of the static score with the task score along the repair path and along the delete path, one point per table and model. A delete path enters when deleting raises the static score by more than one point
+from scipy.stats import spearmanr
+PATHS = (("repair_records", "Repair path", BLUE, "o", -.17), ("delete_records", "Delete path", ORANGE, "D", .17)); science["path_spearman"] = {}
+for a_, n_, col, mk, off in PATHS:
+    allr = []
+    for y_, (ds, _) in enumerate(DS):
+        for m, _ in MOD:
+            pt = path(ds, m, a_)
+            if len(pt) < 5 or len({round(q[1], 9) for q in pt}) < 3 or pt[-1][1] - pt[0][1] <= 1: continue
+            rho = float(spearmanr([q[1] for q in pt], [q[2] for q in pt]).statistic); allr.append(rho); science["path_spearman"].setdefault(n_, {}).setdefault(ds, {})[m] = rho
+            c.plot(rho, y_ + off, ls="none", marker=mk, ms=3.6 if mk == "o" else 3.2, color=col, mec="white", mew=.25, zorder=4)
+    md = float(np.median(allr)); science["path_spearman"][n_ + "/median"] = md; science["path_spearman"][n_ + "/pairs"] = len(allr); science["path_spearman"][n_ + "/negative"] = sum(q < 0 for q in allr)
+    c.axvline(md, color=col, ls=DASH, lw=1.1, zorder=3)
+pos = np.arange(len(DS)); c.axvline(0, color=DARK, lw=.7, zorder=2); c.set_ylim(len(DS) - .5, -.5); c.set_yticks(pos); c.set_xlim(-1.08, 1.08); c.set_xticks([-1, -.5, 0, .5, 1]); c.set_xticklabels(["−1", "−.5", "0", ".5", "1"]); frame(c, "x"); c.tick_params(labelleft=False)
+key_over(fig, c, [Line2D([], [], ls="none", marker=mk, ms=3.4, color=col, label=n_) for _, n_, col, mk, _ in PATHS] + [hl(DARK, None, "Median", lw=1.1, ls=DASH)], cols=2, size=5.8)
+# (d) joint gain minus the sum of the single gains
+OFF = dict(linear=-.28, rf=-.14, gb=0, knn=.14, mlp=.28)
+I = T["interaction_list"]; rows_ = {n: i for i, (n, _) in enumerate(DS)}; science["interaction"] = I; d.axvline(0, color=DARK, lw=.7, zorder=1)
+for r in I:
+    y_ = rows_[r["ds"]] + OFF[r["model"]]; v = 100 * r["inter"]; sig = r["q"] < .05
+    d.plot(v, y_, marker="o", ms=4.6 if sig else 3.4, ls="none", color=RED if sig else GRAY, mfc=RED if sig else "white", mec="white" if sig else GRAY, mew=.5 if sig else .8, zorder=5 if sig else 4, clip_on=False)
+d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.tick_params(labelleft=False)
+key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, color=RED, mec="white", mew=.5, label="Significant"), Line2D([], [], ls="none", marker="o", ms=3.4, color=GRAY, mfc="white", mec=GRAY, mew=.8, label="Not significant")], cols=2)
+titles(fig, [a, b, c, d], ["(a) Repair all errors", "(b) Delete dirty rows", "(c) Repair vs. delete", "(d) Joint minus single gains"])
+# second row
+e = cell(fig, 0, y2); f = cell(fig, 1, y2); j_ = box(fig, 3.98, y2, 1.08, PH); h = cell(fig, 3, y2)
 # (e) cells the language model repaired and damaged, per 100 rows it read, the same rows as (a)
 LC = load("results_llm_cells.json") or {}; pos_e = np.arange(len(DS)); science["qwen_cells"] = {}
 for y_, (ds, _) in zip(pos_e, DS):
@@ -119,19 +129,20 @@ for y_, (ds, _) in zip(pos_e, DS):
     e.plot([rp, dm], [y_, y_], color=GRAY, lw=1.0, zorder=2); e.plot(rp, y_, ls="none", marker="o", ms=4.0, color=BLUE, mec="white", mew=.3, zorder=4); e.plot(dm, y_, ls="none", marker="X", ms=4.6, color=RED, mec="white", mew=.3, zorder=3)
 e.set_xscale("symlog", linthresh=1, linscale=.5); e.set_xlim(-.2, 9000); e.set_xticks([0, 1, 10, 100, 1000]); e.set_xticklabels(["0", "1", "10", "100", "1k"]); e.minorticks_off(); e.set_ylim(len(DS) - .5, -.5); e.set_yticks(pos_e); e.set_yticklabels([n for _, n in DS], fontsize=6.6); e.set_xlabel("Cells per 100 rows", labelpad=1.5); frame(e, "x")
 key_over(fig, e, [Line2D([], [], ls="none", marker="o", ms=4.0, color=BLUE, label="Repaired"), Line2D([], [], ls="none", marker="X", ms=4.4, color=RED, label="Damaged")], cols=2, size=6.4)
-# (f, g) response to the share of repaired or deleted records, one row per table, the mean over five model families, each family against the raw table of the same seed
-SH = [round(.1 * q, 1) for q in range(1, 11)]; science["share"] = dict(rows=[n for _, n in DS], shares=SH)
-def share(ax, action, show):
-    M = np.full((len(DS), len(SH)), np.nan)
-    for i, (ds, _) in enumerate(DS):
-        for j, f_ in enumerate(SH):
-            fam = []
-            for m, _ in MOD:
-                a0, a1 = G.get((ds, m, "keep", 0.0), {}), G.get((ds, m, action, f_), {}); both = set(a0) & set(a1)
-                if both: fam.append(mean(100 * (a1[s_] - a0[s_]) for s_ in both))
-            if fam: M[i, j] = mean(fam)
-    science["share"][action] = M.tolist(); return cells(ax, M, ["20%", "60%", "100%"], [1, 5, 9], [n for _, n in DS] if show else None, size=6.0)
-im = share(f, "repair_records", True); f.set_xlabel("Dirty records repaired", labelpad=1.5); scale(fig, im, 2.03, y2 + PH + .05, 1.44, tk=[-40, -2, 0, 2, 40])
+# (f) partial repair. For each table and model whose full repair gains at least 0.02, the gain at each share of repaired records as a fraction of the full gain, the median per model family, against the same fraction of the static score
+SH = [0.0] + [round(.1 * q, 1) for q in range(1, 11)]; science["share"] = dict(shares=SH); FR = collections.defaultdict(list); FS_ = []
+for ds, _ in DS:
+    for m, _ in MOD:
+        k0, k1 = (ds, m, "keep", 0.0), (ds, m, "repair_records", 1.0)
+        if not G.get(k0) or not G.get(k1): continue
+        s0, g1 = mean(G[k0].values()), mean(G[k1].values()) - mean(G[k0].values())
+        if g1 < .02: continue
+        p0, p1 = mean(PS[k0].values()), mean(PS[k1].values()); FR[m].append([0.0] + [(mean(G[(ds, m, "repair_records", x)].values()) - s0) / g1 for x in SH[1:]]); FS_.append([0.0] + [(mean(PS[(ds, m, "repair_records", x)].values()) - p0) / (p1 - p0) for x in SH[1:]])
+fsm = list(np.median(FS_, axis=0)); science["share"]["static"] = fsm; f.plot(SH, fsm, color=GRAY, lw=1.3, ls=DASH, zorder=2)
+for m, n, col, mk in MODS:
+    if FR[m]: yy = list(np.median(FR[m], axis=0)); science["share"][n] = dict(gain_fraction=yy, pairs=len(FR[m])); line(f, SH, yy, col, mk, lw=1.5, z=4 if m == "gb" else 3)
+f.set_xlim(-.04, 1.04); f.set_ylim(-.06, 1.08); f.set_xticks([0, .5, 1]); f.set_xticklabels(["0", "50%", "100%"]); f.set_yticks([0, .5, 1]); f.set_yticklabels(["0", ".5", "1"]); f.set_xlabel("Dirty records repaired", labelpad=1.5); ylab(f, "Share of full gain"); frame(f)
+key_over(fig, f, [hl(col, mk, n, ms=3.0) for _, n, col, mk in MODS] + [hl(GRAY, None, "Static score", lw=1.2, ls=DASH)], cols=3, size=5.8)
 # (j) CleanML tables with their real errors. For each table and error type the gain of each cleaning method over the dirty version, averaged over model families and seeds, and the choice of the static rule and of the task test within each error type, for every model and seed
 CM = [r for r in jsonl("results_cleanml.jsonl") if "test" in r]; GC = collections.defaultdict(dict)
 for r in CM: GC[(r["ds"], r["error_type"], r["model"], r["seed"])][r["method"]] = r
@@ -167,7 +178,7 @@ for n, v, col, ls in gaps: h.axhline(v, color=col, lw=1.2, ls=ls, zorder=4)
 science["protocol_vs_data"] = dict(changes=[t[0] for t in TB], gaps={n: v for n, v, _, _ in gaps})
 h.set_yscale("log"); h.set_ylim(.02, 110); h.set_yticks([.1, 1, 10]); h.set_yticklabels([".1", "1", "10"]); h.minorticks_off(); h.set_xlim(0, len(TB) + 1); h.set_xticks([1, 20, 40, len(TB)]); h.set_xticklabels(["1", "20", "40", str(len(TB))]); h.set_xlabel("Sorted pairs", labelpad=1.5); ylab(h, "Macro-F1 gap (pp)"); frame(h)
 key_over(fig, h, [Patch(facecolor=BLUE, label="Repair"), Patch(facecolor=ORANGE, label="Delete")] + [hl(col, None, n, lw=1.2, ls=ls) for n, _, col, ls in gaps], cols=3, size=5.8)
-titles(fig, [e, f, j_, h], ["(e) Qwen repair", "(f) Repair share", "(g) Real errors, CleanML", "(h) Protocol vs. data"])
+titles(fig, [e, f, j_, h], ["(e) Qwen repair", "(f) Partial repair", "(g) Real errors, CleanML", "(h) Protocol vs. data"])
 # third row
 j_, i_, k_, l_ = [cell(fig, q, y3) for q in range(4)]
 # (i) error rate of a table estimated from a detector and from labeled records, record level, tables with a true rate between 1 and 99 percent
@@ -239,17 +250,17 @@ for ax, grp, lab in ((a, CLS, "cls"),):
     key_over(fig, ax, [hl(col, mk, n, ms=3.0) for _, n, col, mk in MODS] + [hl(DARK, None, "Mean", lw=1.8), hl(DARK, None, "Reg.", lw=1.2, ls=DASH), hl(DARK, None, "Best", lw=1.0, ls=":")], cols=4, size=5.4)
 # (c) taxi, rule violations per month, every rule
 keys = sorted(X["months"]); idx = {k: i for i, k in enumerate(keys)}; xm = [2019 + i / 12 for i in range(len(keys))]; RU = [("r_location", "Location", BLUE), ("r_passengers", "Passengers", ORANGE), ("r_ratecode", "Rate code", GREEN), ("r_distance", "Distance", PURPLE), ("r_duration", "Duration", TEAL), ("r_fare", "Fare", BROWN), ("r_speed", "Speed", PINK), ("any_rule", "Any rule", RED)]; sci2["rules"] = {}
-# (d) taxi, R2 by training month and test month
-TMS = sorted({r["train_month"] for r in X["runs"]}); M = np.full((len(TMS), len(keys)), np.nan)
-for i, tm in enumerate(TMS):
-    cur = [r["r2"] for r in X["runs"] if r["arm"] == "raw" and r["train_month"] == tm]
-    for j, k in enumerate(keys):
-        v = [c_[k] for c_ in cur if k in c_ and k > tm]
-        if v: M[i, j] = st.mean(v)
-sci2["taxi_matrix"] = dict(train=TMS, test=keys, r2=M.tolist()); cm = plt.get_cmap("YlOrRd_r").copy(); cm.set_bad("#E8EAEC"); imd = d.imshow(np.ma.masked_invalid(M), cmap=cm, vmin=0, vmax=1, aspect="auto", interpolation="nearest")
-d.set_xticks([-.5, 23.5, 47.5, 71.5]); d.set_xticklabels(["2019", "2021", "2023", "2025"], fontsize=6.4); d.set_yticks([-.5, 5.5, 11.5]); d.set_yticklabels(["2019", "2022", "2025"], fontsize=6.0, rotation=90, va="center"); d.get_yticklabels()[-1].set_va("bottom"); d.get_yticklabels()[0].set_va("top"); d.tick_params(length=2.0, pad=1.7); d.set_xlabel("Test month", labelpad=1.5); ylab(d, "Train month")
-for s in d.spines.values(): s.set_visible(True); s.set_linewidth(.8)
-pd_ = d.get_position(); cax = fig.add_axes([pd_.x0, pd_.y1 + .05 / H, pd_.width, .055 / H]); cb = fig.colorbar(imd, cax=cax, orientation="horizontal", ticks=[0, .5, 1]); cb.ax.tick_params(labelsize=6.8, length=1.2, pad=.6); cb.ax.set_xticklabels(["0", ".5", "1"]); cb.ax.xaxis.set_ticks_position("top"); cb.outline.set_linewidth(.6)
+# (b) taxi, mean R2 on two fixed later test periods against the training month, raw records, mean over seeds. A training month enters a period only when it precedes every test month of the period
+TMS = sorted({r["train_month"] for r in X["runs"] if r["arm"] == "raw"}); sci2["taxi_by_train_month"] = {}; ym_ = lambda k: int(k[:4]) + (int(k[5:7]) - 1) / 12; ALLB = []
+for n_, test_, col, mk, ls in (("Test 2023", [f"2023-{q:02d}" for q in range(2, 13)], RED, "*", "-"), ("Test 2024", [f"2024-{q:02d}" for q in range(8, 13)], BLUE, "o", DASH)):
+    xx, yy = [], []
+    for tm in TMS:
+        v = [mean(r["r2"][k] for k in test_) for r in X["runs"] if r["arm"] == "raw" and r["train_month"] == tm and all(k in r["r2"] and k > tm for k in test_)]
+        if v: xx.append(ym_(tm)); yy.append(mean(v))
+    sci2["taxi_by_train_month"][n_] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; line(d, xx, yy, col, mk, lw=1.5, ls=ls)
+d.axvline(ym_("2020-03"), color=GRAY, ls=":", lw=1.0, zorder=1); d.text(ym_("2020-03") - .16, .04, "2020-03", transform=d.get_xaxis_transform(), fontsize=6.4, color=DARK, ha="right", va="bottom")
+d.set_xlim(2018.2, 2024.9); d.set_xticks([2019, 2021, 2023]); d.set_xticklabels(["2019", "2021", "2023"]); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d)
+key_over(fig, d, [hl(RED, "*", "Test 2023", ms=4.4), hl(BLUE, "o", "Test 2024", ls=DASH)], cols=2, size=6.4)
 # second row
 g, h, k_, l_ = [cell(fig, q, y2) for q in range(4)]
 # (e) monthly change of the violation rate against monthly change of R2, the models trained before the first large change
@@ -257,7 +268,9 @@ fx = [r for r in X["runs"] if r["arm"] == "raw" and r["train_month"] <= "2020-01
 tx_ = [abs(ar[q] - ar[p]) for p, q in zip(ks_, ks_[1:])]; ty_ = [abs(mr[q] - mr[p]) for p, q in zip(ks_, ks_[1:])]; sci2["trigger"] = dict(month=ks_[1:], dviol=tx_, dr2=ty_)
 for x_, y_ in zip(tx_, ty_):
     above = x_ > 2; e.plot(x_, y_, ls="none", marker="o", ms=4.2 if above else 3.0, color=RED if above else BLUE, mec="white", mew=.3, zorder=4 if above else 3)
-e.axvline(2, color=DARK, ls=DASH, lw=.9, zorder=2); e.axhline(.05, color=DARK, ls=DASH, lw=.9, zorder=2); e.set_xscale("symlog", linthresh=1, linscale=.6); e.set_xticks([0, 1, 2, 5, 10]); e.set_xticklabels(["0", "1", "2", "5", "10"]); e.minorticks_off(); e.set_xlabel("Violation change (pp)", labelpad=1.5); ylab(e, "R\u00b2 change"); frame(e); short_y(e)
+for m_, x_, y_ in zip(ks_[1:], tx_, ty_):
+    if m_ in ("2020-04", "2024-03"): e.annotate(m_, (x_, y_), xytext=(2, -5) if y_ > .2 else (9, 28), textcoords="offset points", ha="right", va="top" if y_ > .2 else "bottom", fontsize=6.0, color=DARK, arrowprops=None if y_ > .2 else dict(arrowstyle="-", lw=.5, color=DARK, shrinkA=1, shrinkB=2.5))
+e.axvline(2, color=DARK, ls=DASH, lw=.9, zorder=2); e.axhline(.05, color=DARK, ls=DASH, lw=.9, zorder=2); e.set_xscale("symlog", linthresh=1, linscale=.6); e.set_xticks([0, 1, 2, 5, 10]); e.set_xticklabels(["0", "1", "2", "5", "10"]); e.set_xlim(-.3, 16); e.minorticks_off(); e.set_xlabel("Violation change (pp)", labelpad=1.5); ylab(e, "R\u00b2 change"); frame(e); short_y(e)
 key_over(fig, e, [Line2D([], [], ls="none", marker="o", ms=4.0, color=RED, label="Above 2 pp"), Line2D([], [], ls="none", marker="o", ms=3.0, color=BLUE, label="Other months")], cols=2, size=6.4)
 # (f) taxi, R2 against the months after training for three training sizes, raw and rule-filtered, the same six training months at every horizon
 SZT = [(10000, "10k", RED, "*"), (100000, "100k", BLUE, "o"), (3000000, "3M", GREEN, "^")]; RUNS = []; sci2["taxi_size"] = {}; ALLY = []
@@ -300,7 +313,7 @@ def versus(ax, axis, name):
     ax.axhline(0, color=DARK, lw=.7, zorder=1); ax.set_xscale("log"); ax.minorticks_off(); ylab(ax, GAP); frame(ax); zoom(ax, ally); short_y(ax)
 NK = [hl(col, mk, n, ms=3.0) for _, n, col, mk in LN] + [hl(DARK, None, "C4", lw=1.3), hl(DARK, None, "Wiki", lw=1.0, ls=DASH), hl(DARK, None, "Random", lw=.7)]
 versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); key_over(fig, h, NK, cols=3, size=5.6)
-titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 over time", "(c) Violations and R\u00b2", "(d) Training size, time"])
+titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 by train month", "(c) Violations and R\u00b2", "(d) Training size, time"])
 # third row
 # (k) published synthetic images, share of synthetic images in the training set, replacing real images or added to them, each run against the real-only run of the same seed
 SY = jsonl("results_synth.jsonl"); GENS = [("edm", "EDM", RED, "*"), ("ddpm", "DDPM", BLUE, "o"), ("cifake", "CIFAKE", ORANGE, "D")]; sci2["synthetic"] = {}

@@ -56,30 +56,43 @@ def rec(n):
     if n < 1e6: return f"{n}"
     return f"{n / 1e6:.2f}M" if n / 1e6 < 9.95 else f"{n / 1e6:.1f}M"
 S3, S4, S5 = "\\S\\ref{sec:dimension}", "\\S\\ref{sec:method}", "\\S\\ref{sec:newdata}"
-HEAD = [("Tables with benchmark errors", S3, "~\\cite{abdelaal2023rein,ding2025uniclean}", "Macro-F1 or $R^2$"), ("Tables with real errors", S3, "~\\cite{li2021cleanml}", "Macro-F1"), ("Image labels", S3, "~\\cite{wei2022cifarn}", "accuracy"), ("Language-model corpora", S5, "", "loss"), ("Multimodal data", S5, "", "Recall@5"), ("Synthetic data", S5, "", "accuracy"), ("Dynamic data", S5, "", "$R^2$"), ("Evaluation protocol", S3, "", "Macro-F1 or accuracy"), ("Data leakage", S5, "", "accuracy or loss"), ("Test-set labels", S3, "~\\cite{northcutt2021pervasive}", "accuracy"), ("Detector estimates", S4, "", "consistency")]
-GROUP_CITE = (0, 1, 2, 9)     # the citation stands in the group row
+HEAD = [("Tables with benchmark errors", S3, "", "Macro-F1 or $R^2$"), ("Tables with real errors", S3, "", "Macro-F1"), ("Image labels", S3, "", "accuracy"), ("Language-model corpora", S5, "", "loss"), ("Multimodal data", S5, "", "Recall@5"), ("Synthetic data", S5, "", "accuracy"), ("Dynamic data", S5, "", "$R^2$"), ("Evaluation protocol", S3, "", "Macro-F1 or accuracy"), ("Data leakage", S5, "", "accuracy or loss"), ("Test-set labels", S3, "", "accuracy"), ("Detector estimates", S4, "", "share of matched pairs")]
+# every dataset row carries its citation. Where the dataset list gives none or only the benchmark, the original source is added when it is in the bibliography.
+# NYC taxi: Wu and Keogh analyze the NYC taxi demand series that Numenta derived from the same trip records.
+ROW_CITE = {"taxi": "wu2021flawed", "cifar10": "krizhevsky2009cifar,northcutt2021pervasive", "cifar100": "krizhevsky2009cifar,northcutt2021pervasive", "beers": "mahdavi2019raha,abdelaal2023rein", "flights": "mahdavi2019raha,ding2025uniclean", "hospitals": "mahdavi2019raha,ding2025uniclean"}
 ABBR = {"Classification": "C", "Regression": "R", "Language modeling": "LM", "Retrieval": "IR", "Fault diagnosis": "C"}
 INDENT = "\\hspace{0.8ex}"
 PANEL_STUDY = 5     # the groups before this index fill the left panel of the dataset table
-def _ds_lines(d, S, group_cite):
+def _ds_lines(d, S):
     """the printed lines of one dataset, the other columns stand on the first line"""
-    name = d["display"].split("|"); errs = d["errors"].split("|")
-    if d.get("cite") and not group_cite: name[-1] += f"~\\cite{{{d['cite']}}}"
+    name = d["display"].split("|"); errs = d["errors"].split("|"); cite = ROW_CITE.get(d["key"], d.get("cite"))
+    if cite: name[-1] += f"~\\cite{{{cite}}}"
     L = [[(INDENT if i else "") + (name[i] if i < len(name) else ""), "" if i else f"{d['type']}, {ABBR[d['task']]}", errs[i] if i < len(errs) else "", "" if i else rec(S.get(d["key"]))] for i in range(max(len(name), len(errs)))]
     return L
 def dataset_table(R):
     S = records(R); left, right = [], []
     for gi, (g, ds) in enumerate(GROUPS):
         t, sec, cite, metric = HEAD[gi]; tgt = left if gi < PANEL_STUDY else right
+        if tgt: tgt.append(("rule",))
         tgt.append(("g", f"{t} ({sec}){cite}, {metric}"))
-        for d in ds: tgt += [("r", x) for x in _ds_lines(d, S, gi in GROUP_CITE)]
+        for d in ds: tgt += [("r", x) for x in _ds_lines(d, S)]
     L = ["\\begin{table}[!tp]", "\\cnentablecaption{本文测评的数据集, 分组行给出对应章节和评价指标, 数据集列写全称, 缩写加粗. Type, task 列为数据类型和任务, 其中 Mixed, Num., Cat. 和 Pairs 分别为数值和类别混合、数值型、类别型和图文对, C, R, LM 和 IR 分别为分类、回归、语言建模和信息检索. Errors 列为数据问题的来源, 其中 Syn. 和 Sem. 分别为语法错误 (syntactic error) 和语义错误 (semantic error), Dup. 为重复记录 (duplicate). Records 为实验使用的记录数, M 表示百万.}{Datasets assessed in this survey, each group row gives the section and the metric, the dataset column gives the full name with the abbreviation in bold. Type, task gives the data type and the task, Mixed, Num., Cat. and Pairs mean numerical and categorical columns together, numerical, categorical and image-text pairs, C, R, LM and IR mean classification, regression, language modeling and information retrieval. Errors gives the origin of the data problem, Syn. and Sem. mean syntactic and semantic errors, Dup. means duplicates. Records is the number of records used in the experiments, M means million.}", "\\label{tab:study}", "\\footnotesize", "\\tabcolsep 1pt", "\\renewcommand{\\arraystretch}{0.92}", "\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}lllr@{\\hspace{2pt}}|@{\\hspace{2pt}}lllr@{}}", "\\toprule", "Dataset & Type, task & Errors & Records & Dataset & Type, task & Errors & Records\\\\", "\\midrule"]
     def cells(x, bar):
         if x is None: return "&&&"
         if x[0] == "g": return f"\\multicolumn{{4}}{{{BARL if bar else 'l'}}}{{\\textbf{{\\textit{{{x[1]}}}}}}}"
         return " & ".join(x[1])
-    for i in range(max(len(left), len(right))):
-        L.append(cells(left[i] if i < len(left) else None, True) + " & " + cells(right[i] if i < len(right) else None, False) + "\\\\")
+    def seq(side):
+        """the lines of a panel, a rule between two groups stands before the group row, as in the main table"""
+        out = []; rule = False
+        for x in side:
+            if x[0] == "rule": rule = True; continue
+            out.append((x, rule)); rule = False
+        return out
+    a_, b_ = seq(left), seq(right)
+    for i in range(max(len(a_), len(b_))):
+        x, rx = a_[i] if i < len(a_) else (None, False); y, ry = b_[i] if i < len(b_) else (None, False)
+        if rx or ry: L.append(("\\cmidrule(r){1-4}" if rx else "") + ("\\cmidrule(l){5-8}" if ry else ""))
+        L.append(cells(x, True) + " & " + cells(y, False) + "\\\\")
     L += ["\\bottomrule", "\\end{tabular*}", "\\end{table}"]
     return "\n".join(L)
 def counts():
@@ -275,7 +288,7 @@ def main_table(R):
         x = [r for g_ in groups for r in ranks.get(g_, [])]
         return ("m", label, [f"{mean(r[i] for r in x):.2f}" if x else TBD for i in range(3)])
     left += [("rule",), mp("Mean place, benchmark errors", [0]), mp("Mean place, real errors", [1]), mp("Mean place, images, corpora", [2, 3])]
-    top.append(mp("Mean place, all rows", range(len(WIN_TAGS))))
+    top.append(mp("Mean place, all seven groups", range(len(WIN_TAGS))))
     right = top + [("rule",), ("h", ["Dataset", "Doc", "Static", "Usual", "Alternative", "Gap"]), ("rule",)] + low_
     H = ["\\begin{table}[!t]", "\\cnentablecaption{全部数据集的测评结果, 分组和指标与表~\\ref{tab:study} 一致, $\\downarrow$ 表示数值越小越好. Doc 和 Static 分别为说明文档维度的文档得分 (documentation score) 和数据质量维度的静态质量得分 (static quality score). 前七组比较各数据版本的性能, 依次为原始数据 (\\textbf{Raw}), 静态质量得分最高的版本 (静态规则, \\textbf{Static rule}), 留出数据上性能最高的版本 (任务测试, \\textbf{Task test}) 和测试性能最高的版本 (事后最优, \\textbf{Best}). 每行前三个分数的第一名和第二名分别用深色和浅色标出, 平均名次 (\\textbf{Mean place}) 为这三列在相应各行名次的平均值. 后四组比较评测做法, 依次为常见做法下的分数或检测器的估计值 (\\textbf{Usual}), 换用其他划分、测试集或修正后的标签时的分数, 或者真实值 (\\textbf{Alternative}), 以及两者之差 (\\textbf{Gap}). TEP, large 的两个分数为记录数相同时 500 次和 1 次独立运行的结果.}{Assessment results on all datasets, groups and metrics follow Table~\\ref{tab:study}, $\\downarrow$ marks lower is better. Doc and Static: documentation score and static quality score. The first seven groups compare data versions on the test data. Raw: the raw data. Static rule: the version with the highest static quality score. Task test: the version that performs best on held-out data. Best: the best version in hindsight. The first and second place among the first three scores of a row are shaded dark and light, and Mean place is the mean place of these three columns over the rows named. The last four groups compare evaluation practices. Usual: the score under the common practice or the estimate of a detector. Alternative: the score under another split, test set or corrected labels, or the true value. Gap: their difference. For TEP, large the two scores come from 500 runs and 1 run at the same number of records.}", "\\label{tab:main}", "\\footnotesize", "\\tabcolsep 1pt", "\\renewcommand{\\arraystretch}{0.92}", "\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}lcccccc@{\\hspace{2pt}}|@{\\hspace{2pt}}lcccccc@{}}", "\\toprule", "Dataset & Doc & Static & Raw & Static rule & Task test & Best & Dataset & Doc & Static & Raw & Static rule & Task test & Best\\\\", "\\midrule"]
     def cl(x, bar):
