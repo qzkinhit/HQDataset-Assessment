@@ -27,7 +27,7 @@ sys.path[:0] = [HERE, os.path.join(REPO, "study")]
 TREES, MODELS = ("rf", "gb"), ("linear", "rf", "gb", "knn", "mlp")
 SIG = 0.05
 SUMMARY_FILE = "insights_summary.json"
-SUMMARY_VERSION = 2     # raised whenever compute() adds fields, so that macros() recomputes an older stored summary
+SUMMARY_VERSION = 4     # raised whenever compute() adds fields, so that macros() recomputes an older stored summary
 
 
 # ---------------------------------------------------------------- reading
@@ -316,9 +316,14 @@ def sec5(R):
             cl = vm(lambda r: r["ds"] == ds and "noise" not in r and "coverage" not in r and "scale" not in r and r["arch"] == arch)
             if None not in (k0, dl, cl): lab[f"{ds}/{nz}/{arch}"] = dict(delete=float(100 * (dl - k0)), repair=float(100 * (cl - k0)))
     if lab: out["label_sets"] = lab
-    # right half of the main table: gaps of the evaluation-protocol rows against the leakage and test-label rows
+    # ciFAIR-100: accuracy on the test images with a near duplicate in the training set minus accuracy on the other test images, as a difference of raw accuracies
+    F = _load(R, "results_fair.json")
+    if F and F.get("cifar100", {}).get("runs"):
+        fr = F["cifar100"]["runs"]; out["fair_cifar100"] = dict(dup_minus_rest=float(np.mean([r["dup"] for r in fr]) - np.mean([r["rest"] for r in fr])), share=float(F["cifar100"]["share"]))
+    # right half of the main table: gaps of the evaluation-protocol rows against the leakage and test-label rows. Only rows scored by accuracy or Macro-F1
+    # enter, the loss row (C4 held-out set) is a difference of per-token losses and is left out of the medians and maxima
     import big_tables, datasets
-    P = big_tables.protocol_rows(R); grp = {g: [d["key"] for d in ds] for g, ds in datasets.GROUPS}
+    P = big_tables.protocol_rows(R); grp = {g: [d["key"] for d in ds if d["metric"] != "Loss"] for g, ds in datasets.GROUPS}
     def gaps(prefix): return [abs(P[k][0] - P[k][1]) for g, ks in grp.items() if g.startswith(prefix) for k in ks if k in P and None not in P[k]]
     pr, lk = gaps("Evaluation protocol"), gaps("Data leakage") + gaps("Test-set labels")
     out["main_right"] = dict(protocol_n=len(pr), protocol_min=float(min(pr)), protocol_max=float(max(pr)), protocol_med=float(np.median(pr)), record_n=len(lk), record_max=float(max(lk)))
@@ -378,6 +383,8 @@ def sec7(R):
         out["corpus"] = dict(filters=arms, c4_min=min(v["diff"] for v in c4.values()), c4_max=max(v["diff"] for v in c4.values()), c4_min_p_better=min(c4[a]["p"] for a in arms if c4[a]["diff"] < 0), c4_min_p_better_one_sided=min(v["p_better"] for v in c4.values()),
                              c4_better=better, c4_sig_better=int(sum(v["p_better"] < SIG for v in c4.values())), c4_sig_worse=sorted(a for a, v in c4.items() if v["diff"] > 0 and v["p"] < SIG),
                              wiki_min=min(v["diff"] for v in res["nll_wiki"].values()), detail=res)
+        al = [r for r in Co if r["arm"] == "all" and r["size"] == "M"]     # the whole training pool, against which the gain of a filter is set
+        if al: out["corpus"].update(pool_tokens=int(np.mean([r["n_tokens"] for r in al])), budget_drop=float(np.mean([r["nll_c4"] for r in sel if r["arm"] == "random"]) - np.mean([r["nll_c4"] for r in al])))
     F = _load(R, "results_fidelity.json"); Sy = [r for r in _jsonl(R, "results_synth.jsonl") if "error" not in r]
     if F and Sy:
         acc = {"real_test": float(np.mean([r["score"] for r in Sy if r["gen"] == "real" and r["arch"] == "resnet18"]))}
@@ -440,7 +447,7 @@ def sec_main(R):
     P = [r for r in rows if not r["versions"] and r["gap"] is not None]
     def gap(r): return round(abs(r["gap"]), 3)
     shift = [gap(r) for r in P if gname[r["group"]].startswith("Evaluation protocol") and r["d"]["key"] not in SHIFT_SKIP]
-    record = [gap(r) for r in P if gname[r["group"]].startswith(("Data leakage", "Test-set labels"))]
+    record = [gap(r) for r in P if gname[r["group"]].startswith(("Data leakage", "Test-set labels")) and not r["low"]]     # the loss row is a difference of per-token losses, not of accuracies
     stat = [r["static"] for r in rows if not r["versions"] and not gname[r["group"]].startswith("Detector") and r["static"] is not None]
     out["practices"] = dict(shift_n=len(shift), shift_min=min(shift) if shift else None, shift_max=max(shift) if shift else None, shift_med=float(np.median(shift)) if shift else None,
                             record_n=len(record), record_med=float(np.median(record)) if record else None, static_min=min(stat) if stat else None)
@@ -519,6 +526,7 @@ def macros_from(S):
     if ls:
         de = [v["delete"] for v in ls.values()]; rp = [v["repair"] for v in ls.values()]
         M.update(InsLabN=str(len(ls)), InsLabDelLo=f1(min(de)), InsLabDelHi=f1(max(de)), InsLabRepLo=f1(min(rp)), InsLabRepHi=f1(max(rp)))
+    if "fair_cifar100" in e: M["InsFairDupGap"] = f3(e["fair_cifar100"]["dup_minus_rest"])     # raw accuracies, the text reports differences of raw values
     x = e["main_right"]; M.update(InsProtoGapLo=f3(x["protocol_min"]), InsProtoGapHi=f3(x["protocol_max"]), InsProtoGapMed=f3(x["protocol_med"]), InsProtoRows=str(x["protocol_n"]), InsRecGapMax=f3(x["record_max"]), InsRecRows=str(x["record_n"]))
     t = S["6"]
     if t:
@@ -532,6 +540,7 @@ def macros_from(S):
             ref = small[min(small, key=int)]; sized = {tm: v["raw"] for tm, v in sz.items() if tm < "2023-02" and len(v.get("raw", {})) >= 2}
             M["InsTaxiSizedN"] = str(len(sized)); M["InsTaxiBelowN"] = str(sum(v[max(v, key=int)] < ref for v in sized.values()))
     s = S["7"]
+    if "pool_tokens" in s.get("corpus", {}): M.update(InsCorpusPoolTokens=f"{s['corpus']['pool_tokens'] / 1e6:.0f}M", InsCorpusBestShare=f2(-s["corpus"]["c4_min"] / s["corpus"]["budget_drop"]))     # c4_min is in units of 0.01, so the ratio is in percent
     if "corpus" in s: M.update(InsCorpusMinP=f3(s["corpus"]["c4_min_p_better"]), InsCorpusLo=f2(s["corpus"]["c4_min"]), InsCorpusHi=f1(s["corpus"]["c4_max"]), InsCorpusN=str(len(s["corpus"]["filters"])))
     if "synth" in s:
         y = s["synth"]; M.update(InsRecallReal=f3(y["recall"]["real_test"]), InsRecallEDM=f3(y["recall"]["edm"]), InsRecallDDPM=f3(y["recall"]["ddpm"]), InsRecallCIFAKE=f3(y["recall"]["cifake"]),
@@ -543,6 +552,7 @@ def macros_from(S):
         M.update(InsDetPairs=str(z["pairs"]), InsDetCorBelow=str(z["corrected_below_sample"].get("200")), InsDetPostBelow=str(z["post_below_sample"].get("200")), InsDetPostBelowLo=str(min(pb)), InsDetPostBelowHi=str(max(pb)),
                  InsDetCovRho=f2(z["rho_cov_sesp"]), InsDetBandN=str(z["band_n"]), InsDetBandCov=f1(z["band_cov"]), InsDetBestSeSp=f"{z['best']['sesp']:.3f}",
                  InsDetBestCovFifty=f1(z["best"]["cov50"]), InsDetBestCovTwoHundred=f1(z["best"]["cov200"]), InsDetSmartSeSp=f"{z['d1']['smartfactory']:.3f}", InsDetBikeSeSp=f"{z['d1']['bike']:.3f}")
+        M.update(InsDetSmartGap=f"{z['d1']['smartfactory'] - 1:.3f}", InsDetBikeGap=f"{abs(z['d1']['bike'] - 1):.3f}", InsDetBestGap=f"{z['best']['sesp'] - 1:.3f}")     # recall minus false positive rate, which is s_e + s_p - 1
     if "llm" in g:
         l = g["llm"]; M.update(InsLLMMinChanged=f0(l["min_changed_per100"]), InsLLMAdultErr=f1(l["adult_errors_per100"]), InsLLMAdultChanged=f1(l["adult_changed_per100"]))
         if "rho_f1_gain" in l: M.update(InsLLMRho=f2(l["rho_f1_gain"]), InsLLMRhoN=str(l["n"]), InsLLMBestF=f2(l["best_f1"]), InsLLMSoilF=f2(l["soil_f1"]), InsLLMSoilGain=f3(l["soil_gain"]))

@@ -1,4 +1,4 @@
-"""Quality claims and their parts, Definitions 1 to 4 of the survey.
+"""Quality claims and their parts, Definitions 1 to 5 of the survey.
 
 A quality claim is a six-tuple of object, dimension, measure, estimate with
 uncertainty, assessment level and usage context. The level records how a conclusion
@@ -13,7 +13,7 @@ from typing import Any, Optional, Tuple
 
 
 class AssessmentLevel(IntEnum):
-    """The five assessment levels of Definition 4, ordered by the conclusion they support.
+    """The five assessment levels of Definition 5, ordered by the conclusion they support.
 
     The levels record how a conclusion is obtained. L1 is a statement of the provider in its
     documents. L2 matches a statement or a rule against the data, logs and lineage, with the result
@@ -56,7 +56,7 @@ _SUPPORTS = {
 
 #: Lowest assessment level per purpose of the assessment, stage 1 of the procedure.
 PURPOSE_LEVEL = {
-    "admission": AssessmentLevel.L2,
+    "compliance": AssessmentLevel.L2,
     "selection": AssessmentLevel.L4,
     "improvement": AssessmentLevel.L5,
 }
@@ -65,8 +65,8 @@ PURPOSE_LEVEL = {
 def minimum_level(purpose: str) -> AssessmentLevel:
     """Return the lowest level a claim needs for a purpose.
 
-    Admission decides whether a dataset may be used and needs L2 or L3 with a non-compensable
-    threshold. Selection decides which candidate fits and needs L4 on one held-out set and one
+    Compliance decides whether a dataset may be used and needs L2 or L3, with veto items that
+    other claims cannot offset. Selection decides which candidate fits and needs L4 on one held-out set and one
     model class. Improvement decides which change works and needs L5.
     """
     return PURPOSE_LEVEL[purpose]
@@ -108,10 +108,10 @@ class Estimate:
 
 @dataclass(frozen=True)
 class UsageContext:
-    """Usage context U = (T, F, S, B) of Definition 1.
+    """Usage context U = (T, F, S, B) of Definition 2.
 
-    T is the task with its metric and reference version, F the target model class,
-    S the scene with its risk and B the available budget.
+    T is the task with its metric and reference version, F the downstream model class
+    with its training procedure, S the target scene and B the available budget.
     """
 
     task: str
@@ -134,7 +134,7 @@ class UsageContext:
 
 @dataclass(frozen=True)
 class DatasetVersion:
-    """Dataset version D = (R, L, M, split) of Definition 1.
+    """Data version D = (R, L, M, split) of Definition 1.
 
     The split belongs to the version, so changing the split changes the version.
     """
@@ -148,7 +148,7 @@ class DatasetVersion:
 
 @dataclass(frozen=True)
 class QualityClaim:
-    """Quality claim of Definition 3, the six-tuple (o, d, m, estimate, l, U)."""
+    """Quality claim of Definition 4, the six-tuple (o, d, m, estimate, l, U)."""
 
     object: str
     dimension: str
@@ -158,7 +158,7 @@ class QualityClaim:
     usage: UsageContext
 
     def as_tuple(self) -> tuple:
-        """Return the six parts in the order of Definition 3."""
+        """Return the six parts in the order of Definition 4."""
         return (self.object, self.dimension, self.measure, self.estimate, self.level, self.usage)
 
     def __str__(self) -> str:
@@ -167,5 +167,5 @@ class QualityClaim:
 
 
 def task_gain(utility: float, reference_utility: float) -> float:
-    """Gain of a version over the reference version, Definition 2."""
+    """Gain of a version over the reference version, Definition 3."""
     return utility - reference_utility

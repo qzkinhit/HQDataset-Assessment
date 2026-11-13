@@ -193,9 +193,9 @@ Gradient boosting with automatic early stopping on more than 10000 records turns
 | Parameter | Value |
 |---|---|
 | Seeds | 0 to 4 for the real training set, 0 to 2 for each generator |
-| Generators | `edm` and `ddpm` with 100000 images each, `cifake` with its 50000 generated training images, in `native/prep_native.py` |
+| Generators | `edm` and `ddpm` with 100000 images each, `cifake` with its 50000 generated training images, in `native/prep_native.py`. The complete EDM archive of 200000 images is a second array, `synth_edm_all.npz` |
 | Synthetic share | 0.1, 0.25, 0.5, 0.75, 0.9 and 1.0 of the training images replaced with ResNet-18, 0.5 and 1.0 with VGG-11 |
-| Added images | 10000, 25000, 50000 and 100000 with ResNet-18, 50000 with VGG-11. The job `add100000` of `cifake` adds its 50000 images |
+| Added images | 10000, 25000, 50000 and 100000 with ResNet-18, 50000 with VGG-11, and 200000 `edm` images with ResNet-18 from the complete archive. The job `add100000` of `cifake` adds its 50000 images |
 | Training | The recipe of the vision track, 30 epochs and batch size 128 |
 | Scores | Accuracy on the CIFAR-10 test set and on CIFAR-10.1 |
 | Wrong test label | At least three of five reviewers chose the suggested label and fewer than three kept the given one |
@@ -305,7 +305,7 @@ The docstring of the script gives the detectors D1 to D6, the sample sizes 50, 1
 | Pass line | 90 points |
 | Sample size example | $p=0.9$, $h=0.02$, 95 percent confidence |
 | Sampling standard example | 4000 records and a threshold of 96 percent |
-| Proposition 3 example | $q=0.1$, $N=20$, $\delta=0.05$, $\gamma$ of 0.01, 0.02 and 0.05 |
+| Proposition 3 example | $q=q_j=0.1$, $N=20$, $\delta=0.05$, $\gamma=0.02$ in both parts |
 | Weight perturbation in the judgement | 10 percent of each weight, `weight_perturbation` of `judge` |
 | Bootstrap resamples in the package | 1000 in `calibrate_error_rate`, 200 in `select_version` and `bootstrap_metric_interval` |
 
@@ -318,7 +318,7 @@ The job lists above define the grids. The table gives the runs that each result 
 |---|---|---|
 | `case_tep.json` | 400 | 0 to 19 |
 | `results_cleanml.jsonl` | 3175 | 0 to 4 |
-| `results_corpus.jsonl` | 379 | 0 to 4 |
+| `results_corpus.jsonl` | 394 | 0 to 4 |
 | `results_datacomp.jsonl` | 215 | 0 to 4 |
 | `results_decision.jsonl` | 8100 | 0 to 9 |
 | `results_decision_fine.jsonl` | 8100 | 0 to 9 |
@@ -329,19 +329,21 @@ The job lists above define the grids. The table gives the runs that each result 
 | `results_mirflickr.jsonl` | 215 | 0 to 4 |
 | `results_multimodal.jsonl` | 820 | 0 to 19 |
 | `results_multimodal_fine.jsonl` | 133 | 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19 |
+| `results_random_delete.jsonl` | 4800 | 0 to 19 |
 | `results_real_tables.jsonl` | 25000 | 0 to 19 |
 | `results_rieth.json` | 90 | 0 to 4 |
 | `results_rieth_models.jsonl` | 280 | 0 to 4 |
-| `results_synth.jsonl` | 127 | 0 to 4 |
+| `results_synth.jsonl` | 130 | 0 to 4 |
 | `results_tables_fine.jsonl` | 8800 | 0 to 9 |
 | `results_taxi.json` | 48 | 0, 1 |
 | `results_taxi_100k.json` | 48 | 0, 1 |
+| `results_taxi_monthly.json` | 288 | 0, 1 |
 | `results_taxi_sizes.json` | 192 | 0, 1 |
 | `results_tep_windows.jsonl` | 400 | 0 to 4 |
 | `results_text.jsonl` | 143 | 0 to 4 |
 | `results_text_more.jsonl` | 18 | 0 to 4 |
-| `results_versions.jsonl` | 427 | 0 to 9 |
-| `results_vision.jsonl` | 700 | 0 to 9 |
+| `results_versions.jsonl` | 470 | 0 to 9 |
+| `results_vision.jsonl` | 780 | 0 to 9 |
 | `results_vision_fine.jsonl` | 50 | 0 to 4 |
 | `results_wilds.jsonl` | 15 | 0 to 4 |
 <!-- STORED RUNS END -->

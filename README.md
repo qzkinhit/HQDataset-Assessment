@@ -1,6 +1,6 @@
 # Assessment of high-quality datasets
 
-This repository holds the code, the data and the results of the survey *A survey on the assessment of high-quality datasets* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
+This repository holds the code, the data and the results of the survey *A survey on task-oriented assessment of multimodal high-quality datasets* (in Chinese). It also holds the method package `hqd_assess` with its tests, and the documents that the survey leaves out, namely the algorithms of the assessment procedure, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
 
 The Chinese version is [README_zh.md](README_zh.md).
 
@@ -13,8 +13,8 @@ The Chinese version is [README_zh.md](README_zh.md).
 | Datasets | 54 datasets in 11 groups, about $3.39\times 10^8$ records |
 | Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
 | Assessment practices | 66 practices from the five method families of the survey |
-| Experiments | 11 experiment groups, 43009 model trainings, about 860 hours of run time in the result files, on a 64-core CPU server and A6000 GPUs |
-| Code | About 7200 lines of Python for the experiments and the package `hqd_assess`, and 153 tests |
+| Experiments | 6 research questions over 11 groups of datasets, 44041 model trainings (each configuration counted once), about 760 hours of run time recorded in the result files, on a 64-core CPU server and A6000 GPUs |
+| Code | About 7300 lines of Python for the experiments and the package `hqd_assess`, and 196 tests |
 
 | Group of datasets | Datasets | Records |
 |---|---:|---:|
@@ -23,19 +23,19 @@ The Chinese version is [README_zh.md](README_zh.md).
 | Image labels | 2 | 120,000 |
 | Language-model corpora | 2 | 1,564,345 |
 | Multimodal data | 2 | 530,671 |
-| Synthetic data | 3 | 250,000 |
+| Synthetic data | 3 | 350,000 |
 | Dynamic data | 1 | 259,287,888 |
 | Evaluation protocol | 6 | 15,971,700 |
 | Data leakage | 3 | 24,000 |
 | Test-set labels | 10 | 60,585,386 |
 | Detector estimates | 1 | 5,000 |
-| Total | 54 | 339,227,527 |
+| Total | 54 | 339,327,527 |
 
 A static scan over a whole table counts its records. `analysis/big_tables.py` computes the records per dataset from the result files.
 
 ## The framework
 
-The survey writes a quality judgement about a dataset as a six-tuple of object, dimension, measure, estimate with uncertainty, assessment level and usage context. The level records how a conclusion is obtained.
+The survey writes a quality claim about a dataset as a six-tuple of object, dimension, measure, estimate with uncertainty, assessment level and usage context. The level records how a conclusion is obtained.
 
 | Level | Name | What is done |
 |---|---|---|
@@ -47,9 +47,9 @@ The survey writes a quality judgement about a dataset as a six-tuple of object, 
 
 The running example is the classic Tennessee Eastman fault-diagnosis benchmark. It has no missing values and almost no duplicates, so its record-level score is near full marks. On the same files the Macro-F1 of one random forest moves by 0.233 when the split changes, every test window of a random window split shares rows with training windows, and labels taken from file names mark 16.7 percent of each test fault file wrongly.
 
-Three propositions state limits. A rule that reads only static observables loses $\tfrac{\gamma}{2}$ in expectation against a pair of versions whose gain flips sign between two usage contexts. An equal-weight score of 90 points can hide a single item as low as 0.2 among 8 items, while model fit cannot fall below about 0.895. About 55300 held-out records suffice for a simultaneous guarantee on 20 candidates at 1 point.
+The survey proves two theorems and three propositions and compares three estimates of an error rate. By Theorem 1, a rule with zero loss in every usage situation exists if and only if the situations that give the same assessment result share a best version, and on Hospitals, where deleting the wrong records raises the Macro-F1 of KNN by 0.487 and lowers that of gradient boosting by 0.579, a rule that reads only static indicators has a minimax loss of about 0.265 between the two versions. By Proposition 1, an equal-weight score of 90 points over 8 sub-indicators allows a single one as low as 0.2. Post-stratifying the labelled sample by the flags of a detector needs no more labels than the direct estimate or the corrected estimate for any detector. By Proposition 2, the excess risk of a repair or a deletion splits into an error bias, a selection bias and a variance, so the error rate alone does not fix the task risk. By Proposition 3, with a variance bound $q=0.1$ of the per-sample score gap and a failure probability $\delta=0.05$, telling apart gains that differ by 2 points for all of 20 candidates needs about 14300 held-out records, while choosing a version within 2 points of the best needs about 3400. By Theorem 2, when a test set misses a part of the target scene with probability $\alpha$ and the models trained on two candidate versions predict the same outside this part and differently everywhere on it, the minimax loss of the choice between the two is $\tfrac{\alpha}{2}$ however large the test set is, and a scene shift of total variation $\beta$ lowers the bound on the gain by $2\beta$.
 
-[docs/framework.md](docs/framework.md) states the definitions, the six-stage procedure, Algorithms 1 to 6 and the propositions with their proofs.
+[docs/framework.md](docs/framework.md) states the definitions, the six-stage procedure, Algorithms 1 to 6 and the theorems and propositions with their proofs.
 
 ## The package `hqd_assess`
 
@@ -59,10 +59,10 @@ The package holds pure functions without file or network access, and it needs Nu
 |---|---|
 | `claim` | `QualityClaim`, `Estimate`, `UsageContext`, `DatasetVersion`, `AssessmentLevel`, `minimum_level`, `task_gain` |
 | `scoring` | Scores of GB/T 48562-2026, `SUB_INDICATORS`, single-item floors, model fit |
-| `sampling` | Sample sizes, Wilson and Jeffreys intervals, `rogan_gladen`, `calibrate_error_rate` (Algorithm 1) |
+| `sampling` | Sample sizes, Wilson and Jeffreys intervals, `rogan_gladen`, `calibrate_error_rate` (Algorithm 1), `estimator_variances` |
 | `split_check` | Group and window overlap, `check_split_independence` (Algorithm 2) |
-| `selection` | `select_version` (Algorithm 3), `static_rule`, `hindsight_best`, `replay_rules`, `task_test_sample_size` |
-| `interaction` | `interaction_test` (Algorithm 4), `paired_flags`, `additivity_counterexample` |
+| `selection` | `select_version` (Algorithm 3), `static_rule`, `hindsight_best`, `replay_rules`, `task_test_sample_size`, `zero_loss_rule_exists`, `two_version_gaps`, `minimax_loss`, `minimax_choice_probability`, `selection_sample_size`, `wrong_choice_bound`, `coverage_minimax_loss`, `shifted_gain_lower_bound` |
+| `interaction` | `interaction_test` (Algorithm 4), `paired_flags`, `additivity_counterexample`, `operation_biases`, `repair_interaction`, `run_mean_excess_risk` |
 | `judge` | `judge` (Algorithm 5) |
 | `renewal` | `renew` (Algorithm 6), `stages_to_redo`, `violation_trigger`, `trigger_counts` |
 
@@ -104,7 +104,7 @@ pytest
 | `hqd_assess/` | The method package |
 | `tests/` | Tests that reproduce every number the survey derives by calculation, and that compare the package with the stored results |
 | `examples/` | `tep_assessment.py` on classic TEP and `table_claims.py` on one table |
-| `docs/framework.md`, `docs/framework_zh.md` | The framework with six algorithms and three propositions |
+| `docs/framework.md`, `docs/framework_zh.md` | The framework with six algorithms, two theorems, three propositions and the variance comparison of Section 4.1 of the survey |
 | `docs/datasets.md` | Official source, license as stated by the source, use, scale, errors, download command and scripts of every dataset |
 | `docs/parameters.md` | Every engineering parameter with the file that holds it, and the runs stored per result file |
 | `docs/release_assets.md` | The content of each release archive |
@@ -205,6 +205,7 @@ python native/make_jobs_native.py jobs/synth.jsonl jobs/dclm.jsonl
 python study/prep_vision.py $DIR $DIR/cifar_n $DIR/cifar-10-python.tar.gz
 python study/gpu_pool.py --jobs jobs/vision.jsonl --script study/run_vision.py --out results/results_vision.jsonl
 python study/gpu_pool.py --jobs jobs/vision_fine.jsonl --script study/run_vision.py --out results/results_vision_fine.jsonl
+python study/coverage_reference.py --root $DIR --results results/results_vision.jsonl --out results/results_vision_coverage_ref.json   # accuracy of the full-coverage models on the fine classes that smaller shares leave out
 python study/fair.py $DIR results/results_fair.json
 
 # Synthetic images, fidelity and the replay of the image versions
@@ -261,7 +262,7 @@ done
 python native/label_errors.py $DIR/label_errors $DIR/preds results/label_errors.json
 python native/label_errors_audioset.py $DIR/label_errors $DIR/label_errors/class_labels_indices.csv results/results_audioset_labels.json
 
-# Static scores of the native tracks, which read the result files next to the data
+# Static quality scores of the native tracks, which read the result files next to the data
 cp results/results_datacomp.jsonl results/results_mirflickr.jsonl results/results_fidelity.json $DIR/
 python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 
@@ -269,7 +270,7 @@ python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 python analysis/summaries.py results
 python analysis/make_numbers.py results                 # every number of the text as JSON
 python analysis/print_tables.py                         # plain tables per dataset
-python analysis/print_tables.py --latex                 # Table 8 and Table 9 of the survey in LaTeX
+python analysis/print_tables.py --latex                 # Table 6 and Table 7 of the survey in LaTeX
 python figures/plot_results.py results figures/plots    # the single panels res_*.pdf form Figures 5 to 9
 python native/audit_native.py results                   # finished runs of the native tracks against their job lists
 python analysis/stored_runs.py --update docs/parameters.md
@@ -288,30 +289,29 @@ Figures 1 to 4 and the tables that summarize the literature are typeset with the
 | Figure 3, the graded framework | `docs/framework.md` | `hqd_assess/claim.py`, `hqd_assess/scoring.py` | Drawn from the framework |
 | Figure 4, the procedure and the experiments | `docs/framework.md`, `docs/parameters.md` | `hqd_assess/` | Drawn from the framework |
 | Figure 5(a), choice of a version | `results/results_decision.jsonl`, `results/results_decision_fine.jsonl` | `study/run_decision.py`, `study/run_decision_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
+| Figure 5(b), partial repair as a share of the full-repair gain | `results/results_real_tables.jsonl`, `results/results_tables_fine.jsonl` | `study/run_tables_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
+| Figure 5(c), cleaning methods on the CleanML tables | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`, `native/run_cleanml.py`, `figures/plot_results.py` | `CleanML tables`, `Numbers, tables and figures` |
+| Figure 5(d), repair and deletion of human label errors | `results/results_vision.jsonl`, `results/results_vision_fine.jsonl` | `study/run_vision.py`, `figures/plot_results.py` | `Human label noise`, `Numbers, tables and figures` |
+| Figure 6(a) to (d), gains of repair and deletion, random deletion of as many records, Spearman correlation along the repair and delete paths, joint against single repairs | `results/tables_summary.json`, `results/results_real_tables.jsonl`, `results/results_random_delete.jsonl` | `study/run_real_tables.py`, `study/run_random_delete.py`, `analysis/tables_summary.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
+| Figure 7(a), protocol against data errors | `results/tables_summary.json`, `results/case_tep.json` | `case_tep/run_case.py`, `figures/plot_results.py` | `Classic TEP`, `Numbers, tables and figures` |
+| Figure 7(b), independent runs | `results/results_rieth.json`, `results/results_rieth_models.jsonl` | `big/run_rieth.py`, `big/run_rieth_models.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
+| Figure 7(c), error-rate estimates and intervals | `results/results_detectors.jsonl`, `results/results_finite_population.jsonl` | `study/run_detectors.py`, `analysis/validate_detector_intervals.py`, `figures/plot_results.py` | `Detectors on the same tables`, `Numbers, tables and figures` |
+| Figure 7(d), cells repaired and damaged by Qwen | `results/results_llm_cells.json`, `results/results_llm_tables.jsonl` | `llm/repair_tables.py`, `llm/score_tables.py`, `figures/plot_results.py` | [llm/README.md](llm/README.md), `Numbers, tables and figures` |
+| Figure 8(a), coverage of fine classes | `results/results_vision.jsonl`, `results/results_vision_coverage_ref.json` | `study/run_vision.py`, `study/coverage_reference.py`, `figures/plot_results.py` | `Human label noise`, `Numbers, tables and figures` |
 | Figure 8(b), (c), $R^2$ by training month, rule violations | `results/results_taxi.json`, `results/results_taxi_monthly.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
 | Figure 8(d), training size and time | `results/results_taxi.json`, `results/results_taxi_100k.json`, `results/results_taxi_sizes.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
 | Figure 9(a), (b), filters on C4 and by model size | `results/results_corpus.jsonl` | `corpus/run_corpus.py`, `figures/plot_results.py` | `Web corpus and DCLM`, `Numbers, tables and figures` |
 | Figure 9(c), synthetic images | `results/results_synth.jsonl` | `study/run_synth.py`, `figures/plot_results.py` | `Synthetic images`, `Numbers, tables and figures` |
 | Figure 9(d), filters on image-text pools | `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl` | `native/run_datacomp.py`, `native/run_mirflickr.py`, `figures/plot_results.py` | `COCO image-text pairs`, `Numbers, tables and figures` |
-| Figure 6(a) to (d), gains, Spearman correlation along repair and delete paths, joint against single repairs | `results/tables_summary.json`, `results/results_real_tables.jsonl` | `study/run_real_tables.py`, `analysis/tables_summary.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
-| Figure 7(d), cells repaired and damaged by Qwen | `results/results_llm_cells.json`, `results/results_llm_tables.jsonl` | `llm/repair_tables.py`, `llm/score_tables.py`, `figures/plot_results.py` | [llm/README.md](llm/README.md), `Numbers, tables and figures` |
-| Figure 5(b), partial repair as a share of the full-repair gain | `results/results_real_tables.jsonl`, `results/results_tables_fine.jsonl` | `study/run_tables_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
-| Figure 5(c), cleaning methods on the CleanML tables | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`, `native/run_cleanml.py`, `figures/plot_results.py` | `CleanML tables`, `Numbers, tables and figures` |
-| Figure 7(a), protocol against data errors | `results/tables_summary.json`, `results/case_tep.json` | `case_tep/run_case.py`, `figures/plot_results.py` | `Classic TEP`, `Numbers, tables and figures` |
-| Figure 7(b), independent runs | `results/results_rieth.json`, `results/results_rieth_models.jsonl` | `big/run_rieth.py`, `big/run_rieth_models.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
-| Figure 7(c), error-rate estimates and intervals | `results/results_detectors.jsonl`, `results/results_finite_population.jsonl` | `study/run_detectors.py`, `analysis/validate_detector_intervals.py`, `figures/plot_results.py` | `Detectors on the same tables`, `Numbers, tables and figures` |
-| Figure 5(d), Figure 8(a), label noise, coverage and scale | `results/results_vision.jsonl`, `results/results_vision_fine.jsonl` | `study/run_vision.py`, `figures/plot_results.py` | `Human label noise`, `Numbers, tables and figures` |
-| Table 1, symbols | `docs/framework.md` | | |
-| Table 2, comparison with existing surveys | | | Works cited in the survey |
+| Table 1, comparison with existing surveys | | | Works cited in the survey |
+| Table 2, symbols | `docs/framework.md` | | |
 | Table 3, comparison of standards | `docs/standards.md` | | |
-| Table 4, assessment levels of the sub-indicators | `docs/standards.md` | `hqd_assess/scoring.py` | `SUB_INDICATORS` of the package |
+| Table 4, assessment levels of the requirement items of ten assessment documents | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
 | Table 5, comparison of the five method families | `docs/framework.md` | | |
-| Table 6, common benchmarks | `docs/datasets.md` | | Works cited in the survey |
-| Table 7, assessment elements of new data | `docs/datasets.md` | | Works cited in the survey |
-| Table 8, datasets of the experiments | `results/table_sizes.json`, `results/results_sizes_native.json`, `results/label_errors.json`, `results/results_audioset_labels.json`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_taxi.json`, `results/corpus_stats.json`, `results/results_cleanml.jsonl`, `results/results_datacomp.jsonl`, `results/results_wilds.jsonl`, `results/results_multimodal.jsonl` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
-| Table 9, results on all datasets | `results/tables_summary.json`, `results/static_native.json`, `results/corpus_static.json`, `results/dataset_docs.json`, `results/results_decision_fine.jsonl`, `results/results_versions.jsonl`, `results/results_cleanml.jsonl`, `results/results_corpus.jsonl`, `results/results_taxi.json`, `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_wilds.jsonl`, `results/results_synth.jsonl`, `results/results_vision.jsonl`, `results/results_fair.json`, `results/results_multimodal.jsonl`, `results/label_errors.json` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| Table 6, datasets of the experiments | `results/table_sizes.json`, `results/results_sizes_native.json`, `results/label_errors.json`, `results/results_audioset_labels.json`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_taxi.json`, `results/corpus_stats.json`, `results/results_cleanml.jsonl`, `results/results_datacomp.jsonl`, `results/results_wilds.jsonl`, `results/results_multimodal.jsonl` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| Table 7, results on all datasets | `results/tables_summary.json`, `results/static_native.json`, `results/corpus_static.json`, `results/dataset_docs.json`, `results/results_decision_fine.jsonl`, `results/results_versions.jsonl`, `results/results_cleanml.jsonl`, `results/results_corpus.jsonl`, `results/results_taxi.json`, `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_wilds.jsonl`, `results/results_synth.jsonl`, `results/results_vision.jsonl`, `results/results_fair.json`, `results/results_multimodal.jsonl`, `results/label_errors.json` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
 | Numbers in the text | `results/numbers_*.json`, `results/tables_summary.json`, `results/insights_summary.json`, `results/results_random_delete.jsonl` | `analysis/summaries.py`, `analysis/insights.py`, `study/run_random_delete.py`, `analysis/make_numbers.py` | `Numbers, tables and figures` |
-| Derived numbers of the propositions and examples | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
+| Derived numbers of the theorems, propositions and examples | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## Results
 
@@ -327,7 +327,7 @@ The code, documents and result records are under the MIT license in `LICENSE`. D
 
 ```bibtex
 @article{hqd_assessment,
-  title   = {A survey on the assessment of high-quality datasets},
+  title   = {A survey on task-oriented assessment of multimodal high-quality datasets},
   author  = {Zekai Qian and Xiaoou Ding and Hongzhi Wang and Chen Wang},
   journal = {Scientia Sinica Informationis},
   year    = {2026},

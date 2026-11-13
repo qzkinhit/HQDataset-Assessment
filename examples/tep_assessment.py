@@ -3,7 +3,7 @@
 
 The script scans the 44 files, reads the label definition, measures the overlap of random
 window splits, runs a small task test under two splits (Algorithm 2) and prints quality claims
-as six-tuples (Definition 3). The full experiment with five model classes and 20 seeds is
+as six-tuples (Definition 4). The full experiment with five model classes and 20 seeds is
 case_tep/run_case.py.
 """
 import argparse

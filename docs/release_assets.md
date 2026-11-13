@@ -4,7 +4,7 @@ The datasets come from their official sources through `scripts/download_data.sh`
 
 | Asset | Content | Size | Written by |
 |---|---|---|---|
-| `hqd-data-predictions.tar` | `preds/*.npy`, the saved test predictions of the image runs | 9 MiB | `study/run_vision.py`, `study/run_synth.py` |
+| `hqd-data-predictions.tar` | `preds/*.npy`, the saved test predictions of the 960 image runs | 10 MiB | `study/run_vision.py`, `study/run_synth.py` |
 | `hqd-data-scores.tar` | `corpus/c4_ppl.npy`, `corpus/c4_llm_score.npy` and `corpus/c4_group.npy`, the perplexity, the Qwen score and the group of each C4 document, and `text_ppl.npz`, the perplexity of the text pool | 13 MiB | `corpus/prep_corpus.py`, `corpus/run_corpus.py`, `llm/judge_corpus.py`, `study/run_text.py` |
 
 ## How to fetch and unpack

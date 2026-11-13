@@ -1,4 +1,4 @@
-"""Scores of the standard and the compensation bound, Proposition 2 of the survey.
+"""Scores of the standard and the compensation bound, Proposition 1 of the survey.
 
 The dimension scores follow the score formula of GB/T 48562-2026 as published in
 the public draft and in the technical document TC609-5-2025-04. Every ratio is a
@@ -39,25 +39,25 @@ def _si(code, name, unit, given, needed, required):
 
 
 _DOC = "Fields checked against data and lineage"
-#: The 17 sub-indicators of GB/T 48562-2026 with their assessment levels.
+#: The 17 sub-indicators of GB/T 48562-2026 with their assessment levels, those of the items G48562-0101 to G48562-0305 in data/requirements/items.jsonl.
 SUB_INDICATORS = {
     "0101": _si("0101", "Documentation completeness, aspect 1", "Aspects", L.L1, (L.L2,), _DOC),
     "0102": _si("0102", "Documentation completeness, aspect 2", "Aspects", L.L1, (L.L2,), _DOC),
     "0103": _si("0103", "Documentation completeness, aspect 3", "Aspects", L.L1, (L.L2,), _DOC),
     "0104": _si("0104", "Documentation completeness, aspect 4", "Aspects", L.L1, (L.L2,), _DOC),
     "0201": _si("0201", "Format conformity", "Records", L.L3, (L.L3,), "Full scan, accepted missing range"),
-    "0202": _si("0202", "Safety conformity", "Records", L.L3, (L.L3,), "Sample size, non-compensatory threshold"),
+    "0202": _si("0202", "Safety conformity", "Records", L.L2, (L.L3,), "Sample size, non-compensatory threshold"),
     "0203": _si("0203", "Annotation conformity", "Records", L.L2, (L.L3,), "Sample judged by hand, with an interval"),
     "0204": _si("0204", "Structural completeness", "Records", L.L3, (L.L3,), "Full scan, accepted missing range"),
-    "0205": _si("0205", "Content authenticity", "Records", L.L1, (L.L2,), "Lineage compared, sample traced back"),
-    "0206": _si("0206", "Content consistency", "Records", L.L3, (L.L3,), "Detector stated, its error corrected"),
-    "0207": _si("0207", "Type consistency", "Records", L.L3, (L.L3,), "Detector stated, its error corrected"),
-    "0208": _si("0208", "Cleanliness", "Records", L.L3, (L.L4,), "Proxy signals compared with a task score"),
+    "0205": _si("0205", "Content authenticity", "Records", L.L1, (L.L3,), "Lineage compared on a sample traced back, with an interval"),
+    "0206": _si("0206", "Content consistency", "Records", L.L2, (L.L3,), "Detector stated, its error corrected"),
+    "0207": _si("0207", "Type consistency", "Records", L.L2, (L.L3,), "Detector stated, its error corrected"),
+    "0208": _si("0208", "Cleanliness", "Records", L.L2, (L.L3,), "Proxy signals checked on a labeled sample"),
     "0301": _si("0301", "Content diversity", "Dataset", L.L3, (L.L4,), "Coverage by usage, subgroups tested"),
-    "0302": _si("0302", "Scale completeness", "Dataset", L.L3, (L.L5,), "Learning curves, independent units"),
-    "0303": _si("0303", "Timeliness", "Records", L.L2, (L.L4,), "Task test on a later period"),
-    "0304": _si("0304", "Annotation accuracy", "Records", L.L3, (L.L3,), "Sampled ground truth with an interval"),
-    "0305": _si("0305", "Model fit", "Dataset", L.L4, (L.L4, L.L5), "Baseline, model, split, intervention"),
+    "0302": _si("0302", "Scale completeness", "Dataset", L.L3, (L.L4,), "Learning curves, independent units"),
+    "0303": _si("0303", "Timeliness", "Records", L.L3, (L.L4,), "Task test on a later period"),
+    "0304": _si("0304", "Annotation accuracy", "Records", L.L2, (L.L3,), "Sampled ground truth with an interval"),
+    "0305": _si("0305", "Model fit", "Dataset", L.L4, (L.L5,), "Baseline, model, split, intervention"),
 }
 
 #: The three dimensions of the standard and the prefix of their sub-indicator codes.
@@ -133,7 +133,7 @@ def passes(score: float, line: float = PASS_LINE) -> bool:
 def compensation_budget(k: int, line: float = PASS_LINE) -> float:
     """Total shortfall that k equally weighted items may carry at the pass line.
 
-    Proposition 2 states that P reaches 90 if and only if the shortfalls 1 - s_i sum
+    Proposition 1 states that P reaches 90 if and only if the shortfalls 1 - s_i sum
     to at most 0.1 k.
     """
     return (1.0 - line / 100.0) * k
@@ -141,7 +141,7 @@ def compensation_budget(k: int, line: float = PASS_LINE) -> float:
 
 def within_compensation_budget(values: Iterable[float], weights: Optional[Sequence[float]] = None,
                                line: float = PASS_LINE) -> bool:
-    """Right side of the equivalence in Proposition 2.
+    """Right side of the equivalence in Proposition 1.
 
     With equal weights the shortfalls sum to at most 0.1 k. With general weights the weighted
     shortfalls sum to at most 0.1.

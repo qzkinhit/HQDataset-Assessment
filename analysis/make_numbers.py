@@ -2,7 +2,7 @@
 """Every number the survey reports from its own experiments passes through this script. It reads the result files and prints the numbers as JSON.
 With a LaTeX file as the second argument, it rewrites the macro block between the markers NUMBERS BEGIN and NUMBERS END of that file and the main table between its markers, and a macro without a value becomes a marked placeholder.
 Usage: make_numbers.py RESULTS_DIR [MAIN_TEX]"""
-import json, math, os, re, statistics, sys
+import collections, json, math, os, re, statistics, sys
 R = sys.argv[1]; TEX = sys.argv[2] if len(sys.argv) > 2 else None; N = {}
 def load(fn):
     p = os.path.join(R, fn)
@@ -73,7 +73,7 @@ if T:
         for _ in range(60):
             g = (lo + hi) / 2; lo, hi = (lo, g) if (8 * .1 / g ** 2 + 8 / (3 * g)) * L <= te else (g, hi)
         N["TFlightsRes"] = f"{100 * g:.0f}"
-    d_, v_, K_ = .02, .1, 20; N["TSelN"] = f"{round((2 * v_ / d_ ** 2 + 4 / (3 * d_)) * math.log((K_ - 1) / .05), -2):.0f}"     # theorem 3 (1): candidates more than 2 points below the best are excluded
+    d_, v_, K_ = .02, .1, 20; N["TSelN"] = f"{round((2 * v_ / d_ ** 2 + 4 / (3 * d_)) * math.log((K_ - 1) / .05), -2):.0f}"     # Proposition 3 (2): candidates more than 2 points below the best are excluded
 # ---- taxi, vision, corpus, multimodal and decision numbers come from the files that summaries.py writes
 for extra in ("numbers_taxi.json", "numbers_vision.json", "numbers_corpus.json", "numbers_mm.json", "numbers_decision.json", "numbers_search.json", "numbers_totals.json"):
     e = load(extra)
@@ -265,7 +265,14 @@ if Co:
         v = [r[fld] - b_[r["seed"]] for r in Co if r["arm"] == arm_ and r["size"] == size and r.get("budget") == bud and r["seed"] in b_ and r.get(fld) is not None]; return 100 * mean(v) if v else float("nan")
     for k_, a_ in (("Low", "ppl_low"), ("High", "ppl_high"), ("Qwen", "llm_high"), ("Both", "rule_dedup")):
         N["Corpus" + k_ + "Web"] = f1(gap(a_, "nll_c4")); N["Corpus" + k_ + "Wiki"] = f1(gap(a_, "nll_wiki"))
-    N["CorpusLowWikiXS"] = f1(gap("ppl_low", "nll_wiki", "XS")); N["CorpusLowWikiL"] = f1(gap("ppl_low", "nll_wiki", "L")); N["CorpusLowWikiRatio"] = f1(gap("ppl_low", "nll_wiki", "L") / gap("ppl_low", "nll_wiki", "XS")); N["CorpusHighWebXS"] = f1(gap("ppl_high", "nll_c4", "XS")); N["CorpusHighWebL"] = f1(gap("ppl_high", "nll_c4", "L"))
+    N["CorpusLowWikiXS"] = f1(gap("ppl_low", "nll_wiki", "XS")); N["CorpusLowWikiL"] = f1(gap("ppl_low", "nll_wiki", "L")); N["CorpusLowWikiRatio"] = f1(gap("ppl_low", "nll_wiki", "L") / gap("ppl_low", "nll_wiki", "XS"))
+    _qp = collections.defaultdict(dict)     # Qwen-high selection against the random arm of the same size, seed and budget
+    for r_ in jsonl("results_corpus.jsonl"):
+        if "error" not in r_ and r_.get("arm") in ("llm_high", "random"): _qp[(r_.get("size"), r_.get("seed"), r_.get("budget"))][r_["arm"]] = r_
+    _qp = [v for v in _qp.values() if len(v) == 2]
+    if _qp:
+        N["CorpusQwenSizesN"] = f"{len({v['random'].get('size') for v in _qp})}"; N["CorpusQwenPairsN"] = f"{len(_qp)}"
+        N["CorpusQwenPairsAgree"] = f"{sum(1 for v in _qp if v['llm_high']['nll_c4'] > v['random']['nll_c4'] and v['llm_high']['nll_wiki'] < v['random']['nll_wiki'])}"; N["CorpusHighWebXS"] = f1(gap("ppl_high", "nll_c4", "XS")); N["CorpusHighWebL"] = f1(gap("ppl_high", "nll_c4", "L"))
     N["CorpusLowWebThree"] = f1(gap("ppl_low", "nll_c4", "M", 3000000))
     for k_ in list(N):
         if k_.startswith("Corpus") and N[k_].startswith("-"): N[k_] = "$-$" + N[k_][1:]

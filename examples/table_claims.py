@@ -218,13 +218,13 @@ def main():
     for claim in claims:
         print(f"  {claim}")
 
-    admission = [Requirement(claims[1], AssessmentLevel.L3, args.threshold)]
+    veto = [Requirement(claims[1], AssessmentLevel.L3, args.threshold)]
     others = [Requirement(claims[2], AssessmentLevel.L3, args.threshold), Requirement(claims[3], AssessmentLevel.L3, args.threshold), Requirement(claims[0], AssessmentLevel.L3, args.threshold)]
-    verdict = judge(admission, others)
+    verdict = judge(veto, others)
     print(f"\nJudgement by Algorithm 5 with threshold {args.threshold}")
     print(f"  {'passes':38s} {verdict.passed}")
-    if verdict.failed_admission is not None:
-        print(f"  {'failed admission condition':38s} {verdict.failed_admission.claim.measure}")
+    if verdict.failed_veto is not None:
+        print(f"  {'failed veto item':38s} {verdict.failed_veto.claim.measure}")
     else:
         print(f"  {'score of the three other claims':38s} {verdict.score:.1f}, range {verdict.score_low:.1f} to {verdict.score_high:.1f}")
         for record in verdict.records:

@@ -118,9 +118,9 @@ def test_every_script_named_in_the_readme_exists():
 def test_the_readmes_map_each_figure_and_table():
     for name, figure, table in (("README.md", "Figure {}", "Table {}"), ("README_zh.md", "图 {}", "表 {}")):
         text = read(name)
-        for i in range(1, 7):
-            assert figure.format(i) in text, (name, i)
         for i in range(1, 10):
+            assert figure.format(i) in text, (name, i)
+        for i in range(1, 8):
             assert table.format(i) in text, (name, i)
 
 

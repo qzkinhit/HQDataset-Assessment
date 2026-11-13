@@ -79,7 +79,8 @@ if X:
         last = max(fixed); ks = [k for k in months if k > last and all(k in cv for cv in fixed.values())]; mean_r = {k: m(cv[k] for cv in fixed.values()) for k in ks}
         trig = [(abs(anyr_[b] - anyr_[a]) > 2, abs(mean_r[b] - mean_r[a]) > .05) for a, b in zip(ks, ks[1:])]
         Tx.update(TaxiTrigN=f"{sum(1 for t, _ in trig if t)}", TaxiTrigHit=f"{sum(1 for t, h in trig if t and h)}", TaxiRestN=f"{sum(1 for t, _ in trig if not t)}", TaxiRestHit=f"{sum(1 for t, h in trig if not t and h)}")
-    X3 = load("results_taxi_sizes.json"); Tx["RunsTaxi"] = f"{len(X['runs']) + (len(X2['runs']) if X2 else 0) + (len(X3['runs']) if X3 else 0)}"
+    X3 = load("results_taxi_sizes.json"); X4 = load("results_taxi_monthly.json")     # a configuration stored in two files is one training
+    Tx["RunsTaxi"] = f"{len({(r['seed'], r['arm'], r['size'], r['requested_size'], r['train_month']) for Y in (X, X2, X3, X4) if Y for r in Y['runs']})}"
 dump("numbers_taxi.json", Tx)
 # ---- corpus and leakage
 Cc = {}; CO = jsonl("results_corpus.jsonl")
@@ -137,6 +138,19 @@ D["RunsTablesAll"] = f"{(T['n_runs'] if T else 0) + len(fine_k) + int(D.get('Run
 Q = load("results_rieth.json"); tot += sum(2 if r["arm"] == "split_protocol" else 1 for r in Q["runs"]) if Q else 0; tot += len(jsonl("results_rieth_models.jsonl")); tot += int(V.get("RunsVisionN", 0)) + int(V.get("RunsVisionC", 0)) + int(Tx.get("RunsTaxi", 0)) + int(Cc.get("RunsCorpus", 0)) + len(jsonl("results_multimodal.jsonl")) + sum(len(jsonl(fn)) for fn in ("results_wilds.jsonl", "results_datacomp.jsonl", "results_mirflickr.jsonl", "results_synth.jsonl", "results_llm_tables.jsonl"))
 rec = 0; rec += X.get("records_total", 0) if X else 0; rec += Q.get("records_total", 0) if Q else 0
 tot += sum(1 for r in jsonl("results_vision_fine.jsonl") if "error" not in r); rec = sum(big_tables.records(R).values())
-tot += sum(1 for r in jsonl("results_random_delete.jsonl") if r.get("action") == "random_delete" and "error" not in r)     # the reruns of delete_records repeat stored fits and are not counted
-dump("numbers_totals.json", dict(StudyRuns=f"{tot}", StudyRecords=sci(rec)))
+# one training per configuration: a rerun of a stored table fit counts once, replays of stored predictions and language model inference do not train
+stored = {(r["ds"], r["model"], r["seed"], r["action"], r["f"]) for fn in ("results_real_tables.jsonl", "results_tables_fine.jsonl", "results_decision_fine.jsonl") for r in jsonl(fn) if "error" not in r}
+tot += sum(1 for r in jsonl("results_random_delete.jsonl") if "error" not in r and (r.get("action") == "random_delete" or (r["ds"], r["model"], r["seed"], r["action"], r["f"]) not in stored))
+tot += int(Cc.get("RunsText", 0)) + sum(1 for r in jsonl("results_multimodal_fine.jsonl") if "error" not in r)
+# run time of the same trainings, from the seconds stored with each run: a table fit is timed once, a taxi configuration once
+sec = lambda R: sum(r.get("sec", 0) or 0 for r in R if "error" not in r)
+fit_sec = {}
+for fn in ("results_real_tables.jsonl", "results_tables_fine.jsonl", "results_decision_fine.jsonl", "results_cleanml.jsonl"):
+    for r in jsonl(fn):
+        if "error" not in r and "fit_id" in r: fit_sec.setdefault(r["fit_id"], r.get("sec", 0) or 0)
+taxi_sec = {(r["seed"], r["arm"], r["size"], r["requested_size"], r["train_month"]): r.get("sec", 0) for fn in ("results_taxi.json", "results_taxi_100k.json", "results_taxi_sizes.json", "results_taxi_monthly.json") if load(fn) for r in load(fn)["runs"]}
+hours = sum(fit_sec.values()) + sum(taxi_sec.values()) + sec([r for r in jsonl("results_random_delete.jsonl") if r.get("action") == "random_delete" or (r["ds"], r["model"], r["seed"], r["action"], r["f"]) not in stored])
+hours += sum(sec(jsonl(fn)) for fn in ("results_vision.jsonl", "results_vision_fine.jsonl", "results_corpus.jsonl", "results_synth.jsonl", "results_tep_windows.jsonl", "results_text.jsonl", "results_text_more.jsonl", "results_llm_tables.jsonl", "results_rieth_models.jsonl", "results_multimodal.jsonl", "results_multimodal_fine.jsonl", "results_datacomp.jsonl", "results_wilds.jsonl", "results_mirflickr.jsonl"))
+hours += sum(r.get("sec", 0) for Y in (C, Q) if Y for r in Y["runs"])
+dump("numbers_totals.json", dict(StudyRuns=f"{tot}", StudyRecords=sci(rec), StudyHours=f"{round(hours / 3600, -1):.0f}"))
 print(dict(V=V, Tx=Tx, Cc=Cc, MM=MM, D=D, tot=tot, rec=rec))

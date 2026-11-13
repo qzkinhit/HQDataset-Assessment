@@ -1,4 +1,4 @@
-"""Claims, assessment levels and usage contexts, Definitions 1 to 4."""
+"""Claims, assessment levels and usage contexts, Definitions 1 to 5."""
 import dataclasses
 
 import pytest
@@ -54,6 +54,6 @@ def test_gain_is_a_difference_of_utilities():
 
 
 def test_purpose_sets_the_minimum_level():
-    assert minimum_level("admission") == AssessmentLevel.L2
+    assert minimum_level("compliance") == AssessmentLevel.L2
     assert minimum_level("selection") == AssessmentLevel.L4
     assert minimum_level("improvement") == AssessmentLevel.L5

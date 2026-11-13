@@ -36,7 +36,7 @@ class Judgement:
     """Output of Algorithm 5."""
 
     passed: bool
-    failed_admission: Optional[Requirement]
+    failed_veto: Optional[Requirement]
     records: Tuple[ClaimRecord, ...]
     score: Optional[float]
     score_low: Optional[float]
@@ -49,17 +49,17 @@ def _record(requirement: Requirement) -> ClaimRecord:
                        claim.estimate.lower < requirement.threshold)
 
 
-def judge(admission: Sequence[Requirement], others: Sequence[Requirement], weights: Optional[Sequence[float]] = None,
+def judge(veto: Sequence[Requirement], others: Sequence[Requirement], weights: Optional[Sequence[float]] = None,
           weight_perturbation: float = 0.1) -> Judgement:
     """Algorithm 5, the judgement of a dataset under one usage context.
 
-    The dataset passes if and only if all admission conditions hold and every other claim
-    reaches its level with a lower bound at or above its threshold. An admission
+    The dataset passes if and only if all veto items hold and every other claim
+    reaches its level with a lower bound at or above its threshold. A veto item
     condition that fails ends the judgement and cannot be compensated. For the other claims
     the function records a level below the required one and values below the threshold, computes the
     score P from their point estimates, and gives the range of P under weight perturbation.
     """
-    for requirement in admission:
+    for requirement in veto:
         if not _record(requirement).ok:
             return Judgement(False, requirement, (), None, None, None)
     records: List[ClaimRecord] = [_record(r) for r in others]

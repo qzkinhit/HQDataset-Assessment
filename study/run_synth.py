@@ -10,6 +10,7 @@ torch.manual_seed(seed); np.random.seed(seed); rng = np.random.default_rng(zlib.
 z = np.load(f"{ROOT}/{ds}_real.npz"); Xtr, ytr, Xte, yte = z["Xtr"], z["ytr"].astype(np.int64), z["Xte"], z["yte"].astype(np.int64); clean = ytr.copy(); info = {}
 if J.get("gen") and J["gen"] != "real":
     y_ = np.load(f"{ROOT}/synth_{J['gen']}.npz"); Xs, ys = y_["image"], y_["label"].astype(np.int64); n0 = len(Xtr)
+    if J.get("add", 0) > len(Xs) and os.path.exists(f"{ROOT}/synth_{J['gen']}_all.npz"): y_ = np.load(f"{ROOT}/synth_{J['gen']}_all.npz"); Xs, ys = y_["image"], y_["label"].astype(np.int64)     # EDM add200000
     if "share" in J:
         k = int(round(J["share"] * n0)); ir = rng.permutation(n0)[:n0 - k]; iss = rng.permutation(len(Xs))[:k]; Xtr, ytr = np.concatenate([Xtr[ir], Xs[iss]]), np.r_[ytr[ir], ys[iss]]; info = dict(synthetic_share=float(k / n0))
     else:

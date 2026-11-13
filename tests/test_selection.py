@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 
 from hqd_assess.selection import (accuracy, gain_precision_bootstrap, hindsight_best, macro_f1, r2, replay_rules, resolution_for_sample_size,
-                                  select_version, split_holdout, static_rule, task_test_sample_size, validation_score_at)
+                                  select_version, split_holdout, static_rule, task_test_sample_size, validation_score_at, wrong_choice_bound)
 
 
 def test_metrics_match_scikit_learn():
@@ -95,6 +95,18 @@ def test_proposition_3_holds_in_simulation():
         z = rng.choice([-1, 0, 1], size=(n, n_candidates), p=[q / 2, 1 - q, q / 2])
         failures += np.abs(z.mean(axis=0)).max() > gamma / 2
     assert failures / trials <= delta
+
+
+def test_choice_bound_of_proposition_3_holds_in_simulation():
+    rng = np.random.default_rng(0)
+    means = np.array([0.8, 0.79, 0.75, 0.74, 0.7])
+    n, gamma, trials = 600, 0.02, 2000
+    gaps = means[0] - means[1:]
+    variances = means[0] * (1 - means[0]) + means[1:] * (1 - means[1:])
+    bound = wrong_choice_bound(n, gaps, variances, gamma)
+    assert 0.0 < bound < 1.0
+    chosen = np.array([np.argmax((rng.random((n, len(means))) < means).mean(axis=0)) for _ in range(trials)])
+    assert np.mean(means[0] - means[chosen] > gamma) <= bound
 
 
 def test_bootstrap_precision_covers_the_movement_of_the_gains():

@@ -1,9 +1,9 @@
-"""Sampling calibration of ratio sub-indicators, Algorithm 1 of docs/framework.md."""
+"""Sampling calibration of ratio sub-indicators, Algorithm 1 of docs/framework.md, and the variance comparison of Section 4.1 of the survey."""
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Callable, Optional, Sequence, Tuple
+from typing import Callable, Dict, Optional, Sequence, Tuple
 
 import numpy as np
 from scipy import stats
@@ -97,6 +97,31 @@ def rogan_gladen(p_hat: float, sensitivity: float, specificity: float) -> float:
     if denominator <= 0.0:
         raise ValueError("The detector has no discriminating power, s_e + s_p must exceed one")
     return (p_hat + specificity - 1.0) / denominator
+
+
+def estimator_variances(pi: float, phi1: float, phi0: float) -> Dict[str, float]:
+    """Asymptotic variances of three estimates of an error rate from n labelled records, Section 4.1 of the survey.
+
+    The error rate is pi, the detector flags a share phi1 of the wrong records and a
+    share phi0 of the correct records, and lambda = phi1 - phi0. A scan of all records
+    gives the flagged share p = pi phi1 + (1 - pi) phi0 without sampling error, and the
+    squared correlation of truth and flag is rho2 = lambda^2 pi (1 - pi) / (p (1 - p)).
+    Multiplied by n, the variances of the direct estimate, of the estimate post-stratified
+    by the flag and of the corrected estimate (p - phi0) / (phi1 - phi0) tend to
+    pi (1 - pi), pi (1 - pi) (1 - rho2) and pi (1 - pi) (1 / rho2 - 1). The labels needed
+    for one half-width are proportional to these values, so post-stratification never
+    needs more labels than the other two, and the corrected estimate needs fewer labels
+    than the direct estimate only when rho2 exceeds one half. The corrected variance is
+    infinite at lambda = 0.
+    """
+    if not 0.0 < pi < 1.0:
+        raise ValueError("pi must lie strictly between zero and one")
+    p = pi * phi1 + (1.0 - pi) * phi0
+    base = pi * (1.0 - pi)
+    lam = phi1 - phi0
+    rho2 = lam * lam * base / (p * (1.0 - p)) if 0.0 < p < 1.0 else 0.0
+    corrected = base * (1.0 / rho2 - 1.0) if rho2 > 0.0 else math.inf
+    return dict(direct=base, post_stratified=base * (1.0 - rho2), corrected=corrected, rho2=rho2)
 
 
 def detector_rates(flags: np.ndarray, truth: np.ndarray) -> Tuple[float, float]:

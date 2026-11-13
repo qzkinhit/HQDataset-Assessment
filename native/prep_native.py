@@ -10,6 +10,8 @@ def stored(path):
 def save(name, x, y): np.savez(f"{D}/synth_{name}.npz", image=x, label=y.astype(np.int64)); print(name, x.shape, np.bincount(y.astype(np.int64)).tolist(), flush=True)
 if os.path.exists(f"{D}/edm_200k.npz") and not os.path.exists(f"{D}/synth_edm.npz"):     # this archive is sorted by class, the same number per class is drawn at random
     z = np.load(f"{D}/edm_200k.npz"); y = z["label"]; r_ = np.random.default_rng(0); ids = r_.permutation(np.concatenate([r_.permutation(np.where(y == c)[0])[:N // 10] for c in range(10)])); save("edm", z["image"][ids], y[ids])
+if os.path.exists(f"{D}/edm_200k.npz") and not os.path.exists(f"{D}/synth_edm_all.npz"):     # all 200000 images, for the runs that add more images than the first array holds
+    z = np.load(f"{D}/edm_200k.npz"); save("edm_all", z["image"], z["label"])
 if os.path.exists(f"{D}/cifar10_ddpm.npz") and not os.path.exists(f"{D}/synth_ddpm.npz"):
     z = np.load(f"{D}/cifar10_ddpm.npz"); save("ddpm", z["image"][:N], z["label"][:N])
 if os.path.exists(f"{D}/ddpm_head.bin") and not os.path.exists(f"{D}/synth_ddpm.npz"):     # the archive holds 1M images in 3 GB, only its first images and its label member are fetched (fetch_ranges.py)

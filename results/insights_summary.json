@@ -1,5 +1,5 @@
 {
- "_version": 2,
+ "_version": 4,
  "1": {
   "path": {
    "repair_n": 50,
@@ -726,12 +726,16 @@
     "repair": 16.21699999999998
    }
   },
+  "fair_cifar100": {
+   "dup_minus_rest": 0.26022179443155036,
+   "share": 0.0891
+  },
   "main_right": {
    "protocol_n": 6,
    "protocol_min": 0.08011999999999997,
    "protocol_max": 0.6863402721271492,
    "protocol_med": 0.27540209227468015,
-   "record_n": 13,
+   "record_n": 12,
    "record_max": 0.03180000000000005
   }
  },
@@ -1382,7 +1386,9 @@
       "n": 5
      }
     }
-   }
+   },
+   "pool_tokens": 124626373,
+   "budget_drop": 1.060430987857889
   },
   "synth": {
    "recall": {
@@ -1494,8 +1500,8 @@
    "shift_min": 0.08,
    "shift_max": 0.686,
    "shift_med": 0.47800000000000004,
-   "record_n": 13,
-   "record_med": 0.006,
+   "record_n": 12,
+   "record_med": 0.0045000000000000005,
    "static_min": 98.404
   }
  }

@@ -50,6 +50,7 @@ nofield = [r["id"] for r in G if r.get("corpus_ppl") is not None]; print(" DCLM 
 SY = rows("results_synth.jsonl"); want = [f"sy_real_{a}_s{s}" for s in range(5) for a in ("resnet18", "vgg11")]
 for s in range(3):
     for g in ("edm", "ddpm", "cifake"): want += [f"sy_{g}_resnet18_s{s}_share{x}" for x in (1.0, .5, .9, .75, .25, .1)] + [f"sy_{g}_resnet18_s{s}_add{x}" for x in (50000, 10000, 25000, 100000)] + [f"sy_{g}_vgg11_s{s}_share{x}" for x in (1.0, .5)] + [f"sy_{g}_vgg11_s{s}_add50000"]
+    want.append(f"sy_edm_resnet18_s{s}_add200000")
 G = base("synth", SY, want, ("score", "score_c101")); print(" per generator and architecture", by(G, "gen", "arch"))
 for g in ("real", "edm", "ddpm", "cifake"):
     x = [r for r in G if r.get("gen") == g and r["arch"] == "resnet18" and (g == "real" or r.get("share") == 1.0)]

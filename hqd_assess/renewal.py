@@ -12,7 +12,7 @@ STAGES = {
     2: "fix materials and sampling plan before reading results",
     3: "measure ratios with uncertainty and check split independence",
     4: "test the task on held-out data and intervene",
-    5: "judge with admission conditions and a claim list",
+    5: "judge with veto items and a claim list",
     6: "record the conditions for re-assessment",
 }
 

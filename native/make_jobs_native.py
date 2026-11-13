@@ -10,6 +10,7 @@ for s in range(3):
         for x in (50000, 10000, 25000, 100000): out.append(dict(id=f"sy_{g}_resnet18_s{s}_add{x}", ds="cifar10", arch="resnet18", seed=s, gen=g, add=x))
         for x in (1.0, .5): out.append(dict(id=f"sy_{g}_vgg11_s{s}_share{x}", ds="cifar10", arch="vgg11", seed=s, gen=g, share=x))
         out.append(dict(id=f"sy_{g}_vgg11_s{s}_add50000", ds="cifar10", arch="vgg11", seed=s, gen=g, add=50000))
+out += [dict(id=f"sy_edm_resnet18_s{s}_add200000", ds="cifar10", arch="resnet18", seed=s, gen="edm", add=200000) for s in range(3)]     # the complete EDM archive, synth_edm_all.npz
 open(sys.argv[1], "w").write("".join(json.dumps(j) + "\n" for j in out)); print(len(out))
 out = []
 for s in range(3):
