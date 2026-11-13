@@ -137,5 +137,6 @@ D["RunsTablesAll"] = f"{(T['n_runs'] if T else 0) + len(fine_k) + int(D.get('Run
 Q = load("results_rieth.json"); tot += sum(2 if r["arm"] == "split_protocol" else 1 for r in Q["runs"]) if Q else 0; tot += len(jsonl("results_rieth_models.jsonl")); tot += int(V.get("RunsVisionN", 0)) + int(V.get("RunsVisionC", 0)) + int(Tx.get("RunsTaxi", 0)) + int(Cc.get("RunsCorpus", 0)) + len(jsonl("results_multimodal.jsonl")) + sum(len(jsonl(fn)) for fn in ("results_wilds.jsonl", "results_datacomp.jsonl", "results_mirflickr.jsonl", "results_synth.jsonl", "results_llm_tables.jsonl"))
 rec = 0; rec += X.get("records_total", 0) if X else 0; rec += Q.get("records_total", 0) if Q else 0
 tot += sum(1 for r in jsonl("results_vision_fine.jsonl") if "error" not in r); rec = sum(big_tables.records(R).values())
+tot += sum(1 for r in jsonl("results_random_delete.jsonl") if r.get("action") == "random_delete" and "error" not in r)     # the reruns of delete_records repeat stored fits and are not counted
 dump("numbers_totals.json", dict(StudyRuns=f"{tot}", StudyRecords=sci(rec)))
 print(dict(V=V, Tx=Tx, Cc=Cc, MM=MM, D=D, tot=tot, rec=rec))

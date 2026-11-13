@@ -13,7 +13,7 @@ The Chinese version is [README_zh.md](README_zh.md).
 | Datasets | 54 datasets in 11 groups, about $3.39\times 10^8$ records |
 | Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
 | Assessment practices | 66 practices from the five method families of the survey |
-| Experiments | 11 experiment groups, 40609 model trainings, about 850 hours of run time in the result files, on a 64-core CPU server and A6000 GPUs |
+| Experiments | 11 experiment groups, 43009 model trainings, about 860 hours of run time in the result files, on a 64-core CPU server and A6000 GPUs |
 | Code | About 7200 lines of Python for the experiments and the package `hqd_assess`, and 153 tests |
 
 | Group of datasets | Datasets | Records |
