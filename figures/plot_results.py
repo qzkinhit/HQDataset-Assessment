@@ -55,6 +55,20 @@ def snug(fig, gap=2.0):
         left = min(xs) if xs else bb.x0
         ax.yaxis.set_label_coords((left - bb.x0 - gap * fig.dpi / 72) / bb.width, .5)
 SLICE = [0, 1.71, 3.44, 5.19, W]; BOT, TOP = .52, .64     # column slices and the room below and above a panel row, the same in both figures
+ROWTOP = {}     # absolute top of a cropped row, set where the panels of a row are stretched to one legend height
+def align_row(fig, axes, room=.06):
+    """Stretches the panels of one row upwards, so that every legend ends at the height of the tallest one and the panels share both edges."""
+    fig.canvas.draw(); r = fig.canvas.get_renderer(); H_ = fig.get_figheight()
+    legs = {a: [L for L in fig.legends if getattr(L, "_panel", None) is a] for a in axes}
+    hs = {a: max([L.get_window_extent(r).height / fig.dpi for L in legs[a]] or [0]) for a in axes}
+    top = max(a.get_position().y1 * H_ + hs[a] for a in axes)
+    for a in axes:
+        p = a.get_position(); d = top - hs[a] - p.y1 * H_
+        if d <= 0: continue
+        a.set_position([p.x0, p.y0, p.width, p.height + d / H_])
+        for L in legs[a]:
+            bb = L.get_bbox_to_anchor().transformed(fig.transFigure.inverted()); L.set_bbox_to_anchor((bb.x0, bb.y0 + d / H_), transform=fig.transFigure)
+    return top + 3 / 72 + room
 def crops(fig, plan):
     """Saves single panels and full rows as separate PDF files for the themed figures of the survey. plan maps an old panel letter to (column, row bottom y, output stem, new letter), or a row key to (row bottom y, top, output stem, letter map). A single panel is cropped to its own extent, y label, ticks, legend and title included."""
     import re as re_
@@ -69,7 +83,7 @@ def crops(fig, plan):
             for t_, s_ in keep:
                 if s_.startswith(f"({old}) "): t_.set_text(f"({new}) " + s_[4:])
             main = [a_ for a_ in fig.axes if abs(a_.get_position().y0 * fig.get_figheight() - y) < .2 and SLICE[col] <= (a_.get_position().x0 + a_.get_position().x1) / 2 * W <= SLICE[col + 1]]
-            top = max(a_.get_position().y1 for a_ in main) * fig.get_figheight() + top_m
+            top = ROWTOP.get(round(y, 3), max(a_.get_position().y1 for a_ in main) * fig.get_figheight() + top_m)
             band = transforms.Bbox.from_extents(SLICE[col], y - BOT, SLICE[col + 1], top)
             fig.canvas.draw()
             inside = lambda o: (o._panel in main) if hasattr(o, "_panel") else (lambda e: band.x0 <= (e.x0 + e.x1) / 2 / D <= band.x1 and band.y0 <= (e.y0 + e.y1) / 2 / D <= band.y1)(o.get_window_extent(r_))     # a legend belongs to the panel it was drawn for
@@ -352,7 +366,7 @@ d.axvline(ym_("2020-03"), color=RED, ls=DASH, lw=1.0, zorder=1); d.text(ym_("202
 d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=5.6)
 key_over(fig, d, HY, cols=3, size=6.0)
 # second row
-PH = PH2; g, h, k_, l_ = box(fig, .74, y2, 1.12, PH), box(fig, 2.32, y2, 1.48, PH), box(fig, 4.20, y2, 1.12, PH), box(fig, 5.64, y2, 1.24, PH)     # the new-data row is taller, its legends take three lines
+PH = PH2; g, h, k_, l_ = box(fig, .70, y2, 1.36, PH), box(fig, 2.45, y2, 1.38, PH), box(fig, 4.20, y2, 1.12, PH), box(fig, 5.64, y2, 1.24, PH)     # the new-data row is taller, its legends take three lines
 # (e) monthly change of the violation rate against monthly change of R2, the models trained before the first large change
 fx = [r for r in X["runs"] if r["arm"] == "raw" and r["train_month"] <= "2020-01"]; last = max(r["train_month"] for r in fx); ks_ = [k for k in keys if k > last and all(k in r["r2"] for r in fx)]; mr = {k: mean(r["r2"][k] for r in fx) for k in ks_}; ar = {k: 100 * X["months"][k]["any_rule"] for k in keys}
 tx_ = [abs(ar[q] - ar[p]) for p, q in zip(ks_, ks_[1:])]; ty_ = [abs(mr[q] - mr[p]) for p, q in zip(ks_, ks_[1:])]; sci2["trigger"] = dict(month=ks_[1:], dviol=tx_, dr2=ty_)
@@ -389,7 +403,7 @@ def delta(arm, size, budget, fld): return mean(paired(arm, size, budget, fld))
 def delta_sd(arm, size, budget, fld):
     v = [q for q in paired(arm, size, budget, fld) if np.isfinite(q)]; return float(np.std(v, ddof=1)) if len(v) > 1 else 0.0
 ARM = [(a_, n) for a_, n in [("ppl_low", "Low PPL"), ("ppl_mid", "Mid PPL"), ("ppl_high", "High PPL"), ("rule", "Rules"), ("dedup", "Dedup"), ("rule_dedup", "Both"), ("llm_high", "Qwen high"), ("llm_mid", "Qwen mid")] if np.isfinite(delta(a_, "M", BU, "nll_c4"))]
-g.remove(); g = box(fig, .74, y2, 1.12, PH); pos = np.arange(len(ARM)); sci2["corpus"] = {}
+g.remove(); g = box(fig, .70, y2, 1.36, PH); pos = np.arange(len(ARM)); sci2["corpus"] = {}
 for off, (fld, n, col, hat) in zip((-.26, 0, .26), REFS):
     vals = [delta(a_, "M", BU, fld) for a_, _ in ARM]; sd_ = [delta_sd(a_, "M", BU, fld) for a_, _ in ARM]; sci2["corpus"][n] = vals; sci2["corpus"][n + "/sd"] = sd_; g.barh(pos + off, vals, height=.25, color=col, edgecolor=DARK, lw=.25, hatch=hat, zorder=3, xerr=sd_, error_kw=dict(lw=.5, capsize=1.2, capthick=.5, ecolor=DARK, zorder=4))
 g.axvline(0, color=DARK, lw=.7); g.set_ylim(len(ARM) - .5, -.5); g.set_yticks(pos); g.set_yticklabels([n for _, n in ARM], fontsize=6.4); GAP = "Loss \u2212 random ($\\times10^{-2}$)"; g.set_xlabel(GAP, labelpad=1.5); frame(g, "x"); key_over(fig, g, [Patch(facecolor=col, hatch=hat, edgecolor=DARK, label=n) for _, n, col, hat in REFS], cols=3, size=5.8, dx=-.15)
@@ -440,4 +454,4 @@ for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICK
         if fs: yy = [mean(100 * (r["test_r5"] - rnd[(x, r["seed"])]) for r in rr if r["frac"] == x) for x in fs]; sci2["image_text"][f"{tag}/{n}"] = dict(frac=fs, gain=yy); line(l_, fs, yy, col, mk if mkon else None, lw=lw_, ls=ls)
 l_.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(GRAY, None, "Random", lw=1.1, ls=":")], size=5.4, dx=-.04, max_lines=3)
 titles(fig, [g, h, k_, l_], ["(e) Filters on C4", "(f) Filters, model size", "(g) Synthetic images", "(h) Image-text filters"]); label_room(fig)
-snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "e": (0, y2, "res_newdata_a", "a"), "f": (1, y2, "res_newdata_b", "b"), "g": (2, y2, "res_newdata_c", "c"), "h": (3, y2, "res_newdata_d", "d")}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
+ROWTOP[round(y2, 3)] = align_row(fig, [g, h, k_, l_]); snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "e": (0, y2, "res_newdata_a", "a"), "f": (1, y2, "res_newdata_b", "b"), "g": (2, y2, "res_newdata_c", "c"), "h": (3, y2, "res_newdata_d", "d")}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
