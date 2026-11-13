@@ -45,6 +45,14 @@ def label_room(fig):
         lo_, hi_ = sorted(ax.get_ylim()); tk = [t.get_window_extent(r).x0 for t, q in zip(ax.get_yticklabels(), ax.get_yticks()) if t.get_text() and lo_ <= q <= hi_]; lb = ax.yaxis.label.get_window_extent(r)
         if tk and lb.x1 > min(tk) - 1: print("label touches ticks:", ax.get_ylabel(), round((min(tk) - lb.x1) / fig.dpi, 3))
 from matplotlib.ticker import FuncFormatter, MaxNLocator
+def snug(fig, gap=2.0):
+    """Moves every y label next to the left edge of its own tick labels, gap in points."""
+    fig.canvas.draw(); rd = fig.canvas.get_renderer()
+    for ax in fig.axes:
+        if not ax.get_ylabel(): continue
+        bb = ax.get_window_extent(rd); xs = [tl.get_window_extent(rd).x0 for tl in ax.get_yticklabels() if tl.get_visible() and tl.get_text()]
+        left = min(xs) if xs else bb.x0
+        ax.yaxis.set_label_coords((left - bb.x0 - gap * fig.dpi / 72) / bb.width, .5)
 def short_y(ax, n=4):
     """Compact tick labels, without the leading zero, so that the panels keep the same width."""
     ax.yaxis.set_major_locator(MaxNLocator(n)); ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: (f"{v:.3g}".replace("0.", ".", 1) if abs(v) < 1 and v != 0 else f"{v:.3g}").replace("-", "\u2212")))
@@ -114,9 +122,9 @@ OFF = dict(linear=-.28, rf=-.14, gb=0, knn=.14, mlp=.28)
 I = T["interaction_list"]; rows_ = {n: i for i, (n, _) in enumerate(DS)}; science["interaction"] = I; d.axvline(0, color=DARK, lw=.7, zorder=1)
 for r in I:
     y_ = rows_[r["ds"]] + OFF[r["model"]]; v = 100 * r["inter"]; sig = r["q"] < .05
-    d.plot(v, y_, marker="o", ms=4.6 if sig else 3.4, ls="none", color=RED if sig else GRAY, mfc=RED if sig else "white", mec="white" if sig else GRAY, mew=.5 if sig else .8, zorder=5 if sig else 4, clip_on=False)
+    d.plot(v, y_, marker="o", ms=4.6, ls="none", fillstyle="left", mfc=DARK if sig else "white", mfcalt=MC[r["model"]][0], mec=DARK, mew=.45, zorder=5 if sig else 4, clip_on=False)     # left half significance, right half model class
 d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.tick_params(labelleft=False)
-key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, color=RED, mec="white", mew=.5, label="Significant"), Line2D([], [], ls="none", marker="o", ms=3.4, color=GRAY, mfc="white", mec=GRAY, mew=.8, label="Not significant")], cols=2)
+key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc=DARK, mfcalt="white", mec=DARK, mew=.45, label="Signif."), Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc="white", mfcalt="white", mec=DARK, mew=.45, label="Not signif.")] + [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="right", mfc=MC[m][0], mfcalt="white", mec=DARK, mew=.45, label=n) for m, n, _, _ in MODS], cols=4, size=5.8)
 titles(fig, [a, b, c, d], ["(a) Repair all errors", "(b) Delete dirty rows", "(c) Repair vs. delete", "(d) Joint minus single gains"])
 # second row
 e = cell(fig, 0, y2); f = cell(fig, 1, y2); j_ = box(fig, 3.98, y2, 1.08, PH); h = cell(fig, 3, y2)
@@ -216,7 +224,7 @@ for arch, ls, hollow in (("resnet18", "-", False), ("vgg11", DASH, True)):
 l_.invert_xaxis(); l_.set_xticks([.8, .6, .4, .2]); l_.set_xticklabels([".8", ".6", ".4", ".2"]); l_.set_xlabel("Kept share", labelpad=1.5); ylab(l_, "Accuracy"); l_.set_ylim(.2, 1); frame(l_)
 key_over(fig, l_, [hl(BLUE, "o", "Seen"), hl(RED, "*", "Unseen", ms=5.0), hl(GREEN, "s", "Random")], cols=3, size=6.4, dx=-.02)
 titles(fig, [j_, i_, k_, l_], ["(i) Independent runs", "(j) Error-rate estimates", "(k) Real label noise", "(l) Coverage, scale"]); label_room(fig)
-print("A", save(fig, f"{OUT}/results_a")); json.dump(science, open(f"{OUT}/figure_data_a.json", "w"), indent=0, default=float)
+snug(fig); print("A", save(fig, f"{OUT}/results_a")); json.dump(science, open(f"{OUT}/figure_data_a.json", "w"), indent=0, default=float)
 # ======== figure B: choosing a version and large real data
 fine = jsonl("results_decision_fine.jsonl"); D = jsonl("results_decision.jsonl"); D = fine if len(fine) >= len(D) else D
 X, X2, X3, CO = load("results_taxi.json"), load("results_taxi_100k.json"), load("results_taxi_sizes.json"), jsonl("results_corpus.jsonl"); sci2 = {}
@@ -252,15 +260,18 @@ for ax, grp, lab in ((a, CLS, "cls"),):
 keys = sorted(X["months"]); idx = {k: i for i, k in enumerate(keys)}; xm = [2019 + i / 12 for i in range(len(keys))]; RU = [("r_location", "Location", BLUE), ("r_passengers", "Passengers", ORANGE), ("r_ratecode", "Rate code", GREEN), ("r_distance", "Distance", PURPLE), ("r_duration", "Duration", TEAL), ("r_fare", "Fare", BROWN), ("r_speed", "Speed", PINK), ("any_rule", "Any rule", RED)]; sci2["rules"] = {}
 # (b) taxi, mean R2 on two fixed later test periods against the training month, raw records, mean over seeds. A training month enters a period only when it precedes every test month of the period
 TMS = sorted({r["train_month"] for r in X["runs"] if r["arm"] == "raw"}); sci2["taxi_by_train_month"] = {}; ym_ = lambda k: int(k[:4]) + (int(k[5:7]) - 1) / 12; ALLB = []
-for n_, test_, col, mk, ls in (("Test 2023", [f"2023-{q:02d}" for q in range(2, 13)], RED, "*", "-"), ("Test 2024", [f"2024-{q:02d}" for q in range(8, 13)], BLUE, "o", DASH)):
-    xx, yy = [], []
+YRS = [2022, 2023, 2024]; CY = [plt.cm.viridis(.75 - .65 * q / (len(YRS) - 1)) for q in range(len(YRS))]; HY = []
+for Y, col in zip(YRS, CY):     # one line per test year, the test period is February to December of that year, training months up to its January
+    test_ = [f"{Y}-{q:02d}" for q in range(2, 13)]; xx, yy = [], []
     for tm in TMS:
         v = [mean(r["r2"][k] for k in test_) for r in X["runs"] if r["arm"] == "raw" and r["train_month"] == tm and all(k in r["r2"] and k > tm for k in test_)]
         if v: xx.append(ym_(tm)); yy.append(mean(v))
-    sci2["taxi_by_train_month"][n_] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; line(d, xx, yy, col, mk, lw=1.5, ls=ls)
-d.axvline(ym_("2020-03"), color=GRAY, ls=":", lw=1.0, zorder=1); d.text(ym_("2020-03") - .16, .04, "2020-03", transform=d.get_xaxis_transform(), fontsize=6.4, color=DARK, ha="right", va="bottom")
-d.set_xlim(2018.2, 2024.9); d.set_xticks([2019, 2021, 2023]); d.set_xticklabels(["2019", "2021", "2023"]); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d)
-key_over(fig, d, [hl(RED, "*", "Test 2023", ms=4.4), hl(BLUE, "o", "Test 2024", ls=DASH)], cols=2, size=6.4)
+    if not xx: continue
+    sci2["taxi_by_train_month"][f"Test {Y}"] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; d.plot(xx, yy, color=col, lw=1.2, marker="o", ms=2.6, mec=col, mfc=col, zorder=3)
+    HY.append(hl(col, "o", str(Y), ms=2.8))
+d.axvline(ym_("2020-03"), color=RED, ls=DASH, lw=1.0, zorder=1); d.text(ym_("2020-03") - .16, .04, "2020-03", transform=d.get_xaxis_transform(), fontsize=6.4, color=RED, ha="right", va="bottom")
+d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=6.0)
+key_over(fig, d, HY, cols=3, size=6.0)
 # second row
 g, h, k_, l_ = [cell(fig, q, y2) for q in range(4)]
 # (e) monthly change of the violation rate against monthly change of R2, the models trained before the first large change
@@ -338,4 +349,4 @@ for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICK
         if fs: yy = [mean(100 * (r["test_r5"] - rnd[(x, r["seed"])]) for r in rr if r["frac"] == x) for x in fs]; sci2["image_text"][f"{tag}/{n}"] = dict(frac=fs, gain=yy); line(l_, fs, yy, col, mk if mkon else None, lw=lw_, ls=ls)
 l_.axhline(0, color=DARK, lw=.7, zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(DARK, None, "Random", lw=.7)], cols=3, size=5.4, dx=-.04)
 titles(fig, [g, h, k_, l_], ["(e) Filters on C4", "(f) Filters, model size", "(g) Synthetic images", "(h) Image-text filters"]); label_room(fig)
-print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
+snug(fig); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)

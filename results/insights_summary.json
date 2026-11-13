@@ -138,7 +138,200 @@
    "removed": 499
   }
  },
- "1_random": null,
+ "1_random": {
+  "runs": 4800,
+  "errors": 0,
+  "rerun_pairs": 2000,
+  "rerun_max_abs_diff": 0.0,
+  "by_fraction": {
+   "0.5": {
+    "pairs": 40,
+    "tables": 8,
+    "selective_down": 12,
+    "selective_down_pct": 30.0,
+    "random_down": 10,
+    "random_down_pct": 25.0,
+    "selective_worse": 15,
+    "selective_worse_pct": 37.5,
+    "selective_worse_sig": 4,
+    "selective_better_sig": 8,
+    "med_diff": 0.0012523316851367177,
+    "mean_diff": 0.003818661899956495,
+    "shift_selective": 0.05482581959318389,
+    "shift_random": 0.02010897764934603,
+    "shift_by_table": {
+     "adult": {
+      "delete_records": 0.0048,
+      "random_delete": 0.0014
+     },
+     "bike": {
+      "delete_records": 0.0607,
+      "random_delete": 0.0151
+     },
+     "breast_cancer": {
+      "delete_records": 0.05,
+      "random_delete": 0.0416
+     },
+     "flights": {
+      "delete_records": 0.1074,
+      "random_delete": 0.0778
+     },
+     "hospitals": {
+      "delete_records": 0.1106,
+      "random_delete": 0.1088
+     },
+     "nasa": {
+      "delete_records": 0.0277,
+      "random_delete": 0.0251
+     },
+     "smartfactory": {
+      "delete_records": 0.0058,
+      "random_delete": 0.0061
+     },
+     "soccer_full": {
+      "delete_records": 0.0596,
+      "random_delete": 0.0084
+     }
+    },
+    "diff_by_table": {
+     "adult": 0.0001,
+     "bike": 0.005,
+     "breast_cancer": 0.0008,
+     "flights": 0.0155,
+     "hospitals": -0.0173,
+     "nasa": 0.0265,
+     "smartfactory": 0.0046,
+     "soccer_full": -0.0047
+    },
+    "rho_shift_gap": -0.023809523809523815,
+    "p_shift_gap": 0.9553740118158806
+   },
+   "0.9": {
+    "pairs": 40,
+    "tables": 8,
+    "selective_down": 17,
+    "selective_down_pct": 42.5,
+    "random_down": 14,
+    "random_down_pct": 35.0,
+    "selective_worse": 15,
+    "selective_worse_pct": 37.5,
+    "selective_worse_sig": 5,
+    "selective_better_sig": 14,
+    "med_diff": 0.004279329812938066,
+    "mean_diff": 0.018961840950823226,
+    "shift_selective": 0.10768816360187702,
+    "shift_random": 0.03855236431970065,
+    "shift_by_table": {
+     "adult": {
+      "delete_records": 0.0087,
+      "random_delete": 0.0019
+     },
+     "bike": {
+      "delete_records": 0.3836,
+      "random_delete": 0.0368
+     },
+     "breast_cancer": {
+      "delete_records": 0.1002,
+      "random_delete": 0.0681
+     },
+     "flights": {
+      "delete_records": 0.3951,
+      "random_delete": 0.1541
+     },
+     "hospitals": {
+      "delete_records": 0.1745,
+      "random_delete": 0.1685
+     },
+     "nasa": {
+      "delete_records": 0.0399,
+      "random_delete": 0.0403
+     },
+     "smartfactory": {
+      "delete_records": 0.0072,
+      "random_delete": 0.009
+     },
+     "soccer_full": {
+      "delete_records": 0.1152,
+      "random_delete": 0.0117
+     }
+    },
+    "diff_by_table": {
+     "adult": -0.0,
+     "bike": 0.0048,
+     "breast_cancer": 0.004,
+     "flights": 0.0329,
+     "hospitals": 0.0034,
+     "nasa": 0.1011,
+     "smartfactory": 0.0105,
+     "soccer_full": -0.0051
+    },
+    "rho_shift_gap": 0.19047619047619052,
+    "p_shift_gap": 0.6514014957024813
+   },
+   "1.0": {
+    "pairs": 40,
+    "tables": 8,
+    "selective_down": 21,
+    "selective_down_pct": 52.5,
+    "random_down": 16,
+    "random_down_pct": 40.0,
+    "selective_worse": 19,
+    "selective_worse_pct": 47.5,
+    "selective_worse_sig": 12,
+    "selective_better_sig": 16,
+    "med_diff": 0.004001984998692212,
+    "mean_diff": -0.024280530693169964,
+    "shift_selective": 0.12737316571470475,
+    "shift_random": 0.05372396114385479,
+    "shift_by_table": {
+     "adult": {
+      "delete_records": 0.0097,
+      "random_delete": 0.0019
+     },
+     "bike": {
+      "delete_records": 1.0942,
+      "random_delete": 0.0627
+     },
+     "breast_cancer": {
+      "delete_records": 0.1244,
+      "random_delete": 0.0775
+     },
+     "flights": {
+      "delete_records": 0.6128,
+      "random_delete": 0.1954
+     },
+     "hospitals": {
+      "delete_records": 0.1916,
+      "random_delete": 0.1851
+     },
+     "nasa": {
+      "delete_records": 0.0445,
+      "random_delete": 0.0447
+     },
+     "smartfactory": {
+      "delete_records": 0.0076,
+      "random_delete": 0.0088
+     },
+     "soccer_full": {
+      "delete_records": 0.1304,
+      "random_delete": 0.0123
+     }
+    },
+    "diff_by_table": {
+     "adult": 0.0,
+     "bike": -0.5808,
+     "breast_cancer": 0.0079,
+     "flights": 0.0425,
+     "hospitals": 0.0004,
+     "nasa": 0.4115,
+     "smartfactory": 0.0108,
+     "soccer_full": -0.0866
+    },
+    "rho_shift_gap": 0.523809523809524,
+    "p_shift_gap": 0.18272075053971482
+   }
+  }
+ },
  "2": {
   "amount_gain": {
    "n": 10,

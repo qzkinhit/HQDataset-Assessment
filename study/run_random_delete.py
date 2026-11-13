@@ -7,6 +7,7 @@ Everything else, the split, the models, the preprocessing and the metric, is tak
 For every run it also records how far the retained records drift from all training records on the clean values, for the label and for the
 features, so that the analysis can relate the loss of a deletion to the change of the population the retained records represent."""
 import argparse, json, os, sys, time, zlib
+os.environ.update(OMP_NUM_THREADS="1", OPENBLAS_NUM_THREADS="1", MKL_NUM_THREADS="1")     # one thread per worker, set before numpy loads
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np, pandas as pd
 from multiprocessing import Pool

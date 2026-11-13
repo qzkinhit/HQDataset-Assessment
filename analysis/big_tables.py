@@ -58,8 +58,8 @@ def rec(n):
 S3, S4, S5 = "\\S\\ref{sec:dimension}", "\\S\\ref{sec:method}", "\\S\\ref{sec:newdata}"
 HEAD = [("Tables with benchmark errors", S3, "", "Macro-F1 or $R^2$"), ("Tables with real errors", S3, "", "Macro-F1"), ("Image labels", S3, "", "accuracy"), ("Language-model corpora", S5, "", "loss"), ("Multimodal data", S5, "", "Recall@5"), ("Synthetic data", S5, "", "accuracy"), ("Dynamic data", S5, "", "$R^2$"), ("Evaluation protocol", S3, "", "Macro-F1 or accuracy"), ("Data leakage", S5, "", "accuracy or loss"), ("Test-set labels", S3, "", "accuracy"), ("Detector estimates", S4, "", "share of matched pairs")]
 # every dataset row carries its citation. Where the dataset list gives none or only the benchmark, the original source is added when it is in the bibliography.
-# NYC taxi: Wu and Keogh analyze the NYC taxi demand series that Numenta derived from the same trip records.
-ROW_CITE = {"taxi": "wu2021flawed", "cifar10": "krizhevsky2009cifar,northcutt2021pervasive", "cifar100": "krizhevsky2009cifar,northcutt2021pervasive", "beers": "mahdavi2019raha,abdelaal2023rein", "flights": "mahdavi2019raha,ding2025uniclean", "hospitals": "mahdavi2019raha,ding2025uniclean"}
+# NYC taxi: Ferreira et al. study the same TLC trip records.
+ROW_CITE = {"taxi": "ferreira2013taxi", "cifar10": "krizhevsky2009cifar,northcutt2021pervasive", "cifar100": "krizhevsky2009cifar,northcutt2021pervasive", "beers": "mahdavi2019raha,abdelaal2023rein", "flights": "mahdavi2019raha,ding2025uniclean", "hospitals": "mahdavi2019raha,ding2025uniclean"}
 ABBR = {"Classification": "C", "Regression": "R", "Language modeling": "LM", "Retrieval": "IR", "Fault diagnosis": "C"}
 INDENT = "\\hspace{0.8ex}"
 PANEL_STUDY = 5     # the groups before this index fill the left panel of the dataset table
