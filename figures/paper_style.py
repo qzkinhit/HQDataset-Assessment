@@ -20,9 +20,18 @@ def key(fig, handles, x, y, cols=2, size=LEGEND):
     W_, H_ = fig.get_size_inches()
     size = size * LEGSCALE     # legends a little larger than the tick labels allow by default
     return fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(x / W_, y / H_), ncol=cols, frameon=False, fontsize=size, handlelength=1.0, handletextpad=.27, columnspacing=.5, labelspacing=.12, borderaxespad=0, borderpad=0)
-def key_over(fig, ax, handles, cols=2, size=LEGEND, gap=3 / 72, dx=0.0):
-    """A legend centred above one panel."""
-    W_, H_ = fig.get_size_inches(); p = ax.get_position(); return key(fig, handles, (p.x0 + p.x1) / 2 * W_ + dx, p.y1 * H_ + gap, cols, size)
+def key_over(fig, ax, handles, cols=None, size=LEGEND, gap=3 / 72, dx=0.0, max_lines=2):
+    """A legend centred above one panel, in two lines by default. It takes a third line only where max_lines allows it and two lines are wider than the panel, and otherwise the font shrinks a little until two lines fit."""
+    W_, H_ = fig.get_size_inches(); p = ax.get_position(); r = fig.canvas.get_renderer(); n = len(handles); room = p.width * W_ * 1.04 + .25     # a legend may reach over the tick labels on its left
+    lines = 1 if n == 1 else 2
+    while True:
+        c = -(-n // lines); leg = key(fig, handles, (p.x0 + p.x1) / 2 * W_ + dx, p.y1 * H_ + gap, c, size)
+        if leg.get_window_extent(r).width / fig.dpi <= room: return leg
+        leg.remove()
+        if lines < max_lines: lines += 1
+        elif size > LEGEND * .62: size *= .94
+        else: return key(fig, handles, (p.x0 + p.x1) / 2 * W_ + dx, p.y1 * H_ + gap, c, size)
+
 def titles(fig, axes, names):
     fig.canvas.draw(); r = fig.canvas.get_renderer(); H_ = fig.get_figheight(); bottom = min(a.get_tightbbox(r).y0 for a in axes); y = (bottom - 2 * fig.dpi / 72) / (H_ * fig.dpi); out = []
     for a, t in zip(axes, names):

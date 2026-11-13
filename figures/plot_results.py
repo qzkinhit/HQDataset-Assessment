@@ -50,26 +50,30 @@ def snug(fig, gap=2.0):
     fig.canvas.draw(); rd = fig.canvas.get_renderer()
     for ax in fig.axes:
         if not ax.get_ylabel(): continue
-        bb = ax.get_window_extent(rd); xs = [tl.get_window_extent(rd).x0 for tl in ax.get_yticklabels() if tl.get_visible() and tl.get_text()]
+        bb = ax.get_window_extent(rd); lo_, hi_ = sorted(ax.get_ylim())
+        xs = [tl.get_window_extent(rd).x0 for tl, q in zip(ax.get_yticklabels(), ax.get_yticks()) if tl.get_visible() and tl.get_text() and lo_ <= q <= hi_]     # only the tick labels that are drawn
         left = min(xs) if xs else bb.x0
         ax.yaxis.set_label_coords((left - bb.x0 - gap * fig.dpi / 72) / bb.width, .5)
-SLICE = [0, 1.71, 3.44, 5.19, W]; BOT, TOP = .45, .46     # column slices and the room below and above a panel row, the same in both figures
+SLICE = [0, 1.71, 3.44, 5.19, W]; BOT, TOP = .52, .64     # column slices and the room below and above a panel row, the same in both figures
 def crops(fig, plan):
     """Saves single panels and full rows as separate PDF files for the themed figures of the survey. plan maps an old panel letter to (column, row bottom y, output stem, new letter), or a row key to (row bottom y, top, output stem, letter map). A single panel is cropped to its own extent, y label, ticks, legend and title included."""
     import re as re_
     fig.canvas.draw(); r_ = fig.canvas.get_renderer(); D = fig.dpi; keep = [(t_, t_.get_text()) for t_ in fig.texts]
-    ext = lambda o: o.get_tightbbox(r_) if isinstance(o, plt.Axes) else o.get_window_extent(r_)
+    def ext(o):     # an axes with its own x and y labels, which its tight box can leave out
+        if not isinstance(o, plt.Axes): return o.get_window_extent(r_)
+        bs = [o.get_tightbbox(r_)] + [l_.get_window_extent(r_) for l_ in (o.xaxis.label, o.yaxis.label) if l_.get_text() and l_.get_visible()]
+        return transforms.Bbox.union(bs)
     for k, v in plan.items():
-        if len(v) == 4 and isinstance(v[0], int):
-            col, y, stem, new = v; old = k
+        if len(v) in (4, 5) and isinstance(v[0], int):
+            col, y, stem, new = v[:4]; old = k; top_m = v[4] if len(v) == 5 else TOP
             for t_, s_ in keep:
                 if s_.startswith(f"({old}) "): t_.set_text(f"({new}) " + s_[4:])
             main = [a_ for a_ in fig.axes if abs(a_.get_position().y0 * fig.get_figheight() - y) < .2 and SLICE[col] <= (a_.get_position().x0 + a_.get_position().x1) / 2 * W <= SLICE[col + 1]]
-            top = max(a_.get_position().y1 for a_ in main) * fig.get_figheight() + TOP
+            top = max(a_.get_position().y1 for a_ in main) * fig.get_figheight() + top_m
             band = transforms.Bbox.from_extents(SLICE[col], y - BOT, SLICE[col + 1], top)
             fig.canvas.draw()
             mem = [o for o in list(fig.texts) + list(fig.legends) + list(fig.axes) if o.get_visible() and (lambda e: band.x0 <= (e.x0 + e.x1) / 2 / D <= band.x1 and band.y0 <= (e.y0 + e.y1) / 2 / D <= band.y1)(o.get_window_extent(r_))]
-            xs = [ext(o) for o in mem]; x0 = min(e.x0 for e in xs) / D - .03; x1 = max(e.x1 for e in xs) / D + .03
+            xs = [ext(o) for o in mem]; x0 = min(e.x0 for e in xs) / D - .05; x1 = max(e.x1 for e in xs) / D + .08     # the PDF glyphs of superscripts run a little wider than measured
             bb = transforms.Bbox.from_extents(x0, y - BOT, x1, top)
         else:
             y, top, stem, mp = v
@@ -92,7 +96,7 @@ def zoom(ax, ys, pad=.08):
     if v: a, b = min(v), max(v); d = (b - a) or 1; ax.set_ylim(a - pad * d, b + pad * d)
 # ======== figure A: quality and utility on tables, protocols and label noise
 T, C, Q = load("tables_summary.json"), load("case_tep.json"), load("results_rieth.json"); V = jsonl("results_vision.jsonl", "results_vision_fine.jsonl"); science = {}
-PH_B = PH; PH = PH_B; H = 5.65; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 4.34, 0.94; y2, y3 = 2.40, .46
+PH_B = PH; PH = PH_B; H = 6.21; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 4.90, 0.94; y2, y3 = 2.68, .46
 EX = .10; a = box(fig, .34, ty - EX, 1.56, th + EX); b = box(fig, 1.96, ty - EX, 1.56, th + EX); c = box(fig, 3.58, ty - EX, 1.46, th + EX); d = box(fig, 5.10, ty - EX, 1.78, th + EX)
 NORM = SymLogNorm(linthresh=2, linscale=1, vmin=-40, vmax=40, base=10); HMAP = plt.get_cmap("RdBu_r").copy(); HMAP.set_bad("#B9BFC5")
 def ink(v):
@@ -225,7 +229,7 @@ j_.barh(ys, [q["best"] - q["worst"] for q in RC], left=[q["worst"] for q in RC],
 for y_, q in zip(ys, RC):
     if q["versions"] == 1: j_.plot([q["best"]] * 2, [y_ - .4, y_ + .4], color=BLUE, lw=1.1, solid_capstyle="butt", zorder=4.5)     # one cleaning method, the range is a single value
 j_.plot([q["static"] for q in RC], ys, ls="none", marker="D", ms=2.8, color=ORANGE, mec="white", mew=.25, zorder=4); j_.plot([q["task"] for q in RC], ys, ls="none", marker="*", ms=5.0, color=RED, mec="white", mew=.25, zorder=5)
-j_.axvline(0, color=DARK, lw=.7, zorder=3); j_.set_xscale("symlog", linthresh=1, linscale=1); j_.set_xlim(-20, 9); j_.set_xticks([-10, -1, 0, 1, 5]); j_.set_xticklabels(["−10", "−1", "0", "1", "5"]); j_.minorticks_off(); j_.set_ylim(len(ROWS) - .5, -.5); j_.set_yticks(ys); j_.set_yticklabels(ROWS); j_.set_xlabel("Gain over dirty (pp)", labelpad=1.5); frame(j_, "x"); j_.tick_params(axis="y", labelsize=5.4, pad=1.2, length=1.2)
+j_.axvline(0, color=DARK, lw=.7, zorder=3); j_.set_xscale("symlog", linthresh=1, linscale=1); j_.set_xlim(-20, 9); j_.set_xticks([-10, -1, 0, 1, 5]); j_.set_xticklabels(["−10", "−1", "0", "1", "5"]); j_.minorticks_off(); j_.set_ylim(len(ROWS) - .5, -.5); j_.set_yticks(ys); j_.set_yticklabels(ROWS); j_.set_xlabel("Gain over dirty (pp)", labelpad=1.5); frame(j_, "x"); j_.tick_params(axis="y", labelsize=6.6, pad=1.2, length=1.2)
 key_over(fig, j_, [Patch(facecolor=BLUE, alpha=.35, hatch="///", edgecolor=DARK, label="Range"), Line2D([], [], ls="none", marker="D", ms=2.8, color=ORANGE, label="Static"), Line2D([], [], ls="none", marker="*", ms=4.6, color=RED, label="Task test")], cols=3, size=5.8, dx=-.15)
 # (h) score changes on the tables, sorted, against the gaps caused by the protocol on TEP
 def mf(m, arm, fld="macro_f1"): return mean(r[fld] for r in C["runs"] if r["model"] == m and r["arm"] == arm)
@@ -249,7 +253,7 @@ for m_, n_, col, mk, ls_ in (("corrected", "Corrected", ORANGE, "D", "-"), ("poo
     ns = sorted({r["n"] for r in DE if r["method"] == m_}); yy = [100 * mean(r["mean_abs_error"] for r in DE if r["method"] == m_ and r["n"] == x) for x in ns]; science["detectors"][n_] = dict(n=ns, mae=yy); line(i_, ns, yy, col, mk, lw=1.5, ms=5.6 if mk == "*" else 3.4)
 rawv = 100 * mean(r["mean_abs_error"] for r in DE if r["method"] == "raw"); science["detectors"]["Raw"] = rawv; i_.axhline(rawv, color=DARK, ls=DASH, lw=1.2, zorder=2)
 i_.set_xscale("log"); i_.set_yscale("log"); i_.set_xticks([50, 100, 200, 400, 800]); i_.set_xticklabels(["50", "100", "200", "400", "800"], fontsize=7.0); i_.set_yticks([1, 3, 10, 30]); i_.set_yticklabels(["1", "3", "10", "30"]); i_.minorticks_off(); i_.set_ylim(.6, 50); i_.set_xlabel("Labeled records", labelpad=1.5); ylab(i_, "Absolute error (pp)"); frame(i_)
-key_over(fig, i_, [hl(DARK, None, "Raw", lw=1.2, ls=DASH), hl(ORANGE, "D", "Corrected", ms=3.0), hl(GRAY, "v", "Pooled", ms=3.0), hl(BLUE, "o", "Sample", ms=3.0), hl(RED, "*", "Post-strat.", ms=4.0)], cols=3, size=5.6)
+key_over(fig, i_, [hl(DARK, None, "Raw", lw=1.2, ls=DASH), hl(BLUE, "o", "Sample", ms=3.0), hl(GRAY, "v", "Pooled", ms=3.0), hl(ORANGE, "D", "Corrected", ms=3.0), hl(RED, "*", "Post-strat.", ms=4.0)], cols=3, size=5.6)
 # (j) large TEP, the same number of records from k independent runs
 ks = [1, 2, 5, 10, 20, 50, 100, 200, 500]; RM = jsonl("results_rieth_models.jsonl"); rows = [r for r in Q["runs"] if r.get("arm") == "runs_fixed_records"]; science["runs"] = {}
 FAM = [("GB", rows, RED, "*"), ("RF", [r for r in RM if r["model"] == "rf" and r["n"] == 480], BLUE, "o"), ("MLP", [r for r in RM if r["model"] == "mlp" and r["n"] == 480], ORANGE, "D"), ("Lin", [r for r in RM if r["model"] == "linear" and r["n"] == 480], GREEN, "^"), ("KNN", [r for r in RM if r["model"] == "knn" and r["n"] == 480], PURPLE, "s")]; hf = []
@@ -293,7 +297,7 @@ XM = load("results_taxi_monthly.json")     # training months run one by one, add
 if XM and X:
     have = {taxi_key(r) for r in X["runs"]}; X["runs"] += [r for r in XM.get("runs", []) if taxi_key(r) not in have]
     for k, v in XM.get("months", {}).items(): X["months"].setdefault(k, v)
-PH = PH_B; PH2 = PH_B + .30; H = 4.35; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.83, .46
+PH = PH_B; PH2 = PH_B + .30; H = 4.69; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.98, .46
 a, d, e, f = [cell(fig, q, y1) for q in range(4)]
 D = [r for r in D if "test" in r]; SZ_ = sorted({int(x) for r in D for x in r["val"] if int(x) <= 1600}); GD = collections.defaultdict(dict)
 for r in D: GD[(r["ds"], r["model"], r["seed"])][(r["action"], r["f"])] = r
@@ -340,7 +344,7 @@ for Y, col in zip(YRS, CY):     # one line per test year, the test period is Feb
         if v: xx.append(ym_(tm)); yy.append(mean(v))
     if not xx: continue
     sci2["taxi_by_train_month"][f"Test {Y}"] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; d.plot(xx, yy, color=col, lw=1.2, marker="o", ms=MSB, mec=col, mfc=col, zorder=3)
-    HY.append(hl(col, "o", str(Y), ms=2.8))
+    HY.append(hl(col, "o", f"{Y} test", ms=2.8))
 d.axvline(ym_("2020-03"), color=RED, ls=DASH, lw=1.0, zorder=1); d.text(ym_("2020-03") - .16, .04, "2020-03", transform=d.get_xaxis_transform(), fontsize=6.4, color=RED, ha="right", va="bottom")
 d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=5.6)
 key_over(fig, d, HY, cols=3, size=6.0)
@@ -385,7 +389,7 @@ ARM = [(a_, n) for a_, n in [("ppl_low", "Low PPL"), ("ppl_mid", "Mid PPL"), ("p
 g.remove(); g = box(fig, XS[0] + .30, y2, .93, PH); pos = np.arange(len(ARM)); sci2["corpus"] = {}
 for off, (fld, n, col, hat) in zip((-.26, 0, .26), REFS):
     vals = [delta(a_, "M", BU, fld) for a_, _ in ARM]; sd_ = [delta_sd(a_, "M", BU, fld) for a_, _ in ARM]; sci2["corpus"][n] = vals; sci2["corpus"][n + "/sd"] = sd_; g.barh(pos + off, vals, height=.25, color=col, edgecolor=DARK, lw=.25, hatch=hat, zorder=3, xerr=sd_, error_kw=dict(lw=.5, capsize=1.2, capthick=.5, ecolor=DARK, zorder=4))
-g.axvline(0, color=DARK, lw=.7); g.set_ylim(len(ARM) - .5, -.5); g.set_yticks(pos); g.set_yticklabels([n for _, n in ARM], fontsize=6.4); GAP = "Loss \u2212 random (\u00d710\u207b\u00b2)"; g.set_xlabel(GAP, labelpad=1.5); frame(g, "x"); key_over(fig, g, [Patch(facecolor=col, hatch=hat, edgecolor=DARK, label=n) for _, n, col, hat in REFS], cols=3, size=5.8, dx=-.15)
+g.axvline(0, color=DARK, lw=.7); g.set_ylim(len(ARM) - .5, -.5); g.set_yticks(pos); g.set_yticklabels([n for _, n in ARM], fontsize=6.4); GAP = "Loss \u2212 random ($\\times10^{-2}$)"; g.set_xlabel(GAP, labelpad=1.5); frame(g, "x"); key_over(fig, g, [Patch(facecolor=col, hatch=hat, edgecolor=DARK, label=n) for _, n, col, hat in REFS], cols=3, size=5.8, dx=-.15)
 # (h, i) C4 corpus, filter effect by model size and by token budget, web text solid and Wikipedia dashed with hollow markers, so that a budget with one point already shows
 LN = [("ppl_low", "Low PPL", RED, "*"), ("ppl_high", "High PPL", GRAY, "v"), ("rule_dedup", "Both", PURPLE, "s"), ("llm_high", "Qwen high", BLUE, "o")]
 SIZES_ = ["XS", "T", "S", "SM", "MS", "M", "ML", "L"]
@@ -405,7 +409,7 @@ def versus(ax, axis, name):
     ax.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); ax.set_xscale("log"); ax.minorticks_off(); ylab(ax, GAP); frame(ax); zoom(ax, ally); short_y(ax)
 NK = [hl(col, mk, n, ms=3.0) for _, n, col, mk in LN] + [hl(DARK, None, "C4", lw=1.3), hl(DARK, None, "Wiki", lw=1.0, ls=DASH), hl(GRAY, None, "Random", lw=1.1, ls=":")]
 versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); BL = lambda: Line2D([], [], color="none", label=" ")
-key_over(fig, h, [NK[0], NK[1], NK[3], NK[2], NK[4], NK[5], NK[6], BL(), BL()], cols=3, size=5.6)     # columns of long, short and shortest names, so that the three lines are compact
+key_over(fig, h, [NK[0], NK[1], NK[3], NK[2], NK[4], NK[5], NK[6], BL(), BL()], cols=3, size=5.6, max_lines=3)     # columns of long, short and shortest names, so that the three lines are compact
 titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 by train month", "(c) Violations and R\u00b2", "(d) Training size"])
 # third row
 # (k) published synthetic images, share of synthetic images in the training set, replacing real images or added to them, each run against the real-only run of the same seed
@@ -431,6 +435,6 @@ for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICK
     for a_, n, col, mk in FILT:
         rr = [r for r in src if r.get("arm") == a_ and (r.get("frac"), r.get("seed")) in rnd]; fs = sorted({r["frac"] for r in rr})
         if fs: yy = [mean(100 * (r["test_r5"] - rnd[(x, r["seed"])]) for r in rr if r["frac"] == x) for x in fs]; sci2["image_text"][f"{tag}/{n}"] = dict(frac=fs, gain=yy); line(l_, fs, yy, col, mk if mkon else None, lw=lw_, ls=ls)
-l_.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(GRAY, None, "Random", lw=1.1, ls=":")], cols=3, size=5.4, dx=-.04)
+l_.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(GRAY, None, "Random", lw=1.1, ls=":")], cols=3, size=5.4, dx=-.04, max_lines=3)
 titles(fig, [g, h, k_, l_], ["(e) Filters on C4", "(f) Filters, model size", "(g) Synthetic images", "(h) Image-text filters"]); label_room(fig)
-snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "row2": (y2, y2 + PH2 + .58, "res_newdata", dict(e="a", f="b", g="c", h="d"))}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
+snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "e": (0, y2, "res_newdata_a", "a"), "f": (1, y2, "res_newdata_b", "b"), "g": (2, y2, "res_newdata_c", "c"), "h": (3, y2, "res_newdata_d", "d")}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
