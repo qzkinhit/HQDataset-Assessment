@@ -53,6 +53,30 @@ def snug(fig, gap=2.0):
         bb = ax.get_window_extent(rd); xs = [tl.get_window_extent(rd).x0 for tl in ax.get_yticklabels() if tl.get_visible() and tl.get_text()]
         left = min(xs) if xs else bb.x0
         ax.yaxis.set_label_coords((left - bb.x0 - gap * fig.dpi / 72) / bb.width, .5)
+SLICE = [0, 1.71, 3.44, 5.19, W]; BOT, TOP = .45, .46     # column slices and the room below and above a panel row, the same in both figures
+def crops(fig, plan):
+    """Saves single panels and full rows as separate PDF files for the themed figures of the survey. plan maps an old panel letter to (column, row bottom y, output stem, new letter), or a row key to (row bottom y, top, output stem, letter map)."""
+    import re as re_
+    fig.canvas.draw(); Hi = fig.get_figheight(); keep = [(t_, t_.get_text()) for t_ in fig.texts]
+    for k, v in plan.items():
+        if len(v) == 4 and isinstance(v[0], int):
+            col, y, stem, new = v; old = k
+            for t_, s_ in keep:
+                if s_.startswith(f"({old}) "): t_.set_text(f"({new}) " + s_[4:])
+            bb = transforms.Bbox.from_extents(SLICE[col], y - BOT, SLICE[col + 1], y + PH + TOP)
+        else:
+            y, top, stem, mp = v
+            for t_, s_ in keep:
+                m_ = re_.match(r"^\((\w)\) ", s_)
+                if m_ and m_.group(1) in mp: t_.set_text(f"({mp[m_.group(1)]}) " + s_[4:])
+            bb = transforms.Bbox.from_extents(0, y - BOT, W, top)
+        r_ = fig.canvas.get_renderer(); hid = []
+        for o in list(fig.texts) + list(fig.legends) + list(fig.axes):     # hide the neighbours whose centre lies outside this crop
+            e = o.get_window_extent(r_); cx, cy = (e.x0 + e.x1) / 2 / fig.dpi, (e.y0 + e.y1) / 2 / fig.dpi
+            if o.get_visible() and not (bb.x0 <= cx <= bb.x1 and bb.y0 <= cy <= bb.y1): o.set_visible(False); hid.append(o)
+        fig.savefig(f"{OUT}/{stem}.pdf", bbox_inches=bb, facecolor="white")
+        for o in hid: o.set_visible(True)
+        for t_, s_ in keep: t_.set_text(s_)
 def short_y(ax, n=4):
     """Compact tick labels, without the leading zero, so that the panels keep the same width."""
     ax.yaxis.set_major_locator(MaxNLocator(n)); ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: (f"{v:.3g}".replace("0.", ".", 1) if abs(v) < 1 and v != 0 else f"{v:.3g}").replace("-", "\u2212")))
@@ -61,7 +85,7 @@ def zoom(ax, ys, pad=.08):
     if v: a, b = min(v), max(v); d = (b - a) or 1; ax.set_ylim(a - pad * d, b + pad * d)
 # ======== figure A: quality and utility on tables, protocols and label noise
 T, C, Q = load("tables_summary.json"), load("case_tep.json"), load("results_rieth.json"); V = jsonl("results_vision.jsonl", "results_vision_fine.jsonl"); science = {}
-PH_B = PH; PH = PH_B; H = 5.02; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 3.72, 0.94; y2, y3 = 2.08, .34
+PH_B = PH; PH = PH_B; H = 5.65; fig = plt.figure(figsize=(W, H), facecolor="white"); ty, th = 4.34, 0.94; y2, y3 = 2.40, .46
 EX = .10; a = box(fig, .34, ty - EX, 1.56, th + EX); b = box(fig, 1.96, ty - EX, 1.56, th + EX); c = box(fig, 3.58, ty - EX, 1.46, th + EX); d = box(fig, 5.10, ty - EX, 1.78, th + EX)
 NORM = SymLogNorm(linthresh=2, linscale=1, vmin=-40, vmax=40, base=10); HMAP = plt.get_cmap("RdBu_r").copy(); HMAP.set_bad("#B9BFC5")
 def ink(v):
@@ -76,7 +100,27 @@ def cells(ax, M, xlabels, xticks, ylabels, size=6.6):
 def scale(fig, im, x, y, w, tk=(-40, -10, -2, 0, 2, 10, 40)):
     """The thin colour bar above a pair of heat maps, on the scale of the cells."""
     cax = box(fig, x, y, w, .055); tk = list(tk); cb = fig.colorbar(im, cax=cax, orientation="horizontal"); cb.set_ticks(tk, labels=[str(t).replace("-", "−") for t in tk]); cb.minorticks_off(); cb.ax.tick_params(labelsize=7.0, length=1.2, pad=.6); cb.ax.xaxis.set_ticks_position("top"); cb.outline.set_linewidth(.6); fig.text((x + w + .03) / W, (y + .03) / fig.get_figheight(), "pp", fontsize=7.2, va="center")
-def heat(ax, action, show):
+# (b) deletion of all records with errors against deletion of as many random records, per table and model: the paired t test over seeds and the
+# Benjamini-Yekutieli correction over the pairs of sec1_random in insights.py, fraction 1.0. Up triangle: the selective deletion is significantly better
+import insights as INS
+def random_delete_pairs(frac=1.0):
+    import pandas as pd
+    from scipy import stats as ss
+    X_ = pd.DataFrame([r for r in INS._jsonl(R, "results_random_delete.jsonl") if "score" in r])
+    if not len(X_) or "fraction" not in X_: return []
+    Gp = X_[(X_.fraction - frac).abs() < 1e-9].pivot_table(index=["ds", "model", "seed"], columns="action", values="score").dropna()
+    if not {"delete_records", "random_delete"} <= set(Gp.columns): return []
+    out = []
+    for (ds_, m_), g_ in Gp.groupby(level=[0, 1]):
+        dif = g_["delete_records"] - g_["random_delete"]; p = 1.0 if dif.abs().sum() == 0 else float(ss.ttest_rel(g_["delete_records"], g_["random_delete"]).pvalue)
+        out.append(dict(ds=ds_, model=m_, diff=float(dif.mean()), p=p if np.isfinite(p) else 1.0))
+    for r_, q_ in zip(out, INS.fdr_by([r_["p"] for r_ in out])): r_["q"] = float(q_)
+    return out
+RDP = random_delete_pairs(); science["random_delete_1.0"] = RDP; col_ = {m: j for j, (m, _) in enumerate(MOD)}; row_ = {ds: i for i, (ds, _) in enumerate(DS)}
+MARK_B = {(row_[r_["ds"]], col_[r_["model"]]): "^" if r_["diff"] > 0 else "v" for r_ in RDP if r_["q"] < INS.SIG and r_["ds"] in row_ and r_["model"] in col_}
+def heat(ax, action, show, marks=None):
+    """marks: {(row, column): triangle}, the number of a marked cell moves left of the triangle."""
+    marks = marks or {}
     M = np.full((len(DS), len(MOD)), np.nan)
     for i, (ds, _) in enumerate(DS):
         for j, (m, _) in enumerate(MOD):
@@ -86,9 +130,10 @@ def heat(ax, action, show):
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             v = M[i, j]
-            if np.isfinite(v) and abs(v) >= .5: ax.text(j, i, (f"{v:.0f}" if abs(v) >= 9.95 else f"{v:.1f}").replace("-", "−"), ha="center", va="center", fontsize=5.8, color=ink(v))
+            if np.isfinite(v) and abs(v) >= .5: ax.text(j - (.13 if (i, j) in marks else 0), i, (f"{v:.0f}" if abs(v) >= 9.95 else f"{v:.1f}").replace("-", "−"), ha="center", va="center", fontsize=5.8, color=ink(v))
+            if (i, j) in marks: ax.plot(j + .34, i, ls="none", marker=marks[(i, j)], ms=2.8, mfc="white", mec=DARK, mew=.35, zorder=6)
     return im
-im = heat(a, "repair_records", True); heat(b, "delete_records", False)
+im = heat(a, "repair_records", True); heat(b, "delete_records", False, MARK_B)
 scale(fig, im, .40, ty + th + .05, 2.90)
 # the table versions of (c) and (f), seed means of the task score and of the static score per table, model, operation and share
 RT = jsonl("results_real_tables.jsonl", "results_tables_fine.jsonl"); G = collections.defaultdict(dict); PS = collections.defaultdict(dict)
@@ -122,9 +167,9 @@ OFF = dict(linear=-.28, rf=-.14, gb=0, knn=.14, mlp=.28)
 I = T["interaction_list"]; rows_ = {n: i for i, (n, _) in enumerate(DS)}; science["interaction"] = I; d.axvline(0, color=DARK, lw=.7, zorder=1)
 for r in I:
     y_ = rows_[r["ds"]] + OFF[r["model"]]; v = 100 * r["inter"]; sig = r["q"] < .05
-    d.plot(v, y_, marker="o", ms=4.6, ls="none", fillstyle="left", mfc=DARK if sig else "white", mfcalt=MC[r["model"]][0], mec=DARK, mew=.45, zorder=5 if sig else 4, clip_on=False)     # left half significance, right half model class
+    mc_ = MC[r["model"]][0]; d.plot(v, y_, marker="o", ms=4.0, ls="none", mfc=mc_ if sig else "white", mec=mc_ if not sig else "white", mew=.8 if not sig else .3, zorder=5 if sig else 4, clip_on=False)     # colour for the model class, filled when significant after correction
 d.set_xscale("symlog", linthresh=2, linscale=.6); d.set_xlim(-60, 60); d.set_xticks([-30, -2, 0, 2, 30]); d.set_xticklabels(["−30", "−2", "0", "2", "30"]); d.minorticks_off(); d.set_ylim(len(DS) - .5, -.5); d.set_yticks(pos); frame(d, "x"); d.tick_params(labelleft=False)
-key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc=DARK, mfcalt="white", mec=DARK, mew=.45, label="Signif."), Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="left", mfc="white", mfcalt="white", mec=DARK, mew=.45, label="Not signif.")] + [Line2D([], [], ls="none", marker="o", ms=4.6, fillstyle="right", mfc=MC[m][0], mfcalt="white", mec=DARK, mew=.45, label=n) for m, n, _, _ in MODS], cols=4, size=5.8)
+key_over(fig, d, [Line2D([], [], ls="none", marker="o", ms=4.0, mfc=MC[m][0], mec="white", mew=.3, label=n) for m, n, _, _ in MODS] + [Line2D([], [], ls="none", marker="o", ms=4.0, mfc=GRAY, mec="white", mew=.3, label="Filled: signif.")], cols=3, size=5.8)
 titles(fig, [a, b, c, d], ["(a) Repair all errors", "(b) Delete dirty rows", "(c) Repair vs. delete", "(d) Joint minus single gains"])
 # second row
 e = cell(fig, 0, y2); f = cell(fig, 1, y2); j_ = box(fig, 3.98, y2, 1.08, PH); h = cell(fig, 3, y2)
@@ -133,10 +178,10 @@ LC = load("results_llm_cells.json") or {}; pos_e = np.arange(len(DS)); science["
 for y_, (ds, _) in zip(pos_e, DS):
     v_ = LC.get(ds)
     if not v_: continue
-    c_ = v_.get("cells_features", v_["cells"]); rp = 100 * c_["repaired"] / v_["rows_read"]; dm = 100 * c_["damaged"] / v_["rows_read"]; science["qwen_cells"][ds] = dict(repaired=rp, damaged=dm)
-    e.plot([rp, dm], [y_, y_], color=GRAY, lw=1.0, zorder=2); e.plot(rp, y_, ls="none", marker="o", ms=4.0, color=BLUE, mec="white", mew=.3, zorder=4); e.plot(dm, y_, ls="none", marker="X", ms=4.6, color=RED, mec="white", mew=.3, zorder=3)
-e.set_xscale("symlog", linthresh=1, linscale=.5); e.set_xlim(-.2, 9000); e.set_xticks([0, 1, 10, 100, 1000]); e.set_xticklabels(["0", "1", "10", "100", "1k"]); e.minorticks_off(); e.set_ylim(len(DS) - .5, -.5); e.set_yticks(pos_e); e.set_yticklabels([n for _, n in DS], fontsize=6.6); e.set_xlabel("Cells per 100 rows", labelpad=1.5); frame(e, "x")
-key_over(fig, e, [Line2D([], [], ls="none", marker="o", ms=4.0, color=BLUE, label="Repaired"), Line2D([], [], ls="none", marker="X", ms=4.4, color=RED, label="Damaged")], cols=2, size=6.4)
+    c_ = v_["cells"]; er = 100 * c_["wrong_before"] / v_["rows_read"]; rp = 100 * c_["repaired"] / v_["rows_read"]; dm = 100 * c_["damaged"] / v_["rows_read"]; science["qwen_cells"][ds] = dict(errors=er, repaired=rp, damaged=dm)     # all columns the model saw, the label column included
+    e.plot([rp, dm], [y_, y_], color=GRAY, lw=1.0, zorder=2); e.plot(er, y_, ls="none", marker="|", ms=6.0, mew=1.1, color=DARK, zorder=5); e.plot(rp, y_, ls="none", marker="o", ms=4.0, color=BLUE, mec="white", mew=.3, zorder=4); e.plot(dm, y_, ls="none", marker="X", ms=4.6, color=RED, mec="white", mew=.3, zorder=3)
+e.set_xscale("symlog", linthresh=1, linscale=.5); e.set_xlim(-.2, 14000); e.set_xticks([0, 1, 10, 100, 1000]); e.set_xticklabels(["0", "1", "10", "100", "1k"]); e.minorticks_off(); e.set_ylim(len(DS) - .5, -.5); e.set_yticks(pos_e); e.set_yticklabels([n for _, n in DS], fontsize=6.6); e.set_xlabel("Cells per 100 rows", labelpad=1.5); frame(e, "x")
+key_over(fig, e, [Line2D([], [], ls="none", marker="|", ms=5.0, mew=1.1, color=DARK, label="Errors"), Line2D([], [], ls="none", marker="o", ms=4.0, color=BLUE, label="Repaired"), Line2D([], [], ls="none", marker="X", ms=4.4, color=RED, label="Damaged")], cols=3, size=6.4)
 # (f) partial repair. For each table and model whose full repair gains at least 0.02, the gain at each share of repaired records as a fraction of the full gain, the median per model family, against the same fraction of the static score
 SH = [0.0] + [round(.1 * q, 1) for q in range(1, 11)]; science["share"] = dict(shares=SH); FR = collections.defaultdict(list); FS_ = []
 for ds, _ in DS:
@@ -150,7 +195,7 @@ fsm = list(np.median(FS_, axis=0)); science["share"]["static"] = fsm; f.plot(SH,
 for m, n, col, mk in MODS:
     if FR[m]: yy = list(np.median(FR[m], axis=0)); science["share"][n] = dict(gain_fraction=yy, pairs=len(FR[m])); line(f, SH, yy, col, mk, lw=1.5, z=4 if m == "gb" else 3)
 f.set_xlim(-.04, 1.04); f.set_ylim(-.06, 1.08); f.set_xticks([0, .5, 1]); f.set_xticklabels(["0", "50%", "100%"]); f.set_yticks([0, .5, 1]); f.set_yticklabels(["0", ".5", "1"]); f.set_xlabel("Dirty records repaired", labelpad=1.5); ylab(f, "Share of full gain"); frame(f)
-key_over(fig, f, [hl(col, mk, n, ms=3.0) for _, n, col, mk in MODS] + [hl(GRAY, None, "Static score", lw=1.2, ls=DASH)], cols=3, size=5.8)
+key_over(fig, f, [hl(col, mk, f"{n} ({len(FR[m])})", ms=3.0) for m, n, col, mk in MODS if FR[m]] + [hl(GRAY, None, "Static score", lw=1.2, ls=DASH)], cols=3, size=5.8)
 # (j) CleanML tables with their real errors. For each table and error type the gain of each cleaning method over the dirty version, averaged over model families and seeds, and the choice of the static rule and of the task test within each error type, for every model and seed
 CM = [r for r in jsonl("results_cleanml.jsonl") if "test" in r]; GC = collections.defaultdict(dict)
 for r in CM: GC[(r["ds"], r["error_type"], r["model"], r["seed"])][r["method"]] = r
@@ -170,6 +215,8 @@ for ds in sorted(CS):
     science["cleanml"][ds] = dict(worst=gm[lo_], worst_method=lo_[1:], best=gm[hi_], best_method=hi_[1:], static=mean(mean(v) for v in CS[ds].values()), task=mean(mean(v) for v in CT[ds].values()), versions=len(gm), error_types=len(CS[ds]))
 ROWS = sorted(science["cleanml"], key=lambda q: science["cleanml"][q]["best"] - science["cleanml"][q]["worst"], reverse=True); ys = np.arange(len(ROWS)); RC = [science["cleanml"][q] for q in ROWS]
 j_.barh(ys, [q["best"] - q["worst"] for q in RC], left=[q["worst"] for q in RC], height=.72, color=BLUE, alpha=.35, edgecolor=DARK, lw=.3, hatch="///", zorder=2)
+for y_, q in zip(ys, RC):
+    if q["versions"] == 1: j_.plot([q["best"]] * 2, [y_ - .4, y_ + .4], color=BLUE, lw=1.1, solid_capstyle="butt", zorder=4.5)     # one cleaning method, the range is a single value
 j_.plot([q["static"] for q in RC], ys, ls="none", marker="D", ms=2.8, color=ORANGE, mec="white", mew=.25, zorder=4); j_.plot([q["task"] for q in RC], ys, ls="none", marker="*", ms=5.0, color=RED, mec="white", mew=.25, zorder=5)
 j_.axvline(0, color=DARK, lw=.7, zorder=3); j_.set_xscale("symlog", linthresh=1, linscale=1); j_.set_xlim(-20, 9); j_.set_xticks([-10, -1, 0, 1, 5]); j_.set_xticklabels(["−10", "−1", "0", "1", "5"]); j_.minorticks_off(); j_.set_ylim(len(ROWS) - .5, -.5); j_.set_yticks(ys); j_.set_yticklabels(ROWS); j_.set_xlabel("Gain over dirty (pp)", labelpad=1.5); frame(j_, "x"); j_.tick_params(axis="y", labelsize=5.4, pad=1.2, length=1.2)
 key_over(fig, j_, [Patch(facecolor=BLUE, alpha=.35, hatch="///", edgecolor=DARK, label="Range"), Line2D([], [], ls="none", marker="D", ms=2.8, color=ORANGE, label="Static"), Line2D([], [], ls="none", marker="*", ms=4.6, color=RED, label="Task test")], cols=3, size=5.8, dx=-.15)
@@ -186,7 +233,7 @@ for n, v, col, ls in gaps: h.axhline(v, color=col, lw=1.2, ls=ls, zorder=4)
 science["protocol_vs_data"] = dict(changes=[t[0] for t in TB], gaps={n: v for n, v, _, _ in gaps})
 h.set_yscale("log"); h.set_ylim(.02, 110); h.set_yticks([.1, 1, 10]); h.set_yticklabels([".1", "1", "10"]); h.minorticks_off(); h.set_xlim(0, len(TB) + 1); h.set_xticks([1, 20, 40, len(TB)]); h.set_xticklabels(["1", "20", "40", str(len(TB))]); h.set_xlabel("Sorted pairs", labelpad=1.5); ylab(h, "Macro-F1 gap (pp)"); frame(h)
 key_over(fig, h, [Patch(facecolor=BLUE, label="Repair"), Patch(facecolor=ORANGE, label="Delete")] + [hl(col, None, n, lw=1.2, ls=ls) for n, _, col, ls in gaps], cols=3, size=5.8)
-titles(fig, [e, f, j_, h], ["(e) Qwen repair", "(f) Partial repair", "(g) Real errors, CleanML", "(h) Protocol vs. data"])
+titles(fig, [e, f, j_, h], ["(e) Qwen repair", "(f) Partial repair", "(g) CleanML tables", "(h) Protocol vs. data"])
 # third row
 j_, i_, k_, l_ = [cell(fig, q, y3) for q in range(4)]
 # (i) error rate of a table estimated from a detector and from labeled records, record level, tables with a true rate between 1 and 99 percent
@@ -207,28 +254,39 @@ j_.set_xscale("log"); j_.set_xticks([1, 10, 100]); j_.set_xticklabels(["1", "10"
 NZ = [("cifar10", "aggre_label", "Agg.", BLUE, "o"), ("cifar10", "random_label1", "Rand.", GREEN, "^"), ("cifar10", "worse_label", "Worst", ORANGE, "D"), ("cifar100", "noisy_label", "C100", RED, "*")]
 def acc(ds, nz, act, fr, arch="resnet18"): return mean(r["score"] for r in V if r["ds"] == ds and r.get("noise") == nz and r.get("action") == act and abs(r.get("f", -1) - fr) < 1e-9 and r["arch"] == arch)
 def clean(ds, arch="resnet18"): return mean(r["score"] for r in V if r["ds"] == ds and "noise" not in r and "coverage" not in r and "scale" not in r and r["arch"] == arch)
-hs = []; fr = [0, .25, .5, .75, 1]; science["noise"] = {}
+hs = []; science["noise"] = {}
+def shares(ds, nz, act, arch="resnet18", top=1.0):
+    """The shares of one operation that have runs, so that a share added later enters the line."""
+    return sorted({round(r["f"], 6) for r in V if r["ds"] == ds and r.get("noise") == nz and r.get("action") == act and r["arch"] == arch and 0 < r.get("f", -1) <= top})
 for ds, nz, n, col, mk in NZ:
-    k0 = acc(ds, nz, "keep", 0); yr = [0.0] + [100 * (acc(ds, nz, "repair", x) - k0) for x in fr[1:4]] + [100 * (clean(ds) - k0)]; yd = [0.0, 100 * (acc(ds, nz, "delete", .5) - k0), 100 * (acc(ds, nz, "delete", 1.0) - k0)]; science["noise"][n] = dict(keep=k0, repair=yr, delete=yd)
-    line(k_, fr, yr, col, mk, lw=1.8); k_.plot([0, .5, 1], yd, color=col, marker=mk, ms=3.6, lw=1.1, ls=DASH, mfc="white", mec=col, mew=.8, zorder=2); hs.append(hl(col, mk, n, ms=3.2))
-    v0 = acc(ds, nz, "keep", 0, "vgg11"); yv = [0.0] + [100 * (acc(ds, nz, "repair", x, "vgg11") - v0) for x in fr[1:4]] + [100 * (clean(ds, "vgg11") - v0)]; science["noise"][n + "/vgg"] = dict(keep=v0, repair=yv)
+    k0 = acc(ds, nz, "keep", 0); fr_r = [x for x in shares(ds, nz, "repair") if x < 1]; fr_d = shares(ds, nz, "delete")     # full repair is the clean label set
+    xr = [0.0] + fr_r + [1.0]; yr = [0.0] + [100 * (acc(ds, nz, "repair", x) - k0) for x in fr_r] + [100 * (clean(ds) - k0)]; xd = [0.0] + fr_d; yd = [0.0] + [100 * (acc(ds, nz, "delete", x) - k0) for x in fr_d]; science["noise"][n] = dict(keep=k0, repair_share=xr, repair=yr, delete_share=xd, delete=yd)
+    line(k_, xr, yr, col, mk, lw=1.8); k_.plot(xd, yd, color=col, marker=mk, ms=3.6, lw=1.1, ls=DASH, mfc="white", mec=col, mew=.8, zorder=2); hs.append(hl(col, mk, n, ms=3.2))
+    v0 = acc(ds, nz, "keep", 0, "vgg11"); fv = [x for x in shares(ds, nz, "repair", "vgg11") if x < 1]; yv = [0.0] + [100 * (acc(ds, nz, "repair", x, "vgg11") - v0) for x in fv] + [100 * (clean(ds, "vgg11") - v0)]; science["noise"][n + "/vgg"] = dict(keep=v0, repair_share=[0.0] + fv + [1.0], repair=yv)
 k_.set_xticks([0, .5, 1]); k_.set_xticklabels(["0", "50%", "100%"]); k_.set_xlabel("Label errors handled", labelpad=1.5); ylab(k_, "Accuracy gain (pp)"); frame(k_); short_y(k_); key_over(fig, k_, hs + [hl(DARK, None, "Repair", lw=1.8), hl(DARK, None, "Delete", lw=1.1, ls=DASH)], cols=3, size=6.0)
 # (l) coverage against scale on CIFAR-100 superclasses, two architectures
 def cv(k, fld, arch): return mean(r.get(fld) for r in V if r.get("coverage") == k and r["arch"] == arch)
-K = [4, 3, 2, 1]; sh = [.8, .6, .4, .2]; science["coverage"] = {}
+NSUB = 5; K = sorted({r["coverage"] for r in V if r.get("coverage") is not None}, reverse=True); sh = [k / NSUB for k in K]; science["coverage"] = {}     # five fine classes per superclass, all five is full coverage
 SC = sorted({r["scale"] for r in V if r.get("scale") is not None}, reverse=True)
 for arch, ls, hollow in (("resnet18", "-", False), ("vgg11", DASH, True)):
-    seen_ = [cv(k, "score_seen_sub", arch) for k in K]; un = [cv(k, "score_unseen_sub", arch) for k in K]; rnd = [mean(r["score"] for r in V if r.get("scale") == x and r["arch"] == arch) for x in SC]; science["coverage"][arch] = dict(share=sh, seen=seen_, unseen=un, scale=SC, random=rnd)
-    for xx, yy, col, mk, ms, lw in ((sh, seen_, BLUE, "o", 3.8, 1.6), (SC, rnd, GREEN, "s", 3.4, 1.6), (sh, un, RED, "*", 6.4, 1.9)):
+    seen_ = [cv(k, "score_seen_sub", arch) for k in K]; un = [cv(k, "score_unseen_sub", arch) for k in K]; all_ = [cv(k, "score", arch) for k in K]
+    xs_r = SC if 1.0 in SC or NSUB not in K else [1.0] + SC; rnd = [mean(r["score"] for r in V if r.get("scale") == x and r["arch"] == arch) if x != 1.0 or 1.0 in SC else cv(NSUB, "score", arch) for x in xs_r]     # the random line starts from the full training set
+    science["coverage"][arch] = dict(share=sh, seen=seen_, unseen=un, all=all_, scale=xs_r, random=rnd)
+    for xx, yy, col, mk, ms, lw in ((sh, seen_, BLUE, "o", 3.8, 1.6), (xs_r, rnd, GREEN, "s", 3.4, 1.6), (sh, all_, DARK, "D", 3.2, 1.4), (sh, un, RED, "*", 6.4, 1.9)):
         l_.plot(xx, yy, color=col, marker=mk, ms=ms if not hollow else 3.0, lw=lw if not hollow else 1.0, ls=ls, mec=col if hollow else "white", mfc="white" if hollow else col, mew=.7 if hollow else .25, zorder=4 if not hollow else 3)
-l_.invert_xaxis(); l_.set_xticks([.8, .6, .4, .2]); l_.set_xticklabels([".8", ".6", ".4", ".2"]); l_.set_xlabel("Kept share", labelpad=1.5); ylab(l_, "Accuracy"); l_.set_ylim(.2, 1); frame(l_)
-key_over(fig, l_, [hl(BLUE, "o", "Seen"), hl(RED, "*", "Unseen", ms=5.0), hl(GREEN, "s", "Random")], cols=3, size=6.4, dx=-.02)
+l_.set_xlim(1.06, .04); l_.set_xticks([1, .8, .6, .4, .2]); l_.set_xticklabels(["1", ".8", ".6", ".4", ".2"]); l_.set_xlabel("Kept share", labelpad=1.5); ylab(l_, "Accuracy"); l_.set_ylim(.2, 1); frame(l_)
+key_over(fig, l_, [hl(BLUE, "o", "Seen"), hl(RED, "*", "Unseen", ms=5.0), hl(DARK, "D", "All", ms=3.0), hl(GREEN, "s", "Random")], cols=2, size=6.4, dx=-.02)
 titles(fig, [j_, i_, k_, l_], ["(i) Independent runs", "(j) Error-rate estimates", "(k) Real label noise", "(l) Coverage, scale"]); label_room(fig)
-snug(fig); print("A", save(fig, f"{OUT}/results_a")); json.dump(science, open(f"{OUT}/figure_data_a.json", "w"), indent=0, default=float)
+snug(fig); crops(fig, {"row1": (ty - EX, H, "res_ops", dict(a="a", b="b", c="c", d="d")), "e": (0, y2, "res_protocol_d", "d"), "f": (1, y2, "res_version_b", "b"), "g": (2, y2, "res_version_c", "c"), "h": (3, y2, "res_protocol_a", "a"), "i": (0, y3, "res_protocol_b", "b"), "j": (1, y3, "res_protocol_c", "c"), "k": (2, y3, "res_version_d", "d"), "l": (3, y3, "res_time_a", "a")}); print("A", save(fig, f"{OUT}/results_a")); json.dump(science, open(f"{OUT}/figure_data_a.json", "w"), indent=0, default=float)
 # ======== figure B: choosing a version and large real data
 fine = jsonl("results_decision_fine.jsonl"); D = jsonl("results_decision.jsonl"); D = fine if len(fine) >= len(D) else D
 X, X2, X3, CO = load("results_taxi.json"), load("results_taxi_100k.json"), load("results_taxi_sizes.json"), jsonl("results_corpus.jsonl"); sci2 = {}
-PH = PH_B; H = 3.47; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.12, .34
+def taxi_key(r): return (r["train_month"], r["arm"], r.get("requested_size", r.get("size")), r["seed"])
+XM = load("results_taxi_monthly.json")     # training months run one by one, added to the runs of results_taxi.json without repeating a run
+if XM and X:
+    have = {taxi_key(r) for r in X["runs"]}; X["runs"] += [r for r in XM.get("runs", []) if taxi_key(r) not in have]
+    for k, v in XM.get("months", {}).items(): X["months"].setdefault(k, v)
+PH = PH_B; H = 3.92; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.40, .46
 a, d, e, f = [cell(fig, q, y1) for q in range(4)]
 D = [r for r in D if "test" in r]; SZ_ = sorted({int(x) for r in D for x in r["val"] if int(x) <= 1600}); GD = collections.defaultdict(dict)
 for r in D: GD[(r["ds"], r["model"], r["seed"])][(r["action"], r["f"])] = r
@@ -246,31 +304,38 @@ def replay(group, model=None):
 CLS = {r["ds"] for r in D if r.get("task") == "cls"}; REG = {r["ds"] for r in D if r.get("task") == "reg"}
 for ax, grp, lab in ((a, CLS, "cls"),):
     o = replay(grp); s0 = 100 * mean(o["static"]); b0 = 100 * mean(o["oracle"]) - s0; yy = [100 * mean(o[n]) - s0 for n in SZ_]; sci2["decision_" + lab] = dict(n=SZ_, gain_over_static=yy, static=s0, oracle_over_static=b0, cases=len(o["static"]), models={})
-    ax.axhline(0, color=DARK, ls=DASH, lw=1.1, zorder=2); ax.axhline(b0, color=DARK, ls=":", lw=1.0, zorder=2)
-    for m, n, col, mk in MODS:
-        om = replay(grp, m); sm = 100 * mean(om["static"]); ym = [100 * mean(om[n_]) - sm for n_ in SZ_]; sci2["decision_" + lab]["models"][n] = dict(gain_over_static=ym, static=sm, oracle_over_static=100 * mean(om["oracle"]) - sm); line(ax, SZ_, ym, col, mk, lw=1.1, ms=4.6 if mk == "*" else 2.6)
+    ax.axhline(0, color=DARK, ls=DASH, lw=1.1, zorder=2)
+    BMS = []     # the best version in hindsight of each family, drawn below as a short bar of its colour right of the curves
+    for q_, (m, n, col, mk) in enumerate(MODS):
+        om = replay(grp, m); sm = 100 * mean(om["static"]); ym = [100 * mean(om[n_]) - sm for n_ in SZ_]; bm = 100 * mean(om["oracle"]) - sm; sci2["decision_" + lab]["models"][n] = dict(gain_over_static=ym, static=sm, oracle_over_static=bm); line(ax, SZ_, ym, col, mk, lw=1.1, ms=4.6 if mk == "*" else 2.6)
+        BMS.append((bm, col))
     line(ax, SZ_, yy, DARK, None, lw=2.0, z=5)
-    ax.set_xscale("log"); ax.set_xticks([10, 100, 1000] if SZ_[0] < 25 else [25, 100, 400, 1600]); ax.set_xticklabels(["10", "100", "1000"] if SZ_[0] < 25 else ["25", "100", "400", "1600"]); ax.minorticks_off(); ax.set_xlabel("Validation records", labelpad=1.5); ylab(ax, "Gain over static (pp)"); frame(ax)
+    ax.set_xscale("log"); XB, BW = SZ_[-1] * 1.35, 1.32; ax.set_xlim(SZ_[0] / 1.25, XB * BW ** 2 * 1.12); ax.set_xticks([10, 100, 1000] if SZ_[0] < 25 else [25, 100, 400, 1600]); ax.set_xticklabels(["10", "100", "1000"] if SZ_[0] < 25 else ["25", "100", "400", "1600"]); ax.minorticks_off(); ax.set_xlabel("Validation records", labelpad=1.5); ylab(ax, "Gain over static (pp)"); frame(ax)
     ax.set_yscale("symlog", linthresh=1, linscale=1.3); ax.set_ylim(-3.2, 16); ax.set_yticks([-2, 0, 1, 10]); ax.set_yticklabels(["−2", "0", "1", "10"]); ax.minorticks_off()
+    slots = []     # bars closer than 2.5 points in height go to a second slot on the right
+    for bm, col in sorted(BMS):
+        yp = ax.transData.transform((1, bm))[1] * 72 / fig.dpi; q_ = next(c_ for c_ in range(len(BMS)) if all(abs(yp - y0) > 2.5 for y0, c0 in slots if c0 == c_)); slots.append((yp, q_))
+        ax.plot([XB * BW ** q_, XB * BW ** q_ * BW / 1.06], [bm, bm], color=col, lw=2.0, solid_capstyle="butt", zorder=4, clip_on=False)
     # regression tables on the same axis, the mean and the family that carries it
     o = replay(REG); sr = 100 * mean(o["static"]); yr = [100 * mean(o[n_]) - sr for n_ in SZ_]; om = replay(REG, "mlp"); sm = 100 * mean(om["static"]); ym = [100 * mean(om[n_]) - sm for n_ in SZ_]; sci2["decision_reg"] = dict(n=SZ_, gain_over_static=yr, mlp=ym, static=sr, cases=len(o["static"]))
     ax.plot(SZ_, yr, color=DARK, lw=1.3, ls=DASH, zorder=4); ax.plot(SZ_, ym, color=ORANGE, lw=1.0, ls=DASH, zorder=3)
-    key_over(fig, ax, [hl(col, mk, n, ms=3.0) for _, n, col, mk in MODS] + [hl(DARK, None, "Mean", lw=1.8), hl(DARK, None, "Reg.", lw=1.2, ls=DASH), hl(DARK, None, "Best", lw=1.0, ls=":")], cols=4, size=5.4)
+    key_over(fig, ax, [hl(col, mk, n, ms=3.0) for _, n, col, mk in MODS] + [hl(DARK, None, "Mean", lw=1.8), hl(DARK, None, "Reg.", lw=1.2, ls=DASH), Line2D([], [], ls="none", marker="_", ms=5.0, mew=1.6, color=DARK, label="Best")], cols=4, size=5.4)
 # (c) taxi, rule violations per month, every rule
 keys = sorted(X["months"]); idx = {k: i for i, k in enumerate(keys)}; xm = [2019 + i / 12 for i in range(len(keys))]; RU = [("r_location", "Location", BLUE), ("r_passengers", "Passengers", ORANGE), ("r_ratecode", "Rate code", GREEN), ("r_distance", "Distance", PURPLE), ("r_duration", "Duration", TEAL), ("r_fare", "Fare", BROWN), ("r_speed", "Speed", PINK), ("any_rule", "Any rule", RED)]; sci2["rules"] = {}
 # (b) taxi, mean R2 on two fixed later test periods against the training month, raw records, mean over seeds. A training month enters a period only when it precedes every test month of the period
-TMS = sorted({r["train_month"] for r in X["runs"] if r["arm"] == "raw"}); sci2["taxi_by_train_month"] = {}; ym_ = lambda k: int(k[:4]) + (int(k[5:7]) - 1) / 12; ALLB = []
+SZB = collections.Counter(r.get("requested_size", r.get("size")) for r in X["runs"]).most_common(1)[0][0]; XB_ = [r for r in X["runs"] if r["arm"] == "raw" and r.get("requested_size", r.get("size")) == SZB]     # one training size, every training month that has runs
+TMS = sorted({r["train_month"] for r in XB_}); MSB = 1.6 if len(TMS) > 24 else 2.6; sci2["taxi_by_train_month"] = {}; ym_ = lambda k: int(k[:4]) + (int(k[5:7]) - 1) / 12; ALLB = []
 YRS = [2022, 2023, 2024]; CY = [plt.cm.viridis(.75 - .65 * q / (len(YRS) - 1)) for q in range(len(YRS))]; HY = []
 for Y, col in zip(YRS, CY):     # one line per test year, the test period is February to December of that year, training months up to its January
     test_ = [f"{Y}-{q:02d}" for q in range(2, 13)]; xx, yy = [], []
     for tm in TMS:
-        v = [mean(r["r2"][k] for k in test_) for r in X["runs"] if r["arm"] == "raw" and r["train_month"] == tm and all(k in r["r2"] and k > tm for k in test_)]
+        v = [mean(r["r2"][k] for k in test_) for r in XB_ if r["train_month"] == tm and all(k in r["r2"] and k > tm for k in test_)]
         if v: xx.append(ym_(tm)); yy.append(mean(v))
     if not xx: continue
-    sci2["taxi_by_train_month"][f"Test {Y}"] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; d.plot(xx, yy, color=col, lw=1.2, marker="o", ms=2.6, mec=col, mfc=col, zorder=3)
+    sci2["taxi_by_train_month"][f"Test {Y}"] = dict(train=[t for t in TMS if ym_(t) in xx], test=test_, r2=yy); ALLB += yy; d.plot(xx, yy, color=col, lw=1.2, marker="o", ms=MSB, mec=col, mfc=col, zorder=3)
     HY.append(hl(col, "o", str(Y), ms=2.8))
 d.axvline(ym_("2020-03"), color=RED, ls=DASH, lw=1.0, zorder=1); d.text(ym_("2020-03") - .16, .04, "2020-03", transform=d.get_xaxis_transform(), fontsize=6.4, color=RED, ha="right", va="bottom")
-d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=6.0)
+d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=5.6)
 key_over(fig, d, HY, cols=3, size=6.0)
 # second row
 g, h, k_, l_ = [cell(fig, q, y2) for q in range(4)]
@@ -283,30 +348,39 @@ for m_, x_, y_ in zip(ks_[1:], tx_, ty_):
     if m_ in ("2020-04", "2024-03"): e.annotate(m_, (x_, y_), xytext=(2, -5) if y_ > .2 else (9, 28), textcoords="offset points", ha="right", va="top" if y_ > .2 else "bottom", fontsize=6.0, color=DARK, arrowprops=None if y_ > .2 else dict(arrowstyle="-", lw=.5, color=DARK, shrinkA=1, shrinkB=2.5))
 e.axvline(2, color=DARK, ls=DASH, lw=.9, zorder=2); e.axhline(.05, color=DARK, ls=DASH, lw=.9, zorder=2); e.set_xscale("symlog", linthresh=1, linscale=.6); e.set_xticks([0, 1, 2, 5, 10]); e.set_xticklabels(["0", "1", "2", "5", "10"]); e.set_xlim(-.3, 16); e.minorticks_off(); e.set_xlabel("Violation change (pp)", labelpad=1.5); ylab(e, "R\u00b2 change"); frame(e); short_y(e)
 key_over(fig, e, [Line2D([], [], ls="none", marker="o", ms=4.0, color=RED, label="Above 2 pp"), Line2D([], [], ls="none", marker="o", ms=3.0, color=BLUE, label="Other months")], cols=2, size=6.4)
-# (f) taxi, R2 against the months after training for three training sizes, raw and rule-filtered, the same six training months at every horizon
-SZT = [(10000, "10k", RED, "*"), (100000, "100k", BLUE, "o"), (3000000, "3M", GREEN, "^")]; RUNS = []; sci2["taxi_size"] = {}; ALLY = []
+# (f) taxi, mean R2 on February to December 2023 against the number of training records, one line per training month, raw records and rule-filtered
+# records, every training size that has runs, mean over seeds. A training month enters when it precedes the test period and has runs at two sizes or more
+RUNS, seen_ = [], set(); sci2["taxi_size"] = {}; ALLY = []
 for src in (X3, X2, X):
-    if src: RUNS += src["runs"]
-HZ = [1, 3, 6, 9, 12, 18, 24, 30, 36]; TM = ("2019-01", "2019-07", "2020-01", "2020-07", "2021-01", "2021-07")
-for s_, n, col, mk in SZT:
+    for r in (src or {}).get("runs", []):
+        if taxi_key(r) not in seen_: seen_.add(taxi_key(r)); RUNS.append(r)
+TEST23 = [f"2023-{q:02d}" for q in range(2, 13)]; TMZ = [("2019-07", BLUE, "o"), ("2020-07", RED, "*"), ("2021-07", ORANGE, "D"), ("2023-01", GREEN, "^")]; HZ_ = []
+def size_of(r): return r.get("requested_size", r.get("size"))
+for tm, col, mk in TMZ:
+    if tm >= TEST23[0] or len({size_of(r) for r in RUNS if r["train_month"] == tm and r["arm"] == "raw"}) < 2: continue
     for arm, ls, lw_, mk_ in (("raw", "-", 1.5, mk), ("rule_filtered", DASH, 1.0, None)):
-        xx, yy = [], []
-        for hz_ in HZ:
-            v = [r["r2"].get(keys[idx[r["train_month"]] + hz_]) for r in RUNS if r.get("requested_size", r.get("size")) == s_ and r["arm"] == arm and r["train_month"] in TM and idx[r["train_month"]] + hz_ < len(keys)]; v = [q for q in v if q is not None]
-            if v: xx.append(hz_); yy.append(st.mean(v))
-        sci2["taxi_size"][f"{n}/{arm}"] = dict(months=xx, r2=yy); ALLY += yy; line(f, xx, yy, col, mk_, lw=lw_, ls=ls)
-f.set_xticks([1, 12, 24, 36]); f.set_xticklabels(["1", "12", "24", "36"]); f.set_xlabel("Months after training", labelpad=1.5); ylab(f, "R\u00b2"); frame(f); zoom(f, ALLY); short_y(f); key_over(fig, f, [hl(col, mk, n, ms=3.0) for _, n, col, mk in SZT] + [hl(DARK, None, "Raw", lw=1.3), hl(DARK, None, "Rules", lw=1.0, ls=DASH)], cols=3, size=5.8)
+        by_ = collections.defaultdict(list)
+        for r in RUNS:
+            if r["train_month"] == tm and r["arm"] == arm and all(k in r["r2"] for k in TEST23): by_[size_of(r)].append(st.mean(r["r2"][k] for k in TEST23))
+        xx = sorted(by_); yy = [st.mean(by_[x]) for x in xx]
+        if xx: sci2["taxi_size"][f"{tm}/{arm}"] = dict(size=xx, r2=yy, test=TEST23); ALLY += yy; line(f, xx, yy, col, mk_, lw=lw_, ls=ls)
+    HZ_.append(hl(col, mk, tm, ms=3.0))
+f.set_xscale("log"); f.set_xticks([1e4, 1e5, 1e6]); f.set_xticklabels(["10k", "100k", "1M"]); f.minorticks_off(); f.set_xlabel("Training records", labelpad=1.5); ylab(f, "Mean R\u00b2"); frame(f); zoom(f, ALLY); short_y(f); key_over(fig, f, HZ_ + [hl(DARK, None, "Raw", lw=1.3), hl(DARK, None, "Rules", lw=1.0, ls=DASH)], cols=3, size=5.8)
 # (g) C4 corpus, filters against random selection on three references, in hundredths of the per-token loss, each arm against the random arm of the same seed
 BU = 30_000_000; REFS = [("nll_c4", "C4", BLUE, "///"), ("nll_c4_unique", "Unique", GREEN, "---"), ("nll_wiki", "Wiki", ORANGE, "\\\\\\")]
-def delta(arm, size, budget, fld):
-    runs = {r["seed"]: r[fld] for r in CO if r.get("arm") == "random" and r.get("size") == size and r.get("budget") == budget and fld in r}; v = [100 * (r[fld] - runs[r["seed"]]) for r in CO if r.get("arm") == arm and r.get("size") == size and r.get("budget") == budget and r.get("seed") in runs and fld in r]; return mean(v)
+def paired(arm, size, budget, fld):
+    """Each run of an arm against the random arm of the same seed, in hundredths of the per-token loss."""
+    runs = {r["seed"]: r[fld] for r in CO if r.get("arm") == "random" and r.get("size") == size and r.get("budget") == budget and fld in r}; return [100 * (r[fld] - runs[r["seed"]]) for r in CO if r.get("arm") == arm and r.get("size") == size and r.get("budget") == budget and r.get("seed") in runs and fld in r]
+def delta(arm, size, budget, fld): return mean(paired(arm, size, budget, fld))
+def delta_sd(arm, size, budget, fld):
+    v = [q for q in paired(arm, size, budget, fld) if np.isfinite(q)]; return float(np.std(v, ddof=1)) if len(v) > 1 else 0.0
 ARM = [(a_, n) for a_, n in [("ppl_low", "Low PPL"), ("ppl_mid", "Mid PPL"), ("ppl_high", "High PPL"), ("rule", "Rules"), ("dedup", "Dedup"), ("rule_dedup", "Both"), ("llm_high", "Qwen high"), ("llm_mid", "Qwen mid")] if np.isfinite(delta(a_, "M", BU, "nll_c4"))]
 g.remove(); g = box(fig, XS[0] + .30, y2, .93, PH); pos = np.arange(len(ARM)); sci2["corpus"] = {}
 for off, (fld, n, col, hat) in zip((-.26, 0, .26), REFS):
-    vals = [delta(a_, "M", BU, fld) for a_, _ in ARM]; sci2["corpus"][n] = vals; g.barh(pos + off, vals, height=.25, color=col, edgecolor=DARK, lw=.25, hatch=hat, zorder=3)
-g.axvline(0, color=DARK, lw=.7); g.set_ylim(len(ARM) - .5, -.5); g.set_yticks(pos); g.set_yticklabels([n for _, n in ARM], fontsize=6.4); GAP = "Loss gap (\u00d710\u207b\u00b2)"; g.set_xlabel(GAP, labelpad=1.5); frame(g, "x"); key_over(fig, g, [Patch(facecolor=col, hatch=hat, edgecolor=DARK, label=n) for _, n, col, hat in REFS], cols=3, size=5.8, dx=-.15)
+    vals = [delta(a_, "M", BU, fld) for a_, _ in ARM]; sd_ = [delta_sd(a_, "M", BU, fld) for a_, _ in ARM]; sci2["corpus"][n] = vals; sci2["corpus"][n + "/sd"] = sd_; g.barh(pos + off, vals, height=.25, color=col, edgecolor=DARK, lw=.25, hatch=hat, zorder=3, xerr=sd_, error_kw=dict(lw=.5, capsize=1.2, capthick=.5, ecolor=DARK, zorder=4))
+g.axvline(0, color=DARK, lw=.7); g.set_ylim(len(ARM) - .5, -.5); g.set_yticks(pos); g.set_yticklabels([n for _, n in ARM], fontsize=6.4); GAP = "Loss \u2212 random (\u00d710\u207b\u00b2)"; g.set_xlabel(GAP, labelpad=1.5); frame(g, "x"); key_over(fig, g, [Patch(facecolor=col, hatch=hat, edgecolor=DARK, label=n) for _, n, col, hat in REFS], cols=3, size=5.8, dx=-.15)
 # (h, i) C4 corpus, filter effect by model size and by token budget, web text solid and Wikipedia dashed with hollow markers, so that a budget with one point already shows
-LN = [("ppl_low", "Low PPL", RED, "*"), ("ppl_high", "High PPL", GRAY, "v"), ("rule_dedup", "Both", PURPLE, "s")]
+LN = [("ppl_low", "Low PPL", RED, "*"), ("ppl_high", "High PPL", GRAY, "v"), ("rule_dedup", "Both", PURPLE, "s"), ("llm_high", "Qwen high", BLUE, "o")]
 SIZES_ = ["XS", "T", "S", "SM", "MS", "M", "ML", "L"]
 def versus(ax, axis, name):
     sci2[name] = {}; ally = [0.0]
@@ -323,8 +397,8 @@ def versus(ax, axis, name):
             sci2[name][f"{n}/{fld}"] = dict(x=xx, delta=yy); ally += yy; ax.plot(xx, yy, color=col, marker=mk, ms=(5.6 if mk == "*" else 3.4) if not hollow else (4.6 if mk == "*" else 3.0), lw=lw_, ls=ls, mec=col if hollow else "white", mfc="white" if hollow else col, mew=.7 if hollow else .25, zorder=4 if not hollow else 3)
     ax.axhline(0, color=DARK, lw=.7, zorder=1); ax.set_xscale("log"); ax.minorticks_off(); ylab(ax, GAP); frame(ax); zoom(ax, ally); short_y(ax)
 NK = [hl(col, mk, n, ms=3.0) for _, n, col, mk in LN] + [hl(DARK, None, "C4", lw=1.3), hl(DARK, None, "Wiki", lw=1.0, ls=DASH), hl(DARK, None, "Random", lw=.7)]
-versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); key_over(fig, h, NK, cols=3, size=5.6)
-titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 by train month", "(c) Violations and R\u00b2", "(d) Training size, time"])
+versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); key_over(fig, h, NK, cols=4, size=5.6)
+titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 by train month", "(c) Violations and R\u00b2", "(d) Training size"])
 # third row
 # (k) published synthetic images, share of synthetic images in the training set, replacing real images or added to them, each run against the real-only run of the same seed
 SY = jsonl("results_synth.jsonl"); GENS = [("edm", "EDM", RED, "*"), ("ddpm", "DDPM", BLUE, "o"), ("cifake", "CIFAKE", ORANGE, "D")]; sci2["synthetic"] = {}
@@ -338,8 +412,10 @@ for g_, n, col, mk in GENS:
         byshare = collections.defaultdict(list)
         for r in rr:
             if "add" in r: byshare[round(r["synthetic_share"], 3)].append(r)
-        xx = sorted(byshare); yy = [over_real(byshare[x]) for x in xx]; sci2["synthetic"][n + "/add"] = dict(share=xx, gain=yy); line(k_, xx, yy, col, None, lw=1.1, ls=DASH)
-k_.axhline(0, color=DARK, lw=.7, ls=":", zorder=1); k_.set_yscale("symlog", linthresh=1, linscale=1); k_.set_xticks([0, .5, 1]); k_.set_xticklabels(["0", ".5", "1"]); k_.set_xlabel("Synthetic share", labelpad=1.5); ylab(k_, "Accuracy gain (pp)"); frame(k_); k_.set_ylim(-60, 3); k_.set_yticks([-30, -5, -1, 0, 1]); k_.set_yticklabels(["−30", "−5", "−1", "0", "1"]); k_.tick_params(axis="y", labelsize=7.2); k_.minorticks_off(); key_over(fig, k_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in GENS] + [hl(DARK, None, "Real", lw=.9, ls=":")], cols=4, size=5.8)
+        xx = sorted(byshare); yy = [over_real(byshare[x]) for x in xx]; sci2["synthetic"][n + "/add"] = dict(share=xx, gain=yy, add=sorted({r["add"] for r in rr if "add" in r})); k_.plot(xx, yy, color=col, marker=mk, ms=4.6 if mk == "*" else 3.0, lw=1.1, ls=DASH, mfc="white", mec=col, mew=.7, zorder=3)     # every added count that has runs
+k_.axhline(0, color=DARK, lw=.7, ls=":", zorder=1); k_.set_xticks([0, .5, 1]); k_.set_xticklabels(["0", ".5", "1"]); k_.set_xlabel("Synthetic share", labelpad=1.5); ylab(k_, "Accuracy vs. real only (pp)"); frame(k_); k_.set_ylim(-6.5, 2.5); k_.set_yticks([-6, -4, -2, 0, 2]); k_.set_yticklabels(["\u22126", "\u22124", "\u22122", "0", "2"]); cf = sci2["synthetic"].get("CIFAKE/replace")
+if cf: k_.annotate(f"CIFAKE to \u2212{abs(cf['gain'][-1]):.0f}", xy=(cf["share"][-1], -6.5), xytext=(.52, -5.6), fontsize=5.8, color=ORANGE, arrowprops=dict(arrowstyle="->", color=ORANGE, lw=.7))     # the replacement by CIFAKE leaves the axis, its end value is written
+key_over(fig, k_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in GENS] + [hl(DARK, None, "Real", lw=.9, ls=":")], cols=4, size=5.8)
 # (l) native image-text pools, kept fraction by each filter, retrieval on clean COCO pairs, against the random arm at the same fraction and seed
 DC = jsonl("results_datacomp.jsonl"); MF = jsonl("results_mirflickr.jsonl"); FILT = [("sim_top", "Top CLIP", RED, "*"), ("sim_mid", "Mid CLIP", BLUE, "o"), ("sim_bottom", "Low CLIP", GRAY, "v"), ("text_rule", "Text rule", ORANGE, "D"), ("dedup", "Dedup", GREEN, "^")]; sci2["image_text"] = {}
 for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICKR", DASH, 1.0, False)):
@@ -349,4 +425,4 @@ for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICK
         if fs: yy = [mean(100 * (r["test_r5"] - rnd[(x, r["seed"])]) for r in rr if r["frac"] == x) for x in fs]; sci2["image_text"][f"{tag}/{n}"] = dict(frac=fs, gain=yy); line(l_, fs, yy, col, mk if mkon else None, lw=lw_, ls=ls)
 l_.axhline(0, color=DARK, lw=.7, zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(DARK, None, "Random", lw=.7)], cols=3, size=5.4, dx=-.04)
 titles(fig, [g, h, k_, l_], ["(e) Filters on C4", "(f) Filters, model size", "(g) Synthetic images", "(h) Image-text filters"]); label_room(fig)
-snug(fig); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
+snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "row2": (y2, y2 + PH + TOP, "res_newdata", dict(e="a", f="b", g="c", h="d"))}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)

@@ -270,7 +270,7 @@ python analysis/summaries.py results
 python analysis/make_numbers.py results                 # 正文中的全部数字，输出 JSON
 python analysis/print_tables.py                         # 按数据集输出的表格
 python analysis/print_tables.py --latex                 # 综述表 8 和表 9 的 LaTeX
-python figures/plot_results.py results figures/plots    # results_a 是图 6，results_b 是图 5
+python figures/plot_results.py results figures/plots    # 单个子图 res_*.pdf 组成图 5 到图 9
 python native/audit_native.py results                   # 原生实验的完成情况与作业清单的比较
 python analysis/stored_runs.py --update docs/parameters.md
 ```
@@ -288,19 +288,19 @@ python analysis/stored_runs.py --update docs/parameters.md
 | 图 3，分级测评框架 | `docs/framework_zh.md` | `hqd_assess/claim.py`，`hqd_assess/scoring.py` | 依据框架绘制 |
 | 图 4，测评流程和各组实验 | `docs/framework_zh.md`，`docs/parameters.md` | `hqd_assess/` | 依据框架绘制 |
 | 图 5(a)，版本选择 | `results/results_decision.jsonl`，`results/results_decision_fine.jsonl` | `study/run_decision.py`，`study/run_decision_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 5(b), (c)，$R^2$ 随训练月份的变化和规则违反率 | `results/results_taxi.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 5(d)，训练规模和时间 | `results/results_taxi.json`，`results/results_taxi_100k.json`，`results/results_taxi_sizes.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 5(e), (f)，C4 上的筛选和模型规模 | `results/results_corpus.jsonl` | `corpus/run_corpus.py`，`figures/plot_results.py` | 网页语料和 DCLM，数字、表和图 |
-| 图 5(g)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
-| 图 5(h)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
+| 图 8(b), (c)，$R^2$ 随训练月份的变化和规则违反率 | `results/results_taxi.json`，`results/results_taxi_monthly.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 8(d)，训练规模和时间 | `results/results_taxi.json`，`results/results_taxi_100k.json`，`results/results_taxi_sizes.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 9(a), (b)，C4 上的筛选和模型规模 | `results/results_corpus.jsonl` | `corpus/run_corpus.py`，`figures/plot_results.py` | 网页语料和 DCLM，数字、表和图 |
+| 图 9(c)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
+| 图 9(d)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
 | 图 6(a) to (d)，增益、沿修复路径和删除路径的 Spearman 相关、联合修复和单项修复 | `results/tables_summary.json`，`results/results_real_tables.jsonl` | `study/run_real_tables.py`，`analysis/tables_summary.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 6(e)，Qwen 修复和破坏的单元格 | `results/results_llm_cells.json`，`results/results_llm_tables.jsonl` | `llm/repair_tables.py`，`llm/score_tables.py`，`figures/plot_results.py` | [llm/README.md](llm/README.md)，数字、表和图 |
-| 图 6(f)，部分修复增益占全部修复增益的比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 6(g)，CleanML 表上的清洗方法 | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`，`native/run_cleanml.py`，`figures/plot_results.py` | CleanML 表，数字、表和图 |
-| 图 6(h)，评测协议和数据错误 | `results/tables_summary.json`，`results/case_tep.json` | `case_tep/run_case.py`，`figures/plot_results.py` | 经典 TEP，数字、表和图 |
-| 图 6(i)，独立运行数 | `results/results_rieth.json`，`results/results_rieth_models.jsonl` | `big/run_rieth.py`，`big/run_rieth_models.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 6(j)，错误率估计和区间 | `results/results_detectors.jsonl`，`results/results_finite_population.jsonl` | `study/run_detectors.py`，`analysis/validate_detector_intervals.py`，`figures/plot_results.py` | 同样的表上的检测器，数字、表和图 |
-| 图 6(k), (l)，标签噪声、覆盖和规模 | `results/results_vision.jsonl`，`results/results_vision_fine.jsonl` | `study/run_vision.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
+| 图 7(d)，Qwen 修复和破坏的单元格 | `results/results_llm_cells.json`，`results/results_llm_tables.jsonl` | `llm/repair_tables.py`，`llm/score_tables.py`，`figures/plot_results.py` | [llm/README.md](llm/README.md)，数字、表和图 |
+| 图 5(b)，部分修复增益占全部修复增益的比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 5(c)，CleanML 表上的清洗方法 | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`，`native/run_cleanml.py`，`figures/plot_results.py` | CleanML 表，数字、表和图 |
+| 图 7(a)，评测协议和数据错误 | `results/tables_summary.json`，`results/case_tep.json` | `case_tep/run_case.py`，`figures/plot_results.py` | 经典 TEP，数字、表和图 |
+| 图 7(b)，独立运行数 | `results/results_rieth.json`，`results/results_rieth_models.jsonl` | `big/run_rieth.py`，`big/run_rieth_models.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 7(c)，错误率估计和区间 | `results/results_detectors.jsonl`，`results/results_finite_population.jsonl` | `study/run_detectors.py`，`analysis/validate_detector_intervals.py`，`figures/plot_results.py` | 同样的表上的检测器，数字、表和图 |
+| 图 5(d), 图 8(a)，标签噪声、覆盖和规模 | `results/results_vision.jsonl`，`results/results_vision_fine.jsonl` | `study/run_vision.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
 | 表 1，符号表 | `docs/framework_zh.md` | | |
 | 表 2，与已有综述的比较 | | | 综述引用的文献 |
 | 表 3，标准比较 | `docs/standards.md` | | |

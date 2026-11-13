@@ -270,7 +270,7 @@ python analysis/summaries.py results
 python analysis/make_numbers.py results                 # every number of the text as JSON
 python analysis/print_tables.py                         # plain tables per dataset
 python analysis/print_tables.py --latex                 # Table 8 and Table 9 of the survey in LaTeX
-python figures/plot_results.py results figures/plots    # results_a is Figure 6, results_b is Figure 5
+python figures/plot_results.py results figures/plots    # the single panels res_*.pdf form Figures 5 to 9
 python native/audit_native.py results                   # finished runs of the native tracks against their job lists
 python analysis/stored_runs.py --update docs/parameters.md
 ```
@@ -288,19 +288,19 @@ Figures 1 to 4 and the tables that summarize the literature are typeset with the
 | Figure 3, the graded framework | `docs/framework.md` | `hqd_assess/claim.py`, `hqd_assess/scoring.py` | Drawn from the framework |
 | Figure 4, the procedure and the experiments | `docs/framework.md`, `docs/parameters.md` | `hqd_assess/` | Drawn from the framework |
 | Figure 5(a), choice of a version | `results/results_decision.jsonl`, `results/results_decision_fine.jsonl` | `study/run_decision.py`, `study/run_decision_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
-| Figure 5(b), (c), $R^2$ by training month, rule violations | `results/results_taxi.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
-| Figure 5(d), training size and time | `results/results_taxi.json`, `results/results_taxi_100k.json`, `results/results_taxi_sizes.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
-| Figure 5(e), (f), filters on C4 and by model size | `results/results_corpus.jsonl` | `corpus/run_corpus.py`, `figures/plot_results.py` | `Web corpus and DCLM`, `Numbers, tables and figures` |
-| Figure 5(g), synthetic images | `results/results_synth.jsonl` | `study/run_synth.py`, `figures/plot_results.py` | `Synthetic images`, `Numbers, tables and figures` |
-| Figure 5(h), filters on image-text pools | `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl` | `native/run_datacomp.py`, `native/run_mirflickr.py`, `figures/plot_results.py` | `COCO image-text pairs`, `Numbers, tables and figures` |
+| Figure 8(b), (c), $R^2$ by training month, rule violations | `results/results_taxi.json`, `results/results_taxi_monthly.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
+| Figure 8(d), training size and time | `results/results_taxi.json`, `results/results_taxi_100k.json`, `results/results_taxi_sizes.json` | `big/run_taxi.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
+| Figure 9(a), (b), filters on C4 and by model size | `results/results_corpus.jsonl` | `corpus/run_corpus.py`, `figures/plot_results.py` | `Web corpus and DCLM`, `Numbers, tables and figures` |
+| Figure 9(c), synthetic images | `results/results_synth.jsonl` | `study/run_synth.py`, `figures/plot_results.py` | `Synthetic images`, `Numbers, tables and figures` |
+| Figure 9(d), filters on image-text pools | `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl` | `native/run_datacomp.py`, `native/run_mirflickr.py`, `figures/plot_results.py` | `COCO image-text pairs`, `Numbers, tables and figures` |
 | Figure 6(a) to (d), gains, Spearman correlation along repair and delete paths, joint against single repairs | `results/tables_summary.json`, `results/results_real_tables.jsonl` | `study/run_real_tables.py`, `analysis/tables_summary.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
-| Figure 6(e), cells repaired and damaged by Qwen | `results/results_llm_cells.json`, `results/results_llm_tables.jsonl` | `llm/repair_tables.py`, `llm/score_tables.py`, `figures/plot_results.py` | [llm/README.md](llm/README.md), `Numbers, tables and figures` |
-| Figure 6(f), partial repair as a share of the full-repair gain | `results/results_real_tables.jsonl`, `results/results_tables_fine.jsonl` | `study/run_tables_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
-| Figure 6(g), cleaning methods on the CleanML tables | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`, `native/run_cleanml.py`, `figures/plot_results.py` | `CleanML tables`, `Numbers, tables and figures` |
-| Figure 6(h), protocol against data errors | `results/tables_summary.json`, `results/case_tep.json` | `case_tep/run_case.py`, `figures/plot_results.py` | `Classic TEP`, `Numbers, tables and figures` |
-| Figure 6(i), independent runs | `results/results_rieth.json`, `results/results_rieth_models.jsonl` | `big/run_rieth.py`, `big/run_rieth_models.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
-| Figure 6(j), error-rate estimates and intervals | `results/results_detectors.jsonl`, `results/results_finite_population.jsonl` | `study/run_detectors.py`, `analysis/validate_detector_intervals.py`, `figures/plot_results.py` | `Detectors on the same tables`, `Numbers, tables and figures` |
-| Figure 6(k), (l), label noise, coverage and scale | `results/results_vision.jsonl`, `results/results_vision_fine.jsonl` | `study/run_vision.py`, `figures/plot_results.py` | `Human label noise`, `Numbers, tables and figures` |
+| Figure 7(d), cells repaired and damaged by Qwen | `results/results_llm_cells.json`, `results/results_llm_tables.jsonl` | `llm/repair_tables.py`, `llm/score_tables.py`, `figures/plot_results.py` | [llm/README.md](llm/README.md), `Numbers, tables and figures` |
+| Figure 5(b), partial repair as a share of the full-repair gain | `results/results_real_tables.jsonl`, `results/results_tables_fine.jsonl` | `study/run_tables_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
+| Figure 5(c), cleaning methods on the CleanML tables | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`, `native/run_cleanml.py`, `figures/plot_results.py` | `CleanML tables`, `Numbers, tables and figures` |
+| Figure 7(a), protocol against data errors | `results/tables_summary.json`, `results/case_tep.json` | `case_tep/run_case.py`, `figures/plot_results.py` | `Classic TEP`, `Numbers, tables and figures` |
+| Figure 7(b), independent runs | `results/results_rieth.json`, `results/results_rieth_models.jsonl` | `big/run_rieth.py`, `big/run_rieth_models.py`, `figures/plot_results.py` | `Rieth TEP and taxi records`, `Numbers, tables and figures` |
+| Figure 7(c), error-rate estimates and intervals | `results/results_detectors.jsonl`, `results/results_finite_population.jsonl` | `study/run_detectors.py`, `analysis/validate_detector_intervals.py`, `figures/plot_results.py` | `Detectors on the same tables`, `Numbers, tables and figures` |
+| Figure 5(d), Figure 8(a), label noise, coverage and scale | `results/results_vision.jsonl`, `results/results_vision_fine.jsonl` | `study/run_vision.py`, `figures/plot_results.py` | `Human label noise`, `Numbers, tables and figures` |
 | Table 1, symbols | `docs/framework.md` | | |
 | Table 2, comparison with existing surveys | | | Works cited in the survey |
 | Table 3, comparison of standards | `docs/standards.md` | | |

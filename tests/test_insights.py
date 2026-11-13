@@ -90,3 +90,54 @@ def test_random_deletion_summary_on_a_constructed_file(tmp_path):
         x = out["by_fraction"][frac]
         assert x["selective_worse"] == 0 and x["pairs"] > 0 and x["med_diff"] > 0
         assert 0 <= x["selective_down_pct"] <= 100 and 0 <= x["random_down_pct"] <= 100
+
+
+NEW_MACROS = ("InsStaticBelowRaw", "InsTaskLossMax", "InsTaskLossDs", "InsTaskGainMax", "InsTaskGainDs", "InsLossStaticFullPct", "InsDecKnnGain", "InsDecOtherLo",
+              "InsDecOtherHi", "InsDecHundredShare", "InsSameN", "InsSameGeFive", "InsRndNasaDiff", "InsRndBikeDiff", "InsBikeTrainKept", "InsBikeTrainAll",
+              "InsLabN", "InsLabDelLo", "InsLabDelHi", "InsLabRepLo", "InsLabRepHi", "InsShiftRowsN", "InsShiftRowsLo", "InsShiftRowsHi", "InsShiftRowsMed",
+              "InsRecGapMed", "InsLowStaticMin", "InsJudgeMed", "InsJudgeQnn", "InsTaxiTwentyBig", "InsTaxiNineteenSmall")
+
+
+def _num(s):
+    return float(s.replace("$-$", "-"))
+
+
+@need
+def test_new_macros_present_and_in_range(macros, summary):
+    """The macros added for the findings exist on the stored results and their values lie where the definitions allow."""
+    m = macros
+    assert not [k for k in NEW_MACROS if k not in m]
+    v = summary["main"]["versions"]
+    assert 0 <= int(m["InsStaticBelowRaw"]) <= v["n"] and v["task_loss_n"] + v["task_gain_n"] + v["task_tie_n"] == v["n"]
+    assert 0 <= _num(m["InsTaskLossMax"]) < 1 and 0 < _num(m["InsTaskGainMax"]) < 1
+    assert m["InsTaskLossDs"].replace(" ", "").replace("-", "").isalnum() and m["InsTaskGainDs"].replace(" ", "").replace("-", "").isalnum()
+    assert 0 < int(m["InsLossStaticFullPct"]) <= 100 and 0 < int(m["InsDecHundredShare"]) <= 150
+    assert _num(m["InsDecOtherLo"]) <= _num(m["InsDecOtherHi"]) < _num(m["InsDecKnnGain"])
+    assert 0 <= int(m["InsSameGeFive"]) <= int(m["InsSameN"])
+    assert _num(m["InsRndNasaDiff"]) > 0 > _num(m["InsRndBikeDiff"]) and -3 < _num(m["InsRndBikeDiff"])
+    assert 0 < int(m["InsBikeTrainKept"]) < int(m["InsBikeTrainAll"])
+    assert int(m["InsLabN"]) >= 1 and 0 < _num(m["InsLabDelLo"]) <= _num(m["InsLabDelHi"]) and 0 < _num(m["InsLabRepLo"]) <= _num(m["InsLabRepHi"]) < 100
+    assert all(x["delete"] < x["repair"] for x in summary["5"]["label_sets"].values())
+    assert 0 <= _num(m["InsShiftRowsLo"]) <= _num(m["InsShiftRowsMed"]) <= _num(m["InsShiftRowsHi"]) <= 1 and int(m["InsShiftRowsN"]) >= 1
+    assert 0 <= _num(m["InsRecGapMed"]) < _num(m["InsShiftRowsMed"])
+    assert 0 < _num(m["InsLowStaticMin"]) <= 100
+    assert 1 <= _num(m["InsJudgeMed"]) <= _num(m["InsJudgeQnn"]) <= 5
+    assert -1 < _num(m["InsTaxiTwentyBig"]) <= 1 and -1 < _num(m["InsTaxiNineteenSmall"]) <= 1
+
+
+@need
+def test_main_rows_match_main_table():
+    """insights.py reads the rows of the main table through big_tables.main_rows, the printed scores must be the same."""
+    import big_tables
+    tab, _ = big_tables.main_table(RESULTS)
+    for r in big_tables.main_rows(RESULTS):
+        if r["versions"] and None not in r["shown"]:
+            assert all(f"{x:.3f}" in tab for x in r["shown"])
+
+
+def test_competition_place():
+    import big_tables
+    assert big_tables.place([0.9, 0.9, 0.8], False) == [1, 1, 3]
+    assert big_tables.place([0.7, 0.9, 0.9], False) == [3, 1, 1]
+    assert big_tables.place([0.9, 0.8, 0.8], False) == [1, 2, 2]
+    assert big_tables.place([5.8, 5.6, 5.6], True) == [3, 1, 1]

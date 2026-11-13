@@ -15,6 +15,8 @@ Sections, in the order of the findings:
   6  training period of the taxi model and the two rises of the rule violation rate
   7  corpus filters against random sampling, recall of the synthetic images
   8  detector corrections, language-model repair and the language-model judge
+  main  the rows of the main table as big_tables.py prints them: versions against the raw data, the task test against the static rule, the
+        gaps of the evaluation-practice rows by kind of defect
 """
 import collections, json, os, sys
 import numpy as np, pandas as pd
@@ -25,6 +27,7 @@ sys.path[:0] = [HERE, os.path.join(REPO, "study")]
 TREES, MODELS = ("rf", "gb"), ("linear", "rf", "gb", "knn", "mlp")
 SIG = 0.05
 SUMMARY_FILE = "insights_summary.json"
+SUMMARY_VERSION = 2     # raised whenever compute() adds fields, so that macros() recomputes an older stored summary
 
 
 # ---------------------------------------------------------------- reading
@@ -183,7 +186,9 @@ def sec1_random(R, D, C):
                               selective_worse_pct=float(100 * (Pp["diff"] < 0).mean()), selective_worse_sig=int(((Pp.q < SIG) & (Pp["diff"] < 0)).sum()),
                               selective_better_sig=int(((Pp.q < SIG) & (Pp["diff"] > 0)).sum()), med_diff=float(Pp["diff"].median()), mean_diff=float(Pp["diff"].mean()),
                               shift_selective=float(sh["delete_records"].median()), shift_random=float(sh["random_delete"].median()),
-                              shift_by_table=sh.round(4).to_dict("index"), diff_by_table=Pp.groupby("ds")["diff"].mean().round(4).to_dict())
+                              shift_by_table=sh.round(4).to_dict("index"), diff_by_table=Pp.groupby("ds")["diff"].mean().round(4).to_dict(),
+                              n_train_deleted=X[(X.fraction == frac) & (X.action == "delete_records")].groupby("ds").n_train.mean().round(1).to_dict(),
+                              n_train_all=X[X.fraction == frac].groupby("ds").n0.mean().round(1).to_dict())
         # does the gap between the two deletions follow the gap of their shifts, per table
         t = pd.DataFrame(dict(dd=Pp.groupby("ds")["diff"].mean(), ds_=sh["delete_records"] - sh["random_delete"])).dropna()
         if len(t) >= 4: res[str(frac)]["rho_shift_gap"], res[str(frac)]["p_shift_gap"] = _sp(-t.dd, t.ds_)
@@ -227,6 +232,28 @@ def load_tables_summary(R): return _load(R, "tables_summary.json")
 
 
 # ---------------------------------------------------------------- 3. loss of the static rule
+def decision_gain(R, n_top=1600):
+    """Gain of the task test over the static rule on the classification tables, in points, by validation size and by model, replayed as
+    summaries.py and Figure 5(a) do: a table with fewer validation records than n uses all it has."""
+    rows = [r for r in _jsonl(R, "results_decision_fine.jsonl") if "test" in r] or [r for r in _jsonl(R, "results_decision.jsonl") if "test" in r]
+    if not rows: return None
+    G = collections.defaultdict(dict)
+    for r in rows: G[(r["ds"], r["model"], r["seed"])][(r["action"], r["f"])] = r
+    sizes = sorted({int(x) for r in rows for x in r["val"] if int(x) <= n_top})
+    def val(r, n):
+        av = sorted(int(x) for x in r["val"]); return r["val"][str(max([x for x in av if x <= n] or av[:1]))]
+    P = lambda r: r["rate_missing"] + r["rate_domain"] + r["rate_value"]
+    per = collections.defaultdict(lambda: {"static": [], **{n: [] for n in sizes}})
+    for k, arms in G.items():
+        if ("keep", 0.0) not in arms or len(arms) < 14 or arms[("keep", 0.0)]["task"] != "cls": continue
+        base = arms[("keep", 0.0)]["test"]; s0 = min(arms.values(), key=lambda r: (P(r), r["rate_label"], -r["n_train"]))
+        for grp in ("all", k[1]):
+            per[grp]["static"].append(s0["test"] - base)
+            for n in sizes: per[grp][n].append(max(arms.values(), key=lambda r: val(r, n))["test"] - base)
+    gain = {g: {str(n): float(100 * (np.mean(v[n]) - np.mean(v["static"]))) for n in sizes} for g, v in per.items()}
+    return dict(sizes=sizes, gain=gain)
+
+
 def sec3(R):
     rows = [r for r in _jsonl(R, "results_decision_fine.jsonl") if "test" in r]
     if not rows: return None
@@ -244,7 +271,8 @@ def sec3(R):
     C = X.groupby(["ds", "model"])[["regret", "reg_t"]].mean().reset_index().sort_values("regret", ascending=False); tot = C.regret.sum(); d = C.regret - C.reg_t
     T = load_tables_summary(R); top = C.head(3)
     return dict(pairs=len(C), small=int((C.regret < .01).sum()), top3_share=float(100 * top.regret.sum() / tot), top3=[dict(ds=a, model=b, regret=float(c), P=float(T["base"][a]["P_data"]) if T else None) for a, b, c in top[["ds", "model", "regret"]].values],
-                cases=len(X), static_is_full_repair=int((X.static_arm == ("repair_records", 1.0)).sum()), task_better=int((d > .002).sum()), task_worse=int((d < -.002).sum()), task_tie=int((d.abs() <= .002).sum()))
+                cases=len(X), static_is_full_repair=int((X.static_arm == ("repair_records", 1.0)).sum()), task_better=int((d > .002).sum()), task_worse=int((d < -.002).sum()), task_tie=int((d.abs() <= .002).sum()),
+                same_static={k: T["same_static"][k] for k in ("n", "ge05")} if T and "same_static" in T else None, decision=decision_gain(R))
 
 
 # ---------------------------------------------------------------- 4. runs and records
@@ -279,6 +307,15 @@ def sec5(R):
                                  delete=vm(lambda r: r["ds"] == "cifar10" and r.get("noise") == "worse_label" and r.get("action") == "delete" and r.get("f") == 1.0 and r["arch"] == "resnet18"),
                                  clean=vm(lambda r: r["ds"] == "cifar10" and "noise" not in r and r["arch"] == "resnet18"),
                                  deleted_pct=float(100 * (1 - np.mean([r["retained"] for r in V if r["ds"] == "cifar10" and r.get("noise") == "worse_label" and r.get("action") == "delete" and r.get("f") == 1.0]))))
+    # CIFAR-N, every label set and network: gain of deleting all images with a wrong label and of training on the clean labels, in points
+    lab = {}
+    for ds, nz in sorted({(r["ds"], r["noise"]) for r in V if r.get("noise") and r.get("action") == "keep"}):
+        for arch in sorted({r["arch"] for r in V if r["ds"] == ds and r.get("noise") == nz}):
+            k0 = vm(lambda r: r["ds"] == ds and r.get("noise") == nz and r.get("action") == "keep" and r["arch"] == arch)
+            dl = vm(lambda r: r["ds"] == ds and r.get("noise") == nz and r.get("action") == "delete" and r.get("f") == 1.0 and r["arch"] == arch)
+            cl = vm(lambda r: r["ds"] == ds and "noise" not in r and "coverage" not in r and "scale" not in r and r["arch"] == arch)
+            if None not in (k0, dl, cl): lab[f"{ds}/{nz}/{arch}"] = dict(delete=float(100 * (dl - k0)), repair=float(100 * (cl - k0)))
+    if lab: out["label_sets"] = lab
     # right half of the main table: gaps of the evaluation-protocol rows against the leakage and test-label rows
     import big_tables, datasets
     P = big_tables.protocol_rows(R); grp = {g: [d["key"] for d in ds] for g, ds in datasets.GROUPS}
@@ -309,6 +346,19 @@ def sec6(R):
     # the largest rise in the first pandemic year and the largest rise afterwards
     early = max((k for k in rise if k <= "2020-12"), key=lambda k: rise[k]["rule_pp"]); late = max((k for k in rise if k >= "2021-01"), key=lambda k: rise[k]["rule_pp"])
     out["rises"] = {early: rise[early], late: rise[late]}
+    # training size: mean R2 over the same test months by training month, arm and number of training records, from every taxi result file
+    runs = {}
+    for fn in ("results_taxi.json", "results_taxi_100k.json", "results_taxi_sizes.json", "results_taxi_monthly.json"):
+        Y = _load(R, fn)
+        for r in (Y or {}).get("runs", []):
+            n = r.get("requested_size", r.get("size")); runs[(r["train_month"], r["arm"], n, r.get("seed", 0))] = r
+    sz = collections.defaultdict(list)
+    for (tm, arm, n, _), r in runs.items():
+        v = [r["r2"][m] for m in test if m in r["r2"]]
+        if n and len(v) == len(test): sz[(tm, arm, int(n))].append(float(np.mean(v)))
+    size = {}
+    for (tm, arm, n), v in sorted(sz.items()): size.setdefault(tm, {}).setdefault(arm, {})[str(n)] = float(np.mean(v))
+    out["size"] = size
     return out
 
 
@@ -367,7 +417,33 @@ def sec8(R):
             out["llm"].update(rho_f1_gain=rho, p_f1_gain=p, n=len(ks), best_f1_table=bestf, best_f1=float(f1[bestf]), best_f1_models_down=int(sum(np.mean(v) < 0 for (d, m), v in bym.items() if d == bestf)),
                               soil_f1=float(f1.get("soilmoisture", np.nan)), soil_gain=dt.get("soilmoisture"))
     Lj = _load(R, "results_llm_judge.json")
-    if Lj: out["judge"] = dict(rho_words=float(Lj["spearman"]["words"]), rho_ppl=float(Lj["spearman"]["ppl"]), median=float(Lj["quantiles"]["0.5"]), q75=float(Lj["quantiles"]["0.75"]), q90=float(Lj["quantiles"]["0.9"]))
+    if Lj: out["judge"] = dict(rho_words=float(Lj["spearman"]["words"]), rho_ppl=float(Lj["spearman"]["ppl"]), median=float(Lj["quantiles"]["0.5"]), q75=float(Lj["quantiles"]["0.75"]), q90=float(Lj["quantiles"]["0.9"]), q99=float(Lj["quantiles"]["0.99"]) if "0.99" in Lj["quantiles"] else None)
+    return out
+
+
+# ---------------------------------------------------------------- main table
+SHIFT_SKIP = ("tep", "tepl")     # the two TEP rows of the evaluation-protocol group are a protocol of independent runs, the other rows a shift of coverage or distribution
+
+
+def sec_main(R):
+    """Rows of the main table with the values it prints, from big_tables.main_rows. Versions: the rows of the first seven groups with all
+    three scores. Practices: the absolute printed gap by kind of defect, and the static score of the rows outside the detector group."""
+    import big_tables, datasets
+    rows = big_tables.main_rows(R); gname = [g for g, _ in datasets.GROUPS]; out = {}
+    V = [r for r in rows if r["versions"] and None not in r["shown"]]
+    def better(a, b, low): return a < b if low else a > b
+    below = [r["d"]["name"] for r in V if better(r["shown"][0], r["shown"][1], r["low"])]
+    tt = [(round((r["shown"][2] - r["shown"][1]) * (-1 if r["low"] else 1), 3), r["d"]["name"]) for r in V]
+    loss = [x for x in tt if x[0] < 0]; gain = [x for x in tt if x[0] > 0]
+    out["versions"] = dict(n=len(V), static_below_raw=len(below), static_below_raw_rows=below, task_loss_n=len(loss), task_gain_n=len(gain), task_tie_n=len(tt) - len(loss) - len(gain),
+                           task_loss_max=-min(loss)[0] if loss else 0.0, task_loss_max_ds=min(loss)[1] if loss else None, task_gain_max=max(gain)[0] if gain else 0.0, task_gain_max_ds=max(gain)[1] if gain else None)
+    P = [r for r in rows if not r["versions"] and r["gap"] is not None]
+    def gap(r): return round(abs(r["gap"]), 3)
+    shift = [gap(r) for r in P if gname[r["group"]].startswith("Evaluation protocol") and r["d"]["key"] not in SHIFT_SKIP]
+    record = [gap(r) for r in P if gname[r["group"]].startswith(("Data leakage", "Test-set labels"))]
+    stat = [r["static"] for r in rows if not r["versions"] and not gname[r["group"]].startswith("Detector") and r["static"] is not None]
+    out["practices"] = dict(shift_n=len(shift), shift_min=min(shift) if shift else None, shift_max=max(shift) if shift else None, shift_med=float(np.median(shift)) if shift else None,
+                            record_n=len(record), record_med=float(np.median(record)) if record else None, static_min=min(stat) if stat else None)
     return out
 
 
@@ -375,7 +451,7 @@ def sec8(R):
 def compute(R):
     D = table_runs(R); TD = _tables(R)
     s1, G, C = sec1(R, D, TD)
-    out = {"1": s1, "1_random": sec1_random(R, D, C), "2": sec2(R, D, G, TD), "3": sec3(R), "4": sec4(R), "5": sec5(R), "6": sec6(R), "7": sec7(R), "8": sec8(R)}
+    out = {"_version": SUMMARY_VERSION, "1": s1, "1_random": sec1_random(R, D, C), "2": sec2(R, D, G, TD), "3": sec3(R), "4": sec4(R), "5": sec5(R), "6": sec6(R), "7": sec7(R), "8": sec8(R), "main": sec_main(R)}
     return json.loads(json.dumps(out, default=lambda o: o.item() if hasattr(o, "item") else str(o)))
 
 
@@ -407,6 +483,10 @@ def macros_from(S):
             M.update({f"InsRnd{tag}SelDownPct": f1(x["selective_down_pct"]), f"InsRnd{tag}RndDownPct": f1(x["random_down_pct"]), f"InsRnd{tag}SelDown": str(x["selective_down"]), f"InsRnd{tag}RndDown": str(x["random_down"]),
                       f"InsRnd{tag}Pairs": str(x["pairs"]), f"InsRnd{tag}WorsePct": f1(x["selective_worse_pct"]), f"InsRnd{tag}WorseSig": str(x["selective_worse_sig"]), f"InsRnd{tag}BetterSig": str(x["selective_better_sig"]),
                       f"InsRnd{tag}DiffMed": f3(x["med_diff"]), f"InsRnd{tag}ShiftSel": f2(x["shift_selective"]), f"InsRnd{tag}ShiftRnd": f2(x["shift_random"])})
+        x = r["by_fraction"].get("1.0") or {}; dt = x.get("diff_by_table", {}); nk = x.get("n_train_deleted", {}); na = x.get("n_train_all", {})
+        if "nasa" in dt: M["InsRndNasaDiff"] = f3(dt["nasa"])     # mean over the model families of deletion of the records with errors minus random deletion
+        if "bike" in dt: M["InsRndBikeDiff"] = f3(dt["bike"])
+        if "bike" in nk and "bike" in na: M.update(InsBikeTrainKept=f0(nk["bike"]), InsBikeTrainAll=f0(na["bike"]))
     b = S["2"]
     M.update(InsAmountRho=f2(b["amount_gain"]["rho"]), InsAmountP=f2(b["amount_gain"]["p"]), InsAmountN=str(b["amount_gain"]["n"]))
     if "nasa" in b: M.update(InsNasaP=f1(b["nasa"]["P"]), InsNasaGain=f3(b["nasa"]["gain"]), InsMercP=f1(b["mercedes"]["P"]), InsMercGain=f3(b["mercedes"]["gain"]))
@@ -416,7 +496,15 @@ def macros_from(S):
     c = S["3"]
     if c: M.update(InsLossPairs=str(c["pairs"]), InsLossSmall=str(c["small"]), InsLossTopShare=f0(c["top3_share"]), InsLossTaskBetter=str(c["task_better"]), InsLossTaskWorse=str(c["task_worse"]),
                    InsLossTaskTie=str(c["task_tie"]), InsLossStaticFull=str(c["static_is_full_repair"]), InsLossCases=str(c["cases"]),
-                   InsLossHospKNN=f3(c["top3"][0]["regret"]), InsLossFlightsKNN=f3(c["top3"][1]["regret"]), InsLossMercMLP=f3(c["top3"][2]["regret"]))
+                   InsLossHospKNN=f3(c["top3"][0]["regret"]), InsLossFlightsKNN=f3(c["top3"][1]["regret"]), InsLossMercMLP=f3(c["top3"][2]["regret"]),
+                   InsLossStaticFullPct=f0(100 * c["static_is_full_repair"] / c["cases"]))
+    if c and c.get("same_static"): M.update(InsSameN=str(c["same_static"]["n"]), InsSameGeFive=str(c["same_static"]["ge05"]))
+    dg = (c or {}).get("decision")
+    if dg and "100" in dg["gain"].get("all", {}):
+        oth = [v["100"] for m, v in dg["gain"].items() if m not in ("all", "knn")]; top = str(dg["sizes"][-1])
+        if "knn" in dg["gain"]: M["InsDecKnnGain"] = f1(dg["gain"]["knn"]["100"])
+        if oth: M.update(InsDecOtherLo=f2(min(oth)), InsDecOtherHi=f2(max(oth)))
+        if dg["gain"]["all"][top]: M["InsDecHundredShare"] = f0(100 * dg["gain"]["all"]["100"] / dg["gain"]["all"][top])
     d = S["4"]
     if "rieth" in d: M.update(InsRunOne=f3(d["rieth"]["run1"]), InsRunFive=f3(d["rieth"]["run5"]), InsRunGain=f3(d["rieth"]["gain_runs"]), InsRecFourGain=f3(d["rieth"]["gain_rec5x4"]), InsRecSixteenGain=f3(d["rieth"]["gain_rec500x16"]))
     if "rieth_split" in d: M.update(InsSplitRecord=f"{d['rieth_split']['record']:.4f}", InsSplitRun=f"{d['rieth_split']['run']:.4f}")
@@ -427,12 +515,19 @@ def macros_from(S):
     e = S["5"]
     if "coverage" in e: M.update(InsCovSeen=f3(e["coverage"]["seen_low"]), InsCovFull=f3(e["coverage"]["full"]), InsCovAll=f3(e["coverage"]["all_low"]))
     if e.get("cifar10n_worse", {}).get("delete") is not None: x = e["cifar10n_worse"]; M.update(InsTenNKeep=f3(x["keep"]), InsTenNDel=f3(x["delete"]), InsTenNClean=f3(x["clean"]), InsTenNDelPct=f0(x["deleted_pct"]))
+    ls = e.get("label_sets")
+    if ls:
+        de = [v["delete"] for v in ls.values()]; rp = [v["repair"] for v in ls.values()]
+        M.update(InsLabN=str(len(ls)), InsLabDelLo=f1(min(de)), InsLabDelHi=f1(max(de)), InsLabRepLo=f1(min(rp)), InsLabRepHi=f1(max(rp)))
     x = e["main_right"]; M.update(InsProtoGapLo=f3(x["protocol_min"]), InsProtoGapHi=f3(x["protocol_max"]), InsProtoGapMed=f3(x["protocol_med"]), InsProtoRows=str(x["protocol_n"]), InsRecGapMax=f3(x["record_max"]), InsRecRows=str(x["record_n"]))
     t = S["6"]
     if t:
         tr = t["train_2023"]; M.update(InsTaxiNineteen=f3(tr["2019-07"]), InsTaxiTwentyThree=f3(tr["2023-01"]), InsTaxiTwenty=f3(tr["2020-07"]), InsTaxiTwentyOne=f3(tr["2021-01"]))
         ri = t["rises"]; (ka, va), (kb, vb) = sorted(ri.items())
         M.update(InsTaxiRiseA=f1(va["rule_pp"]), InsTaxiRiseAChange=f3(va["r2_change"]), InsTaxiRiseB=f1(vb["rule_pp"]), InsTaxiRiseBChange=f3(vb["r2_change"]))
+        sz = t.get("size", {}); big = sz.get("2020-07", {}).get("raw", {}); small = sz.get("2019-07", {}).get("raw", {})
+        if big: M["InsTaxiTwentyBig"] = f3(big[max(big, key=int)])     # the largest number of training records
+        if small: M["InsTaxiNineteenSmall"] = f3(small[min(small, key=int)])     # the smallest number of training records
     s = S["7"]
     if "corpus" in s: M.update(InsCorpusMinP=f3(s["corpus"]["c4_min_p_better"]), InsCorpusLo=f2(s["corpus"]["c4_min"]), InsCorpusHi=f1(s["corpus"]["c4_max"]), InsCorpusN=str(len(s["corpus"]["filters"])))
     if "synth" in s:
@@ -448,7 +543,18 @@ def macros_from(S):
     if "llm" in g:
         l = g["llm"]; M.update(InsLLMMinChanged=f0(l["min_changed_per100"]), InsLLMAdultErr=f1(l["adult_errors_per100"]), InsLLMAdultChanged=f1(l["adult_changed_per100"]))
         if "rho_f1_gain" in l: M.update(InsLLMRho=f2(l["rho_f1_gain"]), InsLLMRhoN=str(l["n"]), InsLLMBestF=f2(l["best_f1"]), InsLLMSoilF=f2(l["soil_f1"]), InsLLMSoilGain=f3(l["soil_gain"]))
-    if "judge" in g: M.update(InsJudgeWords=f2(g["judge"]["rho_words"]), InsJudgePPL=f2(g["judge"]["rho_ppl"]), InsJudgeQc=f2(g["judge"]["q75"]))
+    if "judge" in g:
+        M.update(InsJudgeWords=f2(g["judge"]["rho_words"]), InsJudgePPL=f2(g["judge"]["rho_ppl"]), InsJudgeQc=f2(g["judge"]["q75"]), InsJudgeMed=f2(g["judge"]["median"]))
+        if g["judge"].get("q99") is not None: M["InsJudgeQnn"] = f2(g["judge"]["q99"])
+    mt = S.get("main")
+    if mt:
+        v = mt["versions"]; p = mt["practices"]
+        M.update(InsStaticBelowRaw=str(v["static_below_raw"]), InsTaskLossMax=f3(v["task_loss_max"]), InsTaskGainMax=f3(v["task_gain_max"]))
+        if v["task_loss_max_ds"]: M["InsTaskLossDs"] = v["task_loss_max_ds"]
+        if v["task_gain_max_ds"]: M["InsTaskGainDs"] = v["task_gain_max_ds"]
+        if p["shift_n"]: M.update(InsShiftRowsLo=f3(p["shift_min"]), InsShiftRowsHi=f3(p["shift_max"]), InsShiftRowsMed=f3(p["shift_med"]), InsShiftRowsN=str(p["shift_n"]))
+        if p["record_n"]: M["InsRecGapMed"] = f3(p["record_med"])
+        if p["static_min"] is not None: M["InsLowStaticMin"] = f1(p["static_min"])
     bad = [k for k in M if not k.isalpha()]
     if bad: raise ValueError(f"macro names must be letters only: {bad}")
     return M
@@ -457,8 +563,8 @@ def macros_from(S):
 def macros(results_dir):
     """{macro name: formatted string}. Reads insights_summary.json when it is newer than every result file it depends on, otherwise recomputes."""
     p = os.path.join(results_dir, SUMMARY_FILE); dep = [os.path.join(results_dir, f) for f in os.listdir(results_dir) if f.startswith("results_") or f == "tables_summary.json"]
-    if os.path.exists(p) and os.path.getmtime(p) >= max(os.path.getmtime(f) for f in dep): S = json.load(open(p))
-    else: S = compute(results_dir)
+    S = json.load(open(p)) if os.path.exists(p) and os.path.getmtime(p) >= max(os.path.getmtime(f) for f in dep) else None
+    if not S or S.get("_version") != SUMMARY_VERSION: S = compute(results_dir)
     return macros_from(S)
 
 

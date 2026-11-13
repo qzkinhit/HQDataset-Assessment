@@ -122,13 +122,14 @@ def _versions(rows, version, static):
 def _static_tables():
     P = lambda r: r["rate_missing"] + r["rate_domain"] + r["rate_value"]
     return dict(raw=lambda a: a.get(("keep", 0.0)), pick=lambda a: min(a.values(), key=lambda r: (P(r), r["rate_label"], -r["n_train"])))
+SYNTH_MODEL = "resnet18"
 def table_versions(R):
     """Dataset key to (raw, static rule, task test, best), for the tables with benchmark errors, the image labels and the synthetic images."""
     out = {}; D = _jsonl(R, "results_decision.jsonl"); F = _jsonl(R, "results_decision_fine.jsonl"); D = F if len(F) >= len(D) else D; ver = lambda r: (r["action"], r["f"])
     for ds in {r["ds"] for r in D}: out[ds] = _versions([r for r in D if r["ds"] == ds and "test" in r], ver, _static_tables())
     V = _jsonl(R, "results_versions.jsonl"); labels = dict(raw=lambda a: a.get(("keep", 0.0)), pick=lambda a: a.get(("repair", 1.0))); real = dict(raw=lambda a: a.get(("share", 1.0)), pick=lambda a: a.get(("real", 0.0)))     # the raw data of a synthetic row are the generated images alone, which the Static column also scores. The rate of a version is its synthetic share times one minus precision, so the real images alone have the highest static score
     for ds, st_ in (("cifar10n", labels), ("cifar100n", labels), ("edm", real), ("ddpm", real), ("cifake", real)):
-        rows = [r for r in V if r["ds"] == ds]
+        rows = [r for r in V if r["ds"] == ds and (st_ is labels or r["model"] == SYNTH_MODEL)]     # the synthetic rows use ResNet-18 alone, the network with the full set of synthetic shares and additions, as Figure 5(g)
         if rows: out[ds] = _versions(rows, ver, st_)
     return out
 def _static_cleanml(a, err):
@@ -263,34 +264,49 @@ def _lower(metric): return metric == "Loss"
 # ---- the main table
 PANEL_MAIN = 4     # the groups before this index fill the left panel of the main table
 WIN_TAGS = ("Bench", "Real", "Image", "Corpus", "Multimodal", "Synthetic", "Dynamic")
+def main_rows(R):
+    """Every row of the main table as the table prints it. A version row has the three scores rounded as shown (Raw, Static rule, Task test),
+    the unrounded Best and the lower-is-better flag. A practice row has the usual score, the alternative score and their difference. Both carry
+    the group index, the dataset entry, the static score and the documentation score. insights.py reads the same rows."""
+    A = {}; A.update(table_versions(R)); A.update(cleanml_versions(R)); A.update(corpus_versions(R)); A.update(taxi_versions(R)); A.update(native_versions(R)); B = protocol_rows(R); ST = _static(R); DOC = _docs(R); out = []
+    for gi, (g, ds) in enumerate(GROUPS):
+        versions = ds[0]["part"] == "versions"
+        for d in ds:
+            k = d["key"]; row = dict(group=gi, versions=versions, d=d, low=_lower(d["metric"]), static=ST.get(k), doc=DOC.get(DOC_NAME.get(d["name"], d["name"])))
+            if versions:
+                vals = list(A.get(k, (None, None, None, None))); row.update(shown=[None if x is None else round(x, 3) for x in vals[:3]], best=vals[3])
+            else:
+                v = B.get(k, (None, None)); row.update(usual=v[0], alt=v[1], gap=None if None in v else v[0] - v[1])
+            out.append(row)
+    return out
+def place(shown, low):
+    """Competition place of each of the three scores, one plus the number of strictly better scores, so tied scores share the better place."""
+    return [1 + sum(1 for j in range(3) if (shown[j] < shown[i] if low else shown[j] > shown[i])) for i in range(3)]
 def main_table(R):
-    A = {}; A.update(table_versions(R)); A.update(cleanml_versions(R)); A.update(corpus_versions(R)); A.update(taxi_versions(R)); A.update(native_versions(R)); B = protocol_rows(R); ST = _static(R); DOC = _docs(R)
-    left, top, low_ = [], [], []; ranks = {}; wins = {}; n_row = {}
-    def dc(d): v = DOC.get(DOC_NAME.get(d["name"], d["name"])); return _f(v, 0)
+    left, top, low_ = [], [], []; ranks = {}; wins = {}; n_row = {}; rows = main_rows(R)
     for gi, (g, ds) in enumerate(GROUPS):
         versions = ds[0]["part"] == "versions"; tgt = left if gi < PANEL_MAIN else (top if versions else low_); tgt.append(("g", HEAD[gi][0]))
-        for d in ds:
-            k = d["key"]; low = _lower(d["metric"]); s_ = ST.get(k); nm = d["name"] + (r"$\downarrow$" if low else "")
+        for row in [r for r in rows if r["group"] == gi]:
+            d = row["d"]; low = row["low"]; s_ = row["static"]; nm = d["name"] + (r"$\downarrow$" if low else ""); dc = _f(row["doc"], 0)
             if versions:
-                vals = list(A.get(k, (None, None, None, None))); shown = [None if x is None else round(x, 3) for x in vals[:3]]; order = sorted({x for x in shown if x is not None}, reverse=not low)
+                shown = row["shown"]; pl = place([x if x is not None else (float("inf") if low else -float("inf")) for x in shown], low)
                 def c(i):
                     x = shown[i]
                     if x is None: return TBD
-                    t = f"{x:.3f}"; return f"\\best{{{t}}}" if x == order[0] else (f"\\secondbest{{{t}}}" if len(order) > 1 and x == order[1] else t)
+                    t = f"{x:.3f}"; return f"\\best{{{t}}}" if pl[i] == 1 else (f"\\secondbest{{{t}}}" if pl[i] == 2 else t)
                 if all(x is not None for x in shown):
                     ranks.setdefault(gi, []).append([1 + sum(1 for j in range(3) if (shown[j] < shown[i] if low else shown[j] > shown[i])) + (sum(1 for j in range(3) if j != i and shown[j] == shown[i]) / 2) for i in range(3)])
                     n_row[gi] = n_row.get(gi, 0) + 1; wins[gi] = wins.get(gi, 0) + bool((shown[2] <= shown[1]) if low else (shown[2] >= shown[1]))
-                tgt.append(("r", [nm, dc(d), _f(s_, 1), c(0), c(1), c(2), _f(vals[3])]))
+                tgt.append(("r", [nm, dc, _f(s_, 1), c(0), c(1), c(2), _f(row["best"])]))
             else:
-                v = B.get(k, (None, None)); gap = None if None in v else v[0] - v[1]
-                tgt.append(("p", [nm, dc(d), _f(s_, 1), _f(v[0]), _f(v[1]), _signed(gap)]))
+                tgt.append(("p", [nm, dc, _f(s_, 1), _f(row["usual"]), _f(row["alt"]), _signed(row["gap"])]))
     def mp(label, groups):
         x = [r for g_ in groups for r in ranks.get(g_, [])]
         return ("m", label, [f"{mean(r[i] for r in x):.2f}" if x else TBD for i in range(3)])
     left += [("rule",), mp("Mean place, benchmark errors", [0]), mp("Mean place, real errors", [1]), mp("Mean place, images, corpora", [2, 3])]
     top.append(mp("Mean place, all seven groups", range(len(WIN_TAGS))))
     right = top + [("rule",), ("h", ["Dataset", "Doc", "Static", "Usual", "Alternative", "Gap"]), ("rule",)] + low_
-    H = ["\\begin{table}[!t]", "\\cnentablecaption{全部数据集的测评结果, 分组和指标与表~\\ref{tab:study} 一致, $\\downarrow$ 表示数值越小越好. Doc 和 Static 分别为说明文档维度的文档得分 (documentation score) 和数据质量维度的静态质量得分 (static quality score). 前七组比较各数据版本的性能, 依次为原始数据 (\\textbf{Raw}), 静态质量得分最高的版本 (静态规则, \\textbf{Static rule}), 留出数据上性能最高的版本 (任务测试, \\textbf{Task test}) 和测试性能最高的版本 (事后最优, \\textbf{Best}). 每行前三个分数的第一名和第二名分别用深色和浅色标出, 平均名次 (\\textbf{Mean place}) 为这三列在相应各行名次的平均值. 后四组比较评测做法, 依次为常见做法下的分数或检测器的估计值 (\\textbf{Usual}), 换用其他划分、测试集或修正后的标签时的分数, 或者真实值 (\\textbf{Alternative}), 以及两者之差 (\\textbf{Gap}). TEP, large 的两个分数为记录数相同时 500 次和 1 次独立运行的结果.}{Assessment results on all datasets, groups and metrics follow Table~\\ref{tab:study}, $\\downarrow$ marks lower is better. Doc and Static: documentation score and static quality score. The first seven groups compare data versions on the test data. Raw: the raw data. Static rule: the version with the highest static quality score. Task test: the version that performs best on held-out data. Best: the best version in hindsight. The first and second place among the first three scores of a row are shaded dark and light, and Mean place is the mean place of these three columns over the rows named. The last four groups compare evaluation practices. Usual: the score under the common practice or the estimate of a detector. Alternative: the score under another split, test set or corrected labels, or the true value. Gap: their difference. For TEP, large the two scores come from 500 runs and 1 run at the same number of records.}", "\\label{tab:main}", "\\footnotesize", "\\tabcolsep 1pt", "\\renewcommand{\\arraystretch}{0.92}", "\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}lcccccc@{\\hspace{2pt}}|@{\\hspace{2pt}}lcccccc@{}}", "\\toprule", "Dataset & Doc & Static & Raw & Static rule & Task test & Best & Dataset & Doc & Static & Raw & Static rule & Task test & Best\\\\", "\\midrule"]
+    H = ["\\begin{table}[!t]", "\\cnentablecaption{全部数据集的测评结果, 分组和指标与表~\\ref{tab:study} 一致, $\\downarrow$ 表示数值越小越好. Doc 和 Static 为文档得分和静态质量得分. 前七组比较数据版本, Raw, Static rule, Task test 和 Best 依次为原始数据、静态规则、任务测试和事后最优, 每行前三列的第一和第二名分别用深色和浅色标出, Mean place 为平均名次. 后四组比较评测做法, Usual 和 Alternative 为常见做法和替代做法下的分数, Gap 为两者之差. 各组的具体做法见第~\\ref{sec:protocol}~节.}{Assessment results on all datasets, groups and metrics as in Table~\\ref{tab:study}, $\\downarrow$ marks lower is better. Doc and Static: documentation score and static quality score. The first seven groups compare data versions, Raw, Static rule, Task test and Best are the raw data, the static rule, the task test and the best version in hindsight, the first and second of the first three scores in a row are shaded dark and light, and Mean place is the mean place. The last four groups compare evaluation practices, Usual and Alternative are the scores under the common and the alternative practice, and Gap is their difference. Section~\\ref{sec:protocol} gives the details of each group.}", "\\label{tab:main}", "\\footnotesize", "\\tabcolsep 1pt", "\\renewcommand{\\arraystretch}{0.92}", "\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}lcccccc@{\\hspace{2pt}}|@{\\hspace{2pt}}lcccccc@{}}", "\\toprule", "Dataset & Doc & Static & Raw & Static rule & Task test & Best & Dataset & Doc & Static & Raw & Static rule & Task test & Best\\\\", "\\midrule"]
     def cl(x, bar):
         """seven cells of one panel"""
         if x is None: return "&&&&&&"
