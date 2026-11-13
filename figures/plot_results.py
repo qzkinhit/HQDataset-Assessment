@@ -55,25 +55,32 @@ def snug(fig, gap=2.0):
         ax.yaxis.set_label_coords((left - bb.x0 - gap * fig.dpi / 72) / bb.width, .5)
 SLICE = [0, 1.71, 3.44, 5.19, W]; BOT, TOP = .45, .46     # column slices and the room below and above a panel row, the same in both figures
 def crops(fig, plan):
-    """Saves single panels and full rows as separate PDF files for the themed figures of the survey. plan maps an old panel letter to (column, row bottom y, output stem, new letter), or a row key to (row bottom y, top, output stem, letter map)."""
+    """Saves single panels and full rows as separate PDF files for the themed figures of the survey. plan maps an old panel letter to (column, row bottom y, output stem, new letter), or a row key to (row bottom y, top, output stem, letter map). A single panel is cropped to its own extent, y label, ticks, legend and title included."""
     import re as re_
-    fig.canvas.draw(); Hi = fig.get_figheight(); keep = [(t_, t_.get_text()) for t_ in fig.texts]
+    fig.canvas.draw(); r_ = fig.canvas.get_renderer(); D = fig.dpi; keep = [(t_, t_.get_text()) for t_ in fig.texts]
+    ext = lambda o: o.get_tightbbox(r_) if isinstance(o, plt.Axes) else o.get_window_extent(r_)
     for k, v in plan.items():
         if len(v) == 4 and isinstance(v[0], int):
             col, y, stem, new = v; old = k
             for t_, s_ in keep:
                 if s_.startswith(f"({old}) "): t_.set_text(f"({new}) " + s_[4:])
-            bb = transforms.Bbox.from_extents(SLICE[col], y - BOT, SLICE[col + 1], y + PH + TOP)
+            main = [a_ for a_ in fig.axes if abs(a_.get_position().y0 * fig.get_figheight() - y) < .2 and SLICE[col] <= (a_.get_position().x0 + a_.get_position().x1) / 2 * W <= SLICE[col + 1]]
+            top = max(a_.get_position().y1 for a_ in main) * fig.get_figheight() + TOP
+            band = transforms.Bbox.from_extents(SLICE[col], y - BOT, SLICE[col + 1], top)
+            fig.canvas.draw()
+            mem = [o for o in list(fig.texts) + list(fig.legends) + list(fig.axes) if o.get_visible() and (lambda e: band.x0 <= (e.x0 + e.x1) / 2 / D <= band.x1 and band.y0 <= (e.y0 + e.y1) / 2 / D <= band.y1)(o.get_window_extent(r_))]
+            xs = [ext(o) for o in mem]; x0 = min(e.x0 for e in xs) / D - .03; x1 = max(e.x1 for e in xs) / D + .03
+            bb = transforms.Bbox.from_extents(x0, y - BOT, x1, top)
         else:
             y, top, stem, mp = v
             for t_, s_ in keep:
                 m_ = re_.match(r"^\((\w)\) ", s_)
                 if m_ and m_.group(1) in mp: t_.set_text(f"({mp[m_.group(1)]}) " + s_[4:])
-            bb = transforms.Bbox.from_extents(0, y - BOT, W, top)
-        r_ = fig.canvas.get_renderer(); hid = []
-        for o in list(fig.texts) + list(fig.legends) + list(fig.axes):     # hide the neighbours whose centre lies outside this crop
-            e = o.get_window_extent(r_); cx, cy = (e.x0 + e.x1) / 2 / fig.dpi, (e.y0 + e.y1) / 2 / fig.dpi
-            if o.get_visible() and not (bb.x0 <= cx <= bb.x1 and bb.y0 <= cy <= bb.y1): o.set_visible(False); hid.append(o)
+            bb = transforms.Bbox.from_extents(0, y - BOT, W, top); band = bb
+        hid = []
+        for o in list(fig.texts) + list(fig.legends) + list(fig.axes):     # hide the neighbours whose centre lies outside this panel
+            e = o.get_window_extent(r_); cx, cy = (e.x0 + e.x1) / 2 / D, (e.y0 + e.y1) / 2 / D
+            if o.get_visible() and not (band.x0 <= cx <= band.x1 and band.y0 <= cy <= band.y1): o.set_visible(False); hid.append(o)
         fig.savefig(f"{OUT}/{stem}.pdf", bbox_inches=bb, facecolor="white")
         for o in hid: o.set_visible(True)
         for t_, s_ in keep: t_.set_text(s_)
@@ -286,7 +293,7 @@ XM = load("results_taxi_monthly.json")     # training months run one by one, add
 if XM and X:
     have = {taxi_key(r) for r in X["runs"]}; X["runs"] += [r for r in XM.get("runs", []) if taxi_key(r) not in have]
     for k, v in XM.get("months", {}).items(): X["months"].setdefault(k, v)
-PH = PH_B; H = 3.92; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.40, .46
+PH = PH_B; PH2 = PH_B + .30; H = 4.35; fig = plt.figure(figsize=(W, H), facecolor="white"); y1, y2 = 2.83, .46
 a, d, e, f = [cell(fig, q, y1) for q in range(4)]
 D = [r for r in D if "test" in r]; SZ_ = sorted({int(x) for r in D for x in r["val"] if int(x) <= 1600}); GD = collections.defaultdict(dict)
 for r in D: GD[(r["ds"], r["model"], r["seed"])][(r["action"], r["f"])] = r
@@ -338,7 +345,7 @@ d.axvline(ym_("2020-03"), color=RED, ls=DASH, lw=1.0, zorder=1); d.text(ym_("202
 d.set_xlim(2018.6, 2024.8); d.set_xticks([2020, 2022, 2024]); d.set_xticklabels(["2020-01", "2022-01", "2024-01"], fontsize=6.4); d.set_xticks([y + h for y in range(2019, 2025) for h in (0, .5)], minor=True); d.tick_params(axis="x", which="minor", length=1.8); d.set_xlabel("Train month", labelpad=1.5); ylab(d, "Mean R\u00b2"); frame(d); zoom(d, ALLB); short_y(d); d.tick_params(axis="x", which="major", labelsize=5.6)
 key_over(fig, d, HY, cols=3, size=6.0)
 # second row
-g, h, k_, l_ = [cell(fig, q, y2) for q in range(4)]
+PH = PH2; g, h, k_, l_ = [cell(fig, q, y2) for q in range(4)]     # the new-data row is taller, its legends take three lines
 # (e) monthly change of the violation rate against monthly change of R2, the models trained before the first large change
 fx = [r for r in X["runs"] if r["arm"] == "raw" and r["train_month"] <= "2020-01"]; last = max(r["train_month"] for r in fx); ks_ = [k for k in keys if k > last and all(k in r["r2"] for r in fx)]; mr = {k: mean(r["r2"][k] for r in fx) for k in ks_}; ar = {k: 100 * X["months"][k]["any_rule"] for k in keys}
 tx_ = [abs(ar[q] - ar[p]) for p, q in zip(ks_, ks_[1:])]; ty_ = [abs(mr[q] - mr[p]) for p, q in zip(ks_, ks_[1:])]; sci2["trigger"] = dict(month=ks_[1:], dviol=tx_, dr2=ty_)
@@ -395,9 +402,10 @@ def versus(ax, axis, name):
                 v = delta(a_, s_, b_, fld)
                 if np.isfinite(v): xx.append(x_ / 1e6); yy.append(v)
             sci2[name][f"{n}/{fld}"] = dict(x=xx, delta=yy); ally += yy; ax.plot(xx, yy, color=col, marker=mk, ms=(5.6 if mk == "*" else 3.4) if not hollow else (4.6 if mk == "*" else 3.0), lw=lw_, ls=ls, mec=col if hollow else "white", mfc="white" if hollow else col, mew=.7 if hollow else .25, zorder=4 if not hollow else 3)
-    ax.axhline(0, color=DARK, lw=.7, zorder=1); ax.set_xscale("log"); ax.minorticks_off(); ylab(ax, GAP); frame(ax); zoom(ax, ally); short_y(ax)
-NK = [hl(col, mk, n, ms=3.0) for _, n, col, mk in LN] + [hl(DARK, None, "C4", lw=1.3), hl(DARK, None, "Wiki", lw=1.0, ls=DASH), hl(DARK, None, "Random", lw=.7)]
-versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); key_over(fig, h, NK, cols=4, size=5.6)
+    ax.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); ax.set_xscale("log"); ax.minorticks_off(); ylab(ax, GAP); frame(ax); zoom(ax, ally); short_y(ax)
+NK = [hl(col, mk, n, ms=3.0) for _, n, col, mk in LN] + [hl(DARK, None, "C4", lw=1.3), hl(DARK, None, "Wiki", lw=1.0, ls=DASH), hl(GRAY, None, "Random", lw=1.1, ls=":")]
+versus(h, "size", "corpus_size"); h.set_xticks([3, 10, 30, 100]); h.set_xticklabels(["3M", "10M", "30M", "100M"]); h.set_xlabel("Model parameters", labelpad=1.5); BL = lambda: Line2D([], [], color="none", label=" ")
+key_over(fig, h, [NK[0], NK[1], NK[3], NK[2], NK[4], NK[5], NK[6], BL(), BL()], cols=3, size=5.6)     # columns of long, short and shortest names, so that the three lines are compact
 titles(fig, [a, d, e, f], ["(a) Choice of version", "(b) R\u00b2 by train month", "(c) Violations and R\u00b2", "(d) Training size"])
 # third row
 # (k) published synthetic images, share of synthetic images in the training set, replacing real images or added to them, each run against the real-only run of the same seed
@@ -423,6 +431,6 @@ for src, tag, ls, lw_, mkon in ((DC, "DataComp", "-", 1.5, True), (MF, "MIRFLICK
     for a_, n, col, mk in FILT:
         rr = [r for r in src if r.get("arm") == a_ and (r.get("frac"), r.get("seed")) in rnd]; fs = sorted({r["frac"] for r in rr})
         if fs: yy = [mean(100 * (r["test_r5"] - rnd[(x, r["seed"])]) for r in rr if r["frac"] == x) for x in fs]; sci2["image_text"][f"{tag}/{n}"] = dict(frac=fs, gain=yy); line(l_, fs, yy, col, mk if mkon else None, lw=lw_, ls=ls)
-l_.axhline(0, color=DARK, lw=.7, zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(DARK, None, "Random", lw=.7)], cols=3, size=5.4, dx=-.04)
+l_.axhline(0, color=GRAY, lw=1.1, ls=":", zorder=1); l_.set_yscale("symlog", linthresh=5, linscale=1); l_.set_ylim(-70, 30); l_.set_yticks([-30, -5, 0, 5, 20]); l_.set_yticklabels(["−30", "−5", "0", "5", "20"]); l_.set_xticks([.1, .3, .5, .7, .9]); l_.set_xticklabels([".1", ".3", ".5", ".7", ".9"]); l_.set_xlabel("Kept share of the pool", labelpad=1.5); ylab(l_, "Recall@5 gain (pp)"); frame(l_); l_.tick_params(axis="y", labelsize=7.2); l_.minorticks_off(); key_over(fig, l_, [hl(col, mk, n, ms=3.0) for _, n, col, mk in FILT] + [hl(GRAY, None, "Random", lw=1.1, ls=":")], cols=3, size=5.4, dx=-.04)
 titles(fig, [g, h, k_, l_], ["(e) Filters on C4", "(f) Filters, model size", "(g) Synthetic images", "(h) Image-text filters"]); label_room(fig)
-snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "row2": (y2, y2 + PH + TOP, "res_newdata", dict(e="a", f="b", g="c", h="d"))}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)
+snug(fig); crops(fig, {"a": (0, y1, "res_version_a", "a"), "b": (1, y1, "res_time_b", "b"), "c": (2, y1, "res_time_c", "c"), "d": (3, y1, "res_time_d", "d"), "row2": (y2, y2 + PH2 + .58, "res_newdata", dict(e="a", f="b", g="c", h="d"))}); print("B", save(fig, f"{OUT}/results_b")); json.dump(sci2, open(f"{OUT}/figure_data_b.json", "w"), indent=0, default=float)

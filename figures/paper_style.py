@@ -9,6 +9,7 @@ from matplotlib.patches import Patch
 W = 176 / 25.4
 RED, BLUE, ORANGE, GREEN, GRAY, DARK, PURPLE, TEAL = "#D62728", "#4E79A7", "#F28E2B", "#59A14F", "#888888", "#303030", "#B279A2", "#17A2B8"
 FS, TICK, LEGEND = 8.7, 8.0, 7.5
+LEGSCALE = 1.15
 def setup():
     plt.rcdefaults(); plt.rcParams.update({"font.size": FS, "axes.labelsize": FS, "xtick.labelsize": TICK, "ytick.labelsize": TICK, "axes.linewidth": .8, "pdf.fonttype": 42, "svg.fonttype": "none", "hatch.linewidth": .45, "font.family": "DejaVu Sans"})
 def box(fig, x, y, w, h, **kw): W_, H_ = fig.get_size_inches(); return fig.add_axes([x / W_, y / H_, w / W_, h / H_], **kw)
@@ -17,6 +18,7 @@ def frame(ax, axis="y"):
     ax.tick_params(direction="in", top=True, right=True, labelsize=TICK, length=2.4, pad=1.8); ax.grid(axis=axis, alpha=.20, lw=.4); ax.set_axisbelow(True)
 def key(fig, handles, x, y, cols=2, size=LEGEND):
     W_, H_ = fig.get_size_inches()
+    size = size * LEGSCALE     # legends a little larger than the tick labels allow by default
     return fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(x / W_, y / H_), ncol=cols, frameon=False, fontsize=size, handlelength=1.0, handletextpad=.27, columnspacing=.5, labelspacing=.12, borderaxespad=0, borderpad=0)
 def key_over(fig, ax, handles, cols=2, size=LEGEND, gap=3 / 72, dx=0.0):
     """A legend centred above one panel."""
