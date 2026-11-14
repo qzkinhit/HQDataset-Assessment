@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Print the main results per dataset as plain tables. A section whose result file is absent is skipped.
 Usage: print_tables.py [--results DIR] [--only SECTION,...] [--latex]
-The sections are tables, decision, tep, taxi, vision, corpus and multimodal. With --latex the script prints the dataset table and the main table of the survey in LaTeX, from big_tables.py."""
+The sections are tables, decision, tep, taxi, vision, corpus and multimodal. With --latex the script prints Table 3 (datasets) and Table 4 (main results) of the survey in LaTeX, from big_tables.py."""
 import argparse, collections, json, os, statistics as st, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, os.path.dirname(HERE))
 from hqd_assess import paired_flags, replay_rules

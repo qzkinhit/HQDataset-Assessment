@@ -1,6 +1,6 @@
-# The graded assessment framework
+# Basic concepts, assessment levels and the assessment procedure
 
-This page states the framework of the survey *A survey on task-oriented assessment of multimodal high-quality datasets*. It covers the quality claim, the five assessment levels, the three dimensions of the standard, the five method families and the six-stage procedure with its algorithms. The package `hqd_assess` implements these parts, and every function named below is in that package. The survey describes the procedure in running text, and this page writes the steps as Algorithms 1 to 6.
+This page restates the basic concepts and the assessment levels of Section 2 of the survey *A survey on task-oriented assessment of multimodal high-quality datasets*, the three dimensions of the standard discussed in Section 3 and the five method families compared in Section 4. It also gives a six-stage assessment procedure with Algorithms 1 to 6. The procedure is documentation of this repository and is not part of the survey. The package `hqd_assess` implements these parts, and every function named below is in that package.
 
 ## What is assessed
 
@@ -69,7 +69,7 @@ The mapping shows three links for further work. Documentation items stay at L1 a
 
 The composite score lets sub-indicators offset each other. Let a dimension hold $K$ sub-indicators $s_i\in[0,1]$ with the equal-weight score $P=\tfrac{100}{K}\sum_{i=1}^K s_i$. Since $P=100-\tfrac{100}{K}\sum_{i=1}^K(1-s_i)$, the score reaches 90 points if and only if $\sum_{i=1}^K(1-s_i)\le 0.1K$, and with the other sub-indicators at full marks a single sub-indicator can fall to $\max(0,1-0.1K)$. Section 3.2 of the survey gives this computation.
 
-GB/T 48562-2026 recommends equal weights. The floor of a single sub-indicator is then 0.2 for the $K=8$ items of data quality and 0.6 for the $K=4$ items of documentation. With adjustable weights the floor of item $i$ with weight $\omega_i$ is $\max(0,1-\tfrac{0.1}{\omega_i})$, and an item with a weight of at most 0.1 can reach 0 while the dimension passes. Safety conformity or content authenticity can therefore fall to 0.2 at 90 points. Model fit cannot fall below about 0.895, because it enters the exponential factor of the model application score. Since $P\le 100\,\mathrm{e}^{s_m-1}$, that dimension fails for $s_m<1+\ln 0.9$ whatever values the other items take. The survey makes safety, license and authenticity veto items, which enter Algorithm 5 as the set $\mathcal{A}$, and computes the composite score on the other items above their own thresholds. The functions are `compensation_budget`, `within_compensation_budget`, `single_item_floor`, `weighted_item_floor` and `model_fit_threshold`.
+GB/T 48562-2026 recommends equal weights. The floor of a single sub-indicator is then 0.2 for the $K=8$ items of data quality and 0.6 for the $K=4$ items of documentation. With adjustable weights the floor of item $i$ with weight $\omega_i$ is $\max(0,1-\tfrac{0.1}{\omega_i})$, and an item with a weight of at most 0.1 can reach 0 while the dimension passes. Safety conformity or content authenticity can therefore fall to 0.2 at 90 points. Model fit cannot fall below about 0.895, because it enters the exponential factor of the model application score. Since $P\le 100\,\mathrm{e}^{s_m-1}$, that dimension fails for $s_m<1+\ln 0.9$ whatever values the other items take. The survey recommends safety, license and authenticity as veto items. Algorithm 5 below takes them as the set $\mathcal{A}$ and computes the composite score on the other items above their own thresholds. The functions are `compensation_budget`, `within_compensation_budget`, `single_item_floor`, `weighted_item_floor` and `model_fit_threshold`.
 
 ## The five method families
 
@@ -95,7 +95,7 @@ The effects of quality dimensions do not add up, so an attribution by dimension 
 
 ## The six-stage procedure
 
-The result of each stage decides what the next stage does. When the data or the usage context changes, the assessment returns to the affected stage.
+This procedure belongs to the documentation of the repository and is not part of the survey. Its stages follow the recommendations at the end of Section 6.2 of the survey, namely to fix the sampling plan, the split and the label definition before results are read, to keep safety, license and authenticity out of the composite score as veto items, and to assess again after the data, labels, downstream model or target scene change. The result of each stage decides what the next stage does. When the data or the usage context changes, the assessment returns to the affected stage.
 
 1. **State the purpose and list the claims.** Compliance decides whether the data may be used, and license, source and safety need L2 or L3 with non-compensable thresholds. Selection decides which candidate fits, and the candidates need L4 on one held-out set and one model class. Improvement decides which change works and needs L5. The output is a list of claims with statistical units and lowest levels (`minimum_level`).
 2. **Fix the materials and the sampling plan before reading results.** The data version, split rule, documents and logs, strata and sample sizes are fixed. The formulas above give the sizes, and when the budget falls short the report states the precision that it can guarantee.

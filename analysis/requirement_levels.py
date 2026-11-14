@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Assessment levels of the requirement items of the assessment documents, from data/requirements/items.jsonl.
-Computes the counts of Table 3, the other numbers of Section 3.2 and the agreement of the two coding rounds. Prints plain text, or JSON with --json.
-Columns of Table 3: Items, L1 to L5 (items per given level), Sampling, Threshold and Scored (items that set a sampling design, give a pass condition
+Computes the counts of Table 5, the other numbers of Section 6 and the agreement of the two coding rounds. Prints plain text, or JSON with --json.
+Columns of Table 5: Items, L1 to L5 (items per given level), Sampling, Threshold and Scored (items that set a sampling design, give a pass condition
 and enter a composite score), N>G (items whose needed level is above the given level). docs/standards.md describes the items and the coding rules.
 Usage: requirement_levels.py [--json]"""
 import argparse, collections, json, os
@@ -23,7 +23,7 @@ def rank(level):
 
 
 def row(items):
-    """One row of Table 3."""
+    """One row of Table 5."""
     return ([len(items)] + [sum(r["given"] == l for r in items) for l in LEVELS] + [sum(r[k] for r in items) for k in ("sampling", "threshold", "aggregation")]
             + [sum(rank(r["needed"]) > rank(r["given"]) > 0 for r in items)])
 
@@ -37,17 +37,17 @@ def agreement(pairs):
 
 
 def compute(path=ITEMS):
-    """Table 3, the numbers of Section 3.2 and the agreement of the two rounds, as a dictionary."""
+    """Table 5, the numbers of Section 6 and the agreement of the two rounds, as a dictionary."""
     items = [json.loads(line) for line in open(path, encoding="utf-8") if line.strip()]
     by = collections.defaultdict(list)
     for r in items:
         by[r["file"]].append(r)
-    files = [f for f in by if f not in DUPLICATES]                      # the 10 documents of Table 3
+    files = [f for f in by if f not in DUPLICATES]                      # the 10 documents of Table 5
     assert sorted(f for _, fs in ROWS for f in fs) == sorted(files)
     kept = [r for f in files for r in by[f]]
 
     def where(test):
-        """Documents of Table 3 with at least one item that passes the test."""
+        """Documents of Table 5 with at least one item that passes the test."""
         return [f for f in files if any(test(r) for r in by[f])]
     table = {name: row([r for f in fs for r in by[f]]) for name, fs in ROWS}
     table["Total"] = row(kept)
@@ -80,11 +80,11 @@ def compute(path=ITEMS):
     rounds["items_with_disagreement"] = sum(r["round1"] != r["round2"] for r in items)
     # items of given level L1 whose needed level is L1 in one round and L2 in the other, the most frequent disagreement of the needed level
     rounds["needed_L1_against_L2_on_given_L1"] = sum(r["given"] == "L1" and {r["round1"]["needed"], r["round2"]["needed"]} == {"L1", "L2"} for r in items)
-    return dict(items_per_document={f: len(rs) for f, rs in by.items()}, pairs=pairs, table3=dict(columns=COLUMNS, rows=table), section_3_2=numbers, agreement=rounds)
+    return dict(items_per_document={f: len(rs) for f, rs in by.items()}, pairs=pairs, table5=dict(columns=COLUMNS, rows=table), section_6=numbers, agreement=rounds)
 
 
 def report(s):
-    x, a = s["section_3_2"], s["agreement"]
+    x, a = s["section_6"], s["agreement"]
     width = [max(len(c), 5) + 2 for c in COLUMNS]
     lines = [f"{x['items']} items in {x['documents']} documents ({x['domestic']} domestic, {x['international']} international), "
              f"{x['items_counted']} items in the {x['documents_counted']} documents without {join(DUPLICATES)}",
@@ -92,11 +92,11 @@ def report(s):
     for pair, p in s["pairs"].items():
         lines.append(f"{pair}: {p['items'][0]} and {p['items'][1]} items, only in the draft: {join(p['only_in_draft']) or 'none'}, "
                      f"only in the technical document: {join(p['only_in_technical_document']) or 'none'}, coded differently: {join(p['coded_differently']) or 'none'}")
-    lines += ["", "Table 3", f"{'Document':22s}" + "".join(f"{c:>{w}s}" for c, w in zip(COLUMNS, width))]
-    for name, values in s["table3"]["rows"].items():
+    lines += ["", "Table 5", f"{'Document':22s}" + "".join(f"{c:>{w}s}" for c, w in zip(COLUMNS, width))]
+    for name, values in s["table5"]["rows"].items():
         lines.append(f"{name:22s}" + "".join(f"{v:>{w}.1f}" if isinstance(v, float) else f"{v:>{w}d}" for v, w in zip(values, width)))
     needed = x["given_L1_by_needed"]
-    lines += ["", f"Section 3.2, over the {x['documents_counted']} documents of Table 3",
+    lines += ["", f"Section 6, over the {x['documents_counted']} documents of Table 5",
               f"Documents with items of given level L2: {len(x['files_with_given_L2'])}, without any item that sets sampling: "
               f"{len(x['files_with_given_L2_without_sampling'])} ({join(x['files_with_given_L2_without_sampling'])})",
               f"Items of given level L2 without a sampling plan, sample size or interval: {x['given_L2_without_sampling']} of {x['given_L2']}",

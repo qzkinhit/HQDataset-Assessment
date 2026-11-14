@@ -1,8 +1,9 @@
 """Graded quality assessment of datasets.
 
-The package implements the framework of the survey "A survey on task-oriented assessment
-of multimodal high-quality datasets". It holds pure functions without file or network
-access. Data loading and model training stay with the caller. Definitions carry the
+The package implements the quality claims, assessment levels and scores of the survey
+"A survey on task-oriented assessment of multimodal high-quality datasets", and the
+assessment procedure that docs/framework.md documents. It holds pure functions without
+file or network access. Data loading and model training stay with the caller. Definitions carry the
 numbers of the survey, and algorithms carry the numbers of docs/framework.md.
 """
 from .claim import AssessmentLevel, DatasetVersion, Estimate, QualityClaim, UsageContext, minimum_level, task_gain

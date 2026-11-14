@@ -234,7 +234,7 @@ def load_tables_summary(R): return _load(R, "tables_summary.json")
 # ---------------------------------------------------------------- 3. loss of the static rule
 def decision_gain(R, n_top=1600):
     """Gain of the task test over the static rule on the classification tables, in points, by validation size and by model, replayed as
-    summaries.py and Figure 5(a) do: a table with fewer validation records than n uses all it has."""
+    summaries.py and Figure 4(a) do: a table with fewer validation records than n uses all it has."""
     rows = [r for r in _jsonl(R, "results_decision_fine.jsonl") if "test" in r] or [r for r in _jsonl(R, "results_decision.jsonl") if "test" in r]
     if not rows: return None
     G = collections.defaultdict(dict)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The two result figures of the survey, Figure 5 and Figure 6. All values are read from the result files, and the plotted values are written next to the figures as figure_data_a.json and figure_data_b.json.
+"""The result figures of the survey, Figures 4 to 8, drawn on two canvases and cropped into the single panels res_*.pdf. All values are read from the result files, and the plotted values are written next to the figures as figure_data_a.json and figure_data_b.json.
 Usage: plot_results.py [RESULTS_DIR] [OUT_DIR]"""
 import json, os, sys, statistics as st, collections
 import numpy as np

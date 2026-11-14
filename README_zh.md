@@ -1,6 +1,6 @@
 # 高质量数据集测评
 
-本仓库存放综述《面向任务的多模态高质量数据集测评研究综述》的代码、数据和结果，同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有展开的文档，包括测评流程的算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
+本仓库存放综述《面向任务的多模态高质量数据集测评研究综述》的代码、数据和结果。综述按五个测评层级梳理数据质量标准和测评方法，统计 10 份测评类文件中要求条目的测评层级，并对 54 个公开数据集做质量测评。仓库同时存放方法软件包 `hqd_assess` 及其测试，以及综述正文没有包含的文档，包括六阶段测评流程及其算法、全部数据集和参数的说明，以及工具、标准和已发表结果的比较。
 
 英文版见 [README.md](README.md)。
 
@@ -13,8 +13,8 @@
 | 数据集 | 11 组共 54 个数据集，约 $3.39\times 10^8$ 条记录 |
 | 下载数据 | 除 `data/` 中的文件外，`scripts/download_data.sh` 从官方来源下载 146 个文件，共约 17 GiB |
 | 测评做法 | 综述五类方法中的 66 种具体做法 |
-| 实验 | 11 组数据集上的 6 个研究问题，44041 次模型训练（每个配置计一次），结果文件记录的运行时间累计约 760 小时，使用 64 核 CPU 服务器和 A6000 GPU |
-| 代码 | 实验和软件包 `hqd_assess` 共约 7300 行 Python 代码，196 项测试 |
+| 公开数据集测评 | 11 组数据集上的 6 个研究问题，44041 次模型训练（每个配置计一次），结果文件记录的运行时间累计约 760 小时，使用 64 核 CPU 服务器和 A6000 GPU |
+| 代码 | 测评脚本和软件包 `hqd_assess` 共约 7300 行 Python 代码，196 项测试 |
 
 | 数据集分组 | 数据集数 | 记录数 |
 |---|---:|---:|
@@ -33,9 +33,9 @@
 
 对整张表做静态扫描时计入该表的全部记录。`analysis/big_tables.py` 从结果文件计算每个数据集的记录数。
 
-## 测评框架
+## 基本概念和测评层级
 
-综述把一条关于数据集的质量结论写成六元组，依次为测评对象、质量维度、度量、带不确定性的估计值、测评层级和使用条件。测评层级记录结论的获得方式。
+综述第 2 节把一条关于数据集的质量结论写成六元组，依次为测评对象、质量维度、度量、带不确定性的估计值、测评层级和使用条件。测评层级记录结论的获得方式，综述按这五个层级梳理标准和方法。
 
 | 层级 | 名称 | 做法 |
 |---|---|---|
@@ -47,7 +47,7 @@
 
 贯穿全文的例子是经典 Tennessee Eastman 故障诊断基准。它没有缺失值，重复记录极少，按记录统计的得分接近满分。在同一批文件上，同一个随机森林的 Macro-F1 仅因划分方式就相差 0.233，随机划分窗口时每个测试窗口都与训练窗口共享记录，按文件名标注时每个故障测试文件有 16.7% 的记录标错。
 
-[docs/framework_zh.md](docs/framework_zh.md) 给出定义、六阶段流程和算法 1 到算法 6。
+[docs/framework_zh.md](docs/framework_zh.md) 列出综述中的定义，并把六阶段测评流程写成算法 1 到算法 6。这一流程是本仓库的文档，不属于综述正文。
 
 ## 软件包 `hqd_assess`
 
@@ -99,23 +99,23 @@ pytest
 | 路径 | 内容 |
 |---|---|
 | `hqd_assess/` | 方法软件包 |
-| `tests/` | 复现综述中全部计算得到的数字，并把软件包的结果与实验记录相比较 |
+| `tests/` | 复现综述中全部计算得到的数字，并把软件包的结果与运行记录相比较 |
 | `examples/` | 经典 TEP 上的 `tep_assessment.py` 和单张表上的 `table_claims.py` |
-| `docs/framework.md`，`docs/framework_zh.md` | 测评框架的定义、六阶段流程和六个算法 |
+| `docs/framework.md`，`docs/framework_zh.md` | 综述中的定义和测评层级，以及仓库给出的六阶段流程和六个算法 |
 | `docs/datasets.md` | 每个数据集的官方来源、来源声明的许可、用途、规模、错误来源、下载命令和对应脚本 |
 | `docs/parameters.md` | 全部工程参数及其所在文件，以及每个结果文件存放的运行数 |
 | `docs/release_assets.md` | 每个发布归档包的内容 |
 | `docs/tools.md`，`docs/published_results.md`，`docs/standards.md` | 工具比较、静态质量和任务效用的已发表结果、标准比较和子指标层级 |
 | `data/` | 小体积数据文件，见 `data/README.md` |
-| `case_tep/`，`big/`，`study/`，`native/`，`corpus/`，`llm/` | 实验脚本 |
-| `analysis/` | 实验汇总、综述中的数字和表格 |
-| `figures/` | 实验结果图 |
-| `results/` | 实验结果记录 |
+| `case_tep/`，`big/`，`study/`，`native/`，`corpus/`，`llm/` | 各组测评的脚本 |
+| `analysis/` | 运行汇总、综述中的数字和表格 |
+| `figures/` | 测评结果图 |
+| `results/` | 运行结果记录 |
 | `scripts/download_data.sh` | 从来源下载数据集的命令 |
 
-## 实验
+## 各组测评
 
-| 实验 | 数据 | 错误来源 | 问题 | 脚本 |
+| 测评 | 数据 | 错误来源 | 问题 | 脚本 |
 |---|---|---|---|---|
 | 表格 | 11 张有脏版本和干净版本的表 | 基准自带 | 标准的得分能否确定任务分数，修复是否可加，修复和删除比例的影响 | `study/run_real_tables.py`，`study/run_tables_fine.py` |
 | 版本选择 | 同样的 11 张表 | 基准自带 | $n$ 条样本上的任务测试相对静态规则的增益 | `study/run_decision.py`，`study/run_decision_fine.py` |
@@ -191,7 +191,7 @@ python big/run_taxi.py
 python big/run_taxi.py --sizes 100000 --out results/results_taxi_100k.json
 python big/run_taxi.py --sizes 10000,30000,300000,3000000 --out results/results_taxi_sizes.json
 
-# GPU 实验的作业清单，由 study/gpu_pool.py 分配到各张卡
+# GPU 测评任务的作业清单，由 study/gpu_pool.py 分配到各张卡
 export HQD_ROOT=$DIR HQD_POOL=$DIR/processed HQD_CORPUS=$DIR/corpus
 mkdir -p jobs
 python study/make_jobs.py jobs
@@ -259,7 +259,7 @@ done
 python native/label_errors.py $DIR/label_errors $DIR/preds results/label_errors.json
 python native/label_errors_audioset.py $DIR/label_errors $DIR/label_errors/class_labels_indices.csv results/results_audioset_labels.json
 
-# 原生实验的静态质量得分，脚本从数据目录读取结果文件
+# 原生数据上各组测评的静态质量得分，脚本从数据目录读取结果文件
 cp results/results_datacomp.jsonl results/results_mirflickr.jsonl results/results_fidelity.json $DIR/
 python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 
@@ -267,9 +267,9 @@ python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 python analysis/summaries.py results
 python analysis/make_numbers.py results                 # 正文中的全部数字，输出 JSON
 python analysis/print_tables.py                         # 按数据集输出的表格
-python analysis/print_tables.py --latex                 # 综述表 5 和表 6 的 LaTeX
-python figures/plot_results.py results figures/plots    # 单个子图 res_*.pdf 组成图 5 到图 9
-python native/audit_native.py results                   # 原生实验的完成情况与作业清单的比较
+python analysis/print_tables.py --latex                 # 综述表 3 和表 4 的 LaTeX
+python figures/plot_results.py results figures/plots    # 单个子图 res_*.pdf 组成图 4 到图 8
+python native/audit_native.py results                   # 原生数据上各组测评的完成情况与作业清单的比较
 python analysis/stored_runs.py --update docs/parameters.md
 ```
 
@@ -277,43 +277,41 @@ python analysis/stored_runs.py --update docs/parameters.md
 
 ## 综述中的图表和结果文件的对应关系
 
-图 1 到图 4 和归纳文献的表格随综述正文排版，下表列出其内容的来源。最后一列写上面命令中对应的分组或具体命令。
+图 1 到图 3 和归纳标准与方法的表格随综述正文排版，下表列出其内容的来源。最后一列写上面命令中对应的分组或具体命令。
 
 | 综述中的内容 | 结果文件 | 脚本 | 对应命令 |
 |---|---|---|---|
 | 图 1，TEP 的静态检查和任务分数 | `results/case_tep.json`，`results/tep_traces.json` | `case_tep/run_case.py`，`case_tep/make_traces.py` | 经典 TEP |
 | 图 2，研究演进 | | | 综述引用的文献 |
-| 图 3，分级测评框架 | `docs/framework_zh.md` | `hqd_assess/claim.py`，`hqd_assess/scoring.py` | 依据框架绘制 |
-| 图 4，测评流程和各组实验 | `docs/framework_zh.md`，`docs/parameters.md` | `hqd_assess/` | 依据框架绘制 |
-| 图 5(a)，版本选择 | `results/results_decision.jsonl`，`results/results_decision_fine.jsonl` | `study/run_decision.py`，`study/run_decision_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 5(b)，部分修复增益占全部修复增益的比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 5(c)，CleanML 表上的清洗方法 | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`，`native/run_cleanml.py`，`figures/plot_results.py` | CleanML 表，数字、表和图 |
-| 图 5(d)，修复和删除人工标签错误 | `results/results_vision.jsonl`，`results/results_vision_fine.jsonl` | `study/run_vision.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
-| 图 6(a) 到 (d)，修复和删除的增益、等量随机删除、沿修复路径和删除路径的 Spearman 相关、联合修复和单项修复 | `results/tables_summary.json`，`results/results_real_tables.jsonl`，`results/results_random_delete.jsonl` | `study/run_real_tables.py`，`study/run_random_delete.py`，`analysis/tables_summary.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
-| 图 7(a)，评测协议和数据错误 | `results/tables_summary.json`，`results/case_tep.json` | `case_tep/run_case.py`，`figures/plot_results.py` | 经典 TEP，数字、表和图 |
-| 图 7(b)，独立运行数 | `results/results_rieth.json`，`results/results_rieth_models.jsonl` | `big/run_rieth.py`，`big/run_rieth_models.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 7(c)，错误率估计和区间 | `results/results_detectors.jsonl`，`results/results_finite_population.jsonl` | `study/run_detectors.py`，`analysis/validate_detector_intervals.py`，`figures/plot_results.py` | 同样的表上的检测器，数字、表和图 |
-| 图 7(d)，Qwen 修复和破坏的单元格 | `results/results_llm_cells.json`，`results/results_llm_tables.jsonl` | `llm/repair_tables.py`，`llm/score_tables.py`，`figures/plot_results.py` | [llm/README.md](llm/README.md)，数字、表和图 |
-| 图 8(a)，细类覆盖 | `results/results_vision.jsonl`，`results/results_vision_coverage_ref.json` | `study/run_vision.py`，`study/coverage_reference.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
-| 图 8(b), (c)，$R^2$ 随训练月份的变化和规则违反率 | `results/results_taxi.json`，`results/results_taxi_monthly.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 8(d)，训练规模和时间 | `results/results_taxi.json`，`results/results_taxi_100k.json`，`results/results_taxi_sizes.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
-| 图 9(a), (b)，C4 上的筛选和模型规模 | `results/results_corpus.jsonl` | `corpus/run_corpus.py`，`figures/plot_results.py` | 网页语料和 DCLM，数字、表和图 |
-| 图 9(c)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
-| 图 9(d)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
-| 表 1，与已有综述的比较 | | | 综述引用的文献 |
-| 表 2，标准比较 | `docs/standards.md` | | |
-| 表 3，测评类文件中要求条目的测评层级 | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
-| 表 4，五类测评方法的比较 | `docs/framework_zh.md` | | |
-| 表 5，实验使用的数据集 | `results/table_sizes.json`，`results/results_sizes_native.json`，`results/label_errors.json`，`results/results_audioset_labels.json`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_taxi.json`，`results/corpus_stats.json`，`results/results_cleanml.jsonl`，`results/results_datacomp.jsonl`，`results/results_wilds.jsonl`，`results/results_multimodal.jsonl` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
-| 表 6，全部数据集上的结果 | `results/tables_summary.json`，`results/static_native.json`，`results/corpus_static.json`，`results/dataset_docs.json`，`results/results_decision_fine.jsonl`，`results/results_versions.jsonl`，`results/results_cleanml.jsonl`，`results/results_corpus.jsonl`，`results/results_taxi.json`，`results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_wilds.jsonl`，`results/results_synth.jsonl`，`results/results_vision.jsonl`，`results/results_fair.json`，`results/results_multimodal.jsonl`，`results/label_errors.json` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| 图 3，基本概念与测评层级 | `docs/framework_zh.md` | `hqd_assess/claim.py`，`hqd_assess/scoring.py` | 依据定义绘制 |
+| 图 4(a)，版本选择 | `results/results_decision.jsonl`，`results/results_decision_fine.jsonl` | `study/run_decision.py`，`study/run_decision_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 4(b)，部分修复增益占全部修复增益的比例 | `results/results_real_tables.jsonl`，`results/results_tables_fine.jsonl` | `study/run_tables_fine.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 4(c)，CleanML 表上的清洗方法 | `results/results_cleanml.jsonl` | `native/clean_cleanml.py`，`native/run_cleanml.py`，`figures/plot_results.py` | CleanML 表，数字、表和图 |
+| 图 4(d)，修复和删除人工标签错误 | `results/results_vision.jsonl`，`results/results_vision_fine.jsonl` | `study/run_vision.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
+| 图 5(a) 到 (d)，修复和删除的增益、等量随机删除、沿修复路径和删除路径的 Spearman 相关、联合修复和单项修复 | `results/tables_summary.json`，`results/results_real_tables.jsonl`，`results/results_random_delete.jsonl` | `study/run_real_tables.py`，`study/run_random_delete.py`，`analysis/tables_summary.py`，`figures/plot_results.py` | 表格和版本选择，数字、表和图 |
+| 图 6(a)，评测协议和数据错误 | `results/tables_summary.json`，`results/case_tep.json` | `case_tep/run_case.py`，`figures/plot_results.py` | 经典 TEP，数字、表和图 |
+| 图 6(b)，独立运行数 | `results/results_rieth.json`，`results/results_rieth_models.jsonl` | `big/run_rieth.py`，`big/run_rieth_models.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 6(c)，错误率估计和区间 | `results/results_detectors.jsonl`，`results/results_finite_population.jsonl` | `study/run_detectors.py`，`analysis/validate_detector_intervals.py`，`figures/plot_results.py` | 同样的表上的检测器，数字、表和图 |
+| 图 6(d)，Qwen 修复和破坏的单元格 | `results/results_llm_cells.json`，`results/results_llm_tables.jsonl` | `llm/repair_tables.py`，`llm/score_tables.py`，`figures/plot_results.py` | [llm/README.md](llm/README.md)，数字、表和图 |
+| 图 7(a)，细类覆盖 | `results/results_vision.jsonl`，`results/results_vision_coverage_ref.json` | `study/run_vision.py`，`study/coverage_reference.py`，`figures/plot_results.py` | 人工标签噪声、覆盖和近重复，数字、表和图 |
+| 图 7(b), (c)，$R^2$ 随训练月份的变化和规则违反率 | `results/results_taxi.json`，`results/results_taxi_monthly.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 7(d)，训练规模和时间 | `results/results_taxi.json`，`results/results_taxi_100k.json`，`results/results_taxi_sizes.json` | `big/run_taxi.py`，`figures/plot_results.py` | Rieth TEP 和出租车记录，数字、表和图 |
+| 图 8(a), (b)，C4 上的筛选和模型规模 | `results/results_corpus.jsonl` | `corpus/run_corpus.py`，`figures/plot_results.py` | 网页语料和 DCLM，数字、表和图 |
+| 图 8(c)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
+| 图 8(d)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
+| 表 1，主要数据质量标准和规范 | `docs/standards.md` | | |
+| 表 2，五类测评方法的比较 | `docs/framework_zh.md` | | |
+| 表 3，按数据类别汇总的公开数据集 | `results/table_sizes.json`，`results/results_sizes_native.json`，`results/label_errors.json`，`results/results_audioset_labels.json`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_taxi.json`，`results/corpus_stats.json`，`results/results_cleanml.jsonl`，`results/results_datacomp.jsonl`，`results/results_wilds.jsonl`，`results/results_multimodal.jsonl` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| 表 4，全部数据集的测评结果 | `results/tables_summary.json`，`results/static_native.json`，`results/corpus_static.json`，`results/dataset_docs.json`，`results/results_decision_fine.jsonl`，`results/results_versions.jsonl`，`results/results_cleanml.jsonl`，`results/results_corpus.jsonl`，`results/results_taxi.json`，`results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_wilds.jsonl`，`results/results_synth.jsonl`，`results/results_vision.jsonl`，`results/results_fair.json`，`results/results_multimodal.jsonl`，`results/label_errors.json` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| 表 5，测评类文件中要求条目的测评层级 | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
 | 正文中的数字 | `results/numbers_*.json`，`results/tables_summary.json`，`results/insights_summary.json`，`results/results_random_delete.jsonl` | `analysis/summaries.py`，`analysis/insights.py`，`study/run_random_delete.py`，`analysis/make_numbers.py` | 数字、表格和图 |
 | 综述中计算得到的数字 | | `hqd_assess/`，`tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## 结果
 
-`results/` 存放每组实验的结果记录，JSONL 文件每行一次运行，JSON 文件中为运行列表。`docs/parameters.md` 给出每个文件的已计分运行数。`results/numbers_*.json` 存放正文中的数字，`results/tables_summary.json` 存放表格实验的汇总，`results/audit_native.json` 存放原生实验与作业清单的比较，`results/audit_cleanml_published.json` 存放 CleanML 实验的准确率与已发表数值的对照，`results/results_detectors.jsonl`、`results/detectors_summary.json` 和 `results/sanity_detectors.json` 存放检测器估计及其汇总和检查结果，`results/dataset_docs.json` 存放说明文档得分及其原文。`results/results_civilcomments.jsonl` 与 `results/results_wilds.jsonl` 中的 CivilComments 行相同。带 `error` 字段的行是未计分的运行，例如删除后不足 30 条记录。
+`results/` 存放每组测评的结果记录，JSONL 文件每行一次运行，JSON 文件中为运行列表。`docs/parameters.md` 给出每个文件的已计分运行数。`results/numbers_*.json` 存放正文中的数字，`results/tables_summary.json` 存放表格测评的汇总，`results/audit_native.json` 存放原生数据上各组测评与作业清单的比较，`results/audit_cleanml_published.json` 存放 CleanML 运行的准确率与已发表数值的对照，`results/results_detectors.jsonl`、`results/detectors_summary.json` 和 `results/sanity_detectors.json` 存放检测器估计及其汇总和检查结果，`results/dataset_docs.json` 存放说明文档得分及其原文。`results/results_civilcomments.jsonl` 与 `results/results_wilds.jsonl` 中的 CivilComments 行相同。带 `error` 字段的行是未计分的运行，例如删除后不足 30 条记录。
 
-图像实验保存的测试预测和语料文档的评分需要 GPU 时间重新计算，它们放在 GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0) 中。`scripts/download_data.sh DIR release` 下载并解包这些文件，[docs/release_assets.md](docs/release_assets.md) 列出其内容。
+图像测评保存的测试预测和语料文档的评分需要 GPU 时间重新计算，它们放在 GitHub Release [v1.0](https://github.com/qzkinhit/HQDataset-Assessment/releases/tag/v1.0) 中。`scripts/download_data.sh DIR release` 下载并解包这些文件，[docs/release_assets.md](docs/release_assets.md) 列出其内容。
 
 ## 许可
 
