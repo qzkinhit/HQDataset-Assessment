@@ -14,7 +14,7 @@ The Chinese version is [README_zh.md](README_zh.md).
 | Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
 | Assessment practices | 66 practices from the five method families of the survey |
 | Assessment of public datasets | 6 research questions over 11 groups of datasets, 44041 model trainings (each configuration counted once), about 760 hours of run time recorded in the result files, on a 64-core CPU server and A6000 GPUs |
-| Code | About 7300 lines of Python for the assessment and the package `hqd_assess`, and 196 tests |
+| Code | About 7200 lines of Python for the assessment and the package `hqd_assess`, and 163 tests |
 
 | Group of datasets | Datasets | Records |
 |---|---:|---:|
