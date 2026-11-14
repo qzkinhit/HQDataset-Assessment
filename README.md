@@ -1,6 +1,6 @@
 # Assessment of high-quality datasets
 
-This repository holds the code, the data and the results of the survey *A survey on task-oriented assessment of multimodal high-quality datasets* (in Chinese). The survey organizes data quality standards and assessment methods by five assessment levels, counts the levels of the requirement items in ten assessment documents, and assesses 54 public datasets. The repository also holds the method package `hqd_assess` with its tests, and documents that the survey leaves out, namely a six-stage assessment procedure with its algorithms, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
+This repository holds the code, the data and the results of the paper *Task-oriented assessment of multimodal high-quality datasets* (in Chinese). The paper organizes data quality standards and assessment methods by five assessment levels, counts the levels of the requirement items in ten assessment documents, and assesses 54 public datasets. The repository also holds the method package `hqd_assess` with its tests, and documents that the paper leaves out, namely a six-stage assessment procedure with its algorithms, the descriptions of all datasets and parameters, and comparisons of tools, standards and published results.
 
 The Chinese version is [README_zh.md](README_zh.md).
 
@@ -8,11 +8,11 @@ The Chinese version is [README_zh.md](README_zh.md).
 
 | Item | Scale |
 |---|---|
-| Literature | 22 search queries on Semantic Scholar from 2010 to November 2026, 52213 hits, 21835 papers after screening by citations and removing duplicates, 207 references in the survey |
+| Literature | 22 search queries on Semantic Scholar from 2010 to November 2026, 52213 hits, 21835 papers after screening by citations and removing duplicates, 207 references in the paper |
 | Standards and policies | National standards, drafts for comment, technical documents of TC609, ISO/IEC 5259, ISO 8000, the EU AI Act and the NIST AI RMF, read in full where a public text exists |
 | Datasets | 54 datasets in 11 groups, about $3.39\times 10^8$ records |
 | Downloads | About 17 GiB from 146 files of the official sources, fetched by `scripts/download_data.sh`, besides the files in `data/` |
-| Assessment practices | 66 practices from the five method families of the survey |
+| Assessment practices | 66 practices from the five method families of the paper |
 | Assessment of public datasets | 6 research questions over 11 groups of datasets, 44041 model trainings (each configuration counted once), about 760 hours of run time recorded in the result files, on a 64-core CPU server and A6000 GPUs |
 | Code | About 7200 lines of Python for the assessment and the package `hqd_assess`, and 163 tests |
 
@@ -35,7 +35,7 @@ A static scan over a whole table counts its records. `analysis/big_tables.py` co
 
 ## Basic concepts and assessment levels
 
-Section 2 of the survey writes a quality claim about a dataset as a six-tuple of object, dimension, measure, estimate with uncertainty, assessment level and usage context. The level records how a conclusion is obtained, and the survey organizes standards and methods by these five levels.
+Section 2 of the paper writes a quality claim about a dataset as a six-tuple of object, dimension, measure, estimate with uncertainty, assessment level and usage context. The level records how a conclusion is obtained, and the paper organizes standards and methods by these five levels.
 
 | Level | Name | What is done |
 |---|---|---|
@@ -47,7 +47,7 @@ Section 2 of the survey writes a quality claim about a dataset as a six-tuple of
 
 The running example is the classic Tennessee Eastman fault-diagnosis benchmark. It has no missing values and almost no duplicates, so its record-level score is near full marks. On the same files the Macro-F1 of one random forest moves by 0.233 when the split changes, every test window of a random window split shares rows with training windows, and labels taken from file names mark 16.7 percent of each test fault file wrongly.
 
-[docs/framework.md](docs/framework.md) restates the definitions of the survey. It also writes a six-stage assessment procedure as Algorithms 1 to 6, which is documentation of this repository and not part of the survey.
+[docs/framework.md](docs/framework.md) restates the definitions of the paper. It also writes a six-stage assessment procedure as Algorithms 1 to 6, which is documentation of this repository and not part of the paper.
 
 ## The package `hqd_assess`
 
@@ -99,16 +99,16 @@ pytest
 | Path | Content |
 |---|---|
 | `hqd_assess/` | The method package |
-| `tests/` | Tests that reproduce every number the survey derives by calculation, and that compare the package with the stored results |
+| `tests/` | Tests that reproduce every number the paper derives by calculation, and that compare the package with the stored results |
 | `examples/` | `tep_assessment.py` on classic TEP and `table_claims.py` on one table |
-| `docs/framework.md`, `docs/framework_zh.md` | The definitions and assessment levels of the survey, and the six-stage procedure with six algorithms that the repository documents |
+| `docs/framework.md`, `docs/framework_zh.md` | The definitions and assessment levels of the paper, and the six-stage procedure with six algorithms that the repository documents |
 | `docs/datasets.md` | Official source, license as stated by the source, use, scale, errors, download command and scripts of every dataset |
 | `docs/parameters.md` | Every engineering parameter with the file that holds it, and the runs stored per result file |
 | `docs/release_assets.md` | The content of each release archive |
 | `docs/tools.md`, `docs/published_results.md`, `docs/standards.md` | Comparison of tools, published results on static quality and task utility, standards with the levels of their indicators |
 | `data/` | The small data files, see `data/README.md` |
 | `case_tep/`, `big/`, `study/`, `native/`, `corpus/`, `llm/` | Scripts of the assessment tracks |
-| `analysis/` | Summaries of the runs, the numbers of the survey and tables |
+| `analysis/` | Summaries of the runs, the numbers of the paper and tables |
 | `figures/` | The result figures |
 | `results/` | Result records of the runs |
 | `scripts/download_data.sh` | Download commands for the datasets from their sources |
@@ -267,7 +267,7 @@ python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 python analysis/summaries.py results
 python analysis/make_numbers.py results                 # every number of the text as JSON
 python analysis/print_tables.py                         # plain tables per dataset
-python analysis/print_tables.py --latex                 # Table 3 and Table 4 of the survey in LaTeX
+python analysis/print_tables.py --latex                 # Table 3 and Table 4 of the paper in LaTeX
 python figures/plot_results.py results figures/plots    # the single panels res_*.pdf form Figures 4 to 8
 python native/audit_native.py results                   # finished runs of the native tracks against their job lists
 python analysis/stored_runs.py --update docs/parameters.md
@@ -277,12 +277,12 @@ The language model baselines have their own commands in [llm/README.md](llm/READ
 
 ## Where each figure and table comes from
 
-Figures 1 to 3 and the tables that summarize standards and methods are typeset with the text of the survey, and the sources of their content are listed here. The last column names the blocks of the commands above, or a command.
+Figures 1 to 3 and the tables that summarize standards and methods are typeset with the text of the paper, and the sources of their content are listed here. The last column names the blocks of the commands above, or a command.
 
-| Item of the survey | Result file | Script | Commands |
+| Item of the paper | Result file | Script | Commands |
 |---|---|---|---|
 | Figure 1, static checks and task scores of TEP | `results/case_tep.json`, `results/tep_traces.json` | `case_tep/run_case.py`, `case_tep/make_traces.py` | `Classic TEP` |
-| Figure 2, evolution of the field | | | Works cited in the survey |
+| Figure 2, evolution of the field | | | Works cited in the paper |
 | Figure 3, basic concepts and assessment levels | `docs/framework.md` | `hqd_assess/claim.py`, `hqd_assess/scoring.py` | Drawn from the definitions |
 | Figure 4(a), choice of a version | `results/results_decision.jsonl`, `results/results_decision_fine.jsonl` | `study/run_decision.py`, `study/run_decision_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
 | Figure 4(b), partial repair as a share of the full-repair gain | `results/results_real_tables.jsonl`, `results/results_tables_fine.jsonl` | `study/run_tables_fine.py`, `figures/plot_results.py` | `Tables and version choice`, `Numbers, tables and figures` |
@@ -305,7 +305,7 @@ Figures 1 to 3 and the tables that summarize standards and methods are typeset w
 | Table 4, assessment results on all datasets | `results/tables_summary.json`, `results/static_native.json`, `results/corpus_static.json`, `results/dataset_docs.json`, `results/results_decision_fine.jsonl`, `results/results_versions.jsonl`, `results/results_cleanml.jsonl`, `results/results_corpus.jsonl`, `results/results_taxi.json`, `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_wilds.jsonl`, `results/results_synth.jsonl`, `results/results_vision.jsonl`, `results/results_fair.json`, `results/results_multimodal.jsonl`, `results/label_errors.json` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
 | Table 5, assessment levels of the requirement items of ten assessment documents | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
 | Numbers in the text | `results/numbers_*.json`, `results/tables_summary.json`, `results/insights_summary.json`, `results/results_random_delete.jsonl` | `analysis/summaries.py`, `analysis/insights.py`, `study/run_random_delete.py`, `analysis/make_numbers.py` | `Numbers, tables and figures` |
-| Numbers that the survey derives by calculation | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
+| Numbers that the paper derives by calculation | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## Results
 
@@ -321,7 +321,7 @@ The code, documents and result records are under the MIT license in `LICENSE`. D
 
 ```bibtex
 @article{hqd_assessment,
-  title   = {A survey on task-oriented assessment of multimodal high-quality datasets},
+  title   = {Task-oriented assessment of multimodal high-quality datasets},
   author  = {Zekai Qian and Xiaoou Ding and Hongzhi Wang and Chen Wang},
   journal = {Scientia Sinica Informationis},
   year    = {2026},
