@@ -163,3 +163,12 @@ The given level, the needed level and the form of all 479 items were coded twice
 - [NIST AI 100-1] National Institute of Standards and Technology. Artificial intelligence risk management framework (AI RMF 1.0). NIST AI 100-1. 2023.
 - [NIST AI 600-1] National Institute of Standards and Technology. Artificial intelligence risk management framework: generative artificial intelligence profile. no. 600-1, 2024.
 - [TC609-5-2025-04] SAC/TC 609. TC609-5-2025-04 High-quality dataset: specifications for quality evaluation. 2025. 全国数据标准化技术委员会. TC609-5-2025-04 高质量数据集 质量评测规范. 2025.
+
+## Other specifications and links mentioned in the survey
+
+| Item | Link |
+|---|---|
+| C2PA Technical Specification 2.2, signed provenance statements bound to content | https://c2pa.org/specifications/ |
+| W3C PROV-DM, data model for provenance (W3C Recommendation, 2013-04-30) | https://www.w3.org/TR/prov-dm/ |
+| Re-LAION-5B, LAION-5B re-released after removing suspected illegal links | https://laion.ai/blog/relaion-5b/ |
+| NYC TLC trip record data, source of the dynamic-data assessment | https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page |
