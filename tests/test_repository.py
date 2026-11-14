@@ -120,8 +120,9 @@ def test_the_readmes_map_each_figure_and_table():
         text = read(name)
         for i in range(1, 10):
             assert figure.format(i) in text, (name, i)
-        for i in range(1, 8):
+        for i in range(1, 7):
             assert table.format(i) in text, (name, i)
+        assert table.format(7) not in text, name
 
 
 def test_plain_text_rules_of_the_readmes():

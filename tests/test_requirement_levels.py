@@ -1,4 +1,4 @@
-"""Table 4 and the numbers of Section 3.2 of the survey, computed by analysis/requirement_levels.py from data/requirements/items.jsonl."""
+"""Table 3 and the numbers of Section 3.2 of the survey, computed by analysis/requirement_levels.py from data/requirements/items.jsonl."""
 import json
 import os
 import subprocess
@@ -19,8 +19,8 @@ FORMS = {"doc_presence", "record_ratio", "scale_ratio", "model_ratio", "sampled_
 # given levels on which both rounds agreed and the rules decide otherwise: a composite score takes the lowest given level of its components (G48562-S2),
 # an item that lists deliverables reads the delivery list (G48560-0013, G48560-0015)
 RULE_CORRECTED = {"G48562-S2": "L1", "G48560-0013": "L1", "G48560-0015": "L1"}
-# Table 4 of the survey: Items, L1 to L5, Sampling, Threshold, Scored, N>G
-TABLE4 = {
+# Table 3 of the survey: Items, L1 to L5, Sampling, Threshold, Scored, N>G
+TABLE3 = {
     "G48562 (T04)": [44, 8, 18, 17, 1, 0, 0, 4, 20, 30],
     "G48560": [225, 20, 187, 18, 0, 0, 3, 1, 0, 178],
     "G48561 (T03)": [8, 3, 5, 0, 0, 0, 0, 0, 0, 3],
@@ -68,13 +68,13 @@ def test_documents_and_items(summary):
 
 
 def test_table_4(summary):
-    rows = summary["table4"]["rows"]
-    assert list(rows) == list(TABLE4)
-    assert rows == TABLE4
+    rows = summary["table3"]["rows"]
+    assert list(rows) == list(TABLE3)
+    assert rows == TABLE3
 
 
 def test_matched_is_the_most_frequent_given_level_and_most_items_need_a_higher_level(summary):
-    total = dict(zip(summary["table4"]["columns"], summary["table4"]["rows"]["Total"]))
+    total = dict(zip(summary["table3"]["columns"], summary["table3"]["rows"]["Total"]))
     assert max(LEVELS, key=total.get) == "L2"
     assert 2 * total["N>G"] > total["Items"]
     assert summary["section_3_2"]["threshold_by_file"] == {"G48562": 4, "G48560": 1, "G48563": 16}
@@ -125,7 +125,7 @@ def test_no_item_reaches_the_interventional_level(summary):
 def test_command_line():
     out = subprocess.run([sys.executable, SCRIPT, "--json"], capture_output=True, text=True, timeout=60)
     assert out.returncode == 0, out.stderr
-    assert json.loads(out.stdout)["table4"]["rows"]["Total"] == TABLE4["Total"]
+    assert json.loads(out.stdout)["table3"]["rows"]["Total"] == TABLE3["Total"]
     out = subprocess.run([sys.executable, SCRIPT], capture_output=True, text=True, timeout=60)
     assert out.returncode == 0, out.stderr
-    assert "Table 4" in out.stdout and "Agreement of the two coding rounds" in out.stdout
+    assert "Table 3" in out.stdout and "Agreement of the two coding rounds" in out.stdout

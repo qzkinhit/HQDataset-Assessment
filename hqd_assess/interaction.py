@@ -1,4 +1,4 @@
-"""Non-additivity of quality dimensions and paired comparison, Proposition 2 of the survey and Algorithm 4 of docs/framework.md."""
+"""Non-additivity of quality dimensions and paired comparison, Algorithm 4 of docs/framework.md."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -132,49 +132,6 @@ def paired_flags(comparisons: Mapping[Any, Tuple[Sequence[float], Sequence[float
     return out
 
 
-def operation_biases(x, errors, keep) -> Tuple[float, float]:
-    """Selection bias and error bias of a data operation, Proposition 2 (1).
-
-    The records of the clean population hold the values x, the observed values are
-    x + errors, and the operation keeps each record with probability keep. With p_r the
-    mean of keep, the selection bias is Cov(keep, x) / p_r and the error bias is the mean
-    of keep times errors divided by p_r, both over the population. Their sum is the bias
-    of a weighted mean of the kept observed values, and the excess risk under squared
-    loss is the squared sum plus the variance of that mean.
-    """
-    x, errors, keep = (np.asarray(v, float) for v in (x, errors, keep))
-    p_r = float(keep.mean())
-    if p_r <= 0.0:
-        raise ValueError("The operation must keep some records")
-    selection = float(np.mean(keep * x) - p_r * np.mean(x)) / p_r
-    error = float(np.mean(keep * errors)) / p_r
-    return selection, error
-
-
-def repair_interaction(b1, b2):
-    """Interaction of repairing two error types with biases b1 and b2, Proposition 2 (2).
-
-    Repairs leave the variance unchanged and the utility is the negative risk. The excess
-    risks of the raw table, of repairing only the first type, of repairing only the
-    second type and of repairing both are (b1 + b2)^2, b2^2, b1^2 and 0, so the
-    interaction is -2 b1 b2. It is synergy when the biases have opposite signs and
-    antagonism when they have the same sign.
-    """
-    return -2 * b1 * b2
-
-
-def run_mean_excess_risk(bias: float, tau2: float, sigma2: float, runs: int, per_run: int) -> float:
-    """Excess risk b^2 + tau^2 / J + sigma^2 / (J k) of the equal-weight mean, Proposition 2 (3).
-
-    The records come from J independent runs with k records each, and record i of run j
-    is observed as mu + b + A_j + zeta_ji, where the run effects A_j and the residuals
-    zeta_ji are independent with mean zero and variances tau2 and sigma2. At a fixed
-    number J k of records, more runs lower the run term and leave the residual term
-    unchanged.
-    """
-    return bias * bias + tau2 / runs + sigma2 / (runs * per_run)
-
-
 def constant_predictor_risk(values: Sequence, truth=0):
     """Risk of the training mean as a constant predictor under squared loss.
 
@@ -191,9 +148,8 @@ def additivity_counterexample() -> Dict[str, Fraction]:
     All 11 true values are 0. Eight records are correct, record a holds +2 outside the value
     range, and records b and c hold -1 inside the range. Repairing a or repairing b and c
     lowers the share of wrong records and raises the risk from 0 to 4/121, while repairing
-    all three returns the risk to 0. It is the case b1 = 2/11 and b2 = -2/11 of
-    Proposition 2 (2). The interaction returned here is measured on the risk and equals
-    -8/121, and on the utility, the negative risk, it is 8/121 = -2 b1 b2.
+    all three returns the risk to 0. The interaction returned here is measured on the
+    risk and equals -8/121, and on the utility, the negative risk, it is 8/121.
     """
     clean = [Fraction(0)] * 8
     a, b_c = [Fraction(2)], [Fraction(-1)] * 2

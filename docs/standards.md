@@ -44,7 +44,7 @@ The table shows three links for further work. The documentation items and conten
 
 ## Requirement items of the assessment documents
 
-Section 3.2 of the survey assigns assessment levels to all quality requirements of 13 assessment documents. Three of them are technical documents with nearly the same content as three national standard drafts, so Table 4 counts 10 documents. [data/requirements/items.jsonl](../data/requirements/items.jsonl) holds one requirement item per line, and [analysis/requirement_levels.py](../analysis/requirement_levels.py) computes Table 4, the other numbers of Section 3.2 and the agreement of the two coding rounds from this file.
+Section 3.2 of the survey assigns assessment levels to all quality requirements of 13 assessment documents. Three of them are technical documents with nearly the same content as three national standard drafts, so Table 3 counts 10 documents. [data/requirements/items.jsonl](../data/requirements/items.jsonl) holds one requirement item per line, and [analysis/requirement_levels.py](../analysis/requirement_levels.py) computes Table 3, the other numbers of Section 3.2 and the agreement of the two coding rounds from this file.
 
 ### Documents and extraction unit
 
@@ -66,7 +66,7 @@ The unit of extraction is a requirement that leads to a pass or fail decision on
 | NAI100 | NIST AI 100-1 | 6 | MAP 2.3, MAP 4.1, MEASURE 2.1, MEASURE 2.2, the test set requirement of Section 3.1 and the requirement on the sources and intellectual property of training data of Section 3.4 |
 | NAI600 | NIST AI 600-1 | 27 | Suggested actions that read training data, test, evaluation, verification and validation (TEVV) data, dataset provenance or dataset documentation |
 
-The texts of ISO/IEC 25012:2008 and ISO/IEC 25024:2015 were available only as previews. The preview of ISO/IEC 25012 ends at the definitions in 4.2 and the preview of ISO/IEC 25024 at the definitions in 4.5, so the characteristics of Chapter 5 of ISO/IEC 25012 and the measures of Chapter 8 of ISO/IEC 25024 are not visible. Their four items come from the conformance clauses, and Table 4 marks their row with a dagger. The scope of ISO/IEC 25024 states that it does not define rating ranges for the measures and does not address the statistical significance of random samples. The previews of ISO/IEC 5259-1, 5259-2, 5259-3 and 5259-5, ISO/IEC TR 5259-6, ISO/IEC TR 24027, ISO 8000-1, ISO 8000-2 and ISO 8000-61 end at their definitions, contents or process structure and contain no requirement of this kind, so they give no item.
+The texts of ISO/IEC 25012:2008 and ISO/IEC 25024:2015 were available only as previews. The preview of ISO/IEC 25012 ends at the definitions in 4.2 and the preview of ISO/IEC 25024 at the definitions in 4.5, so the characteristics of Chapter 5 of ISO/IEC 25012 and the measures of Chapter 8 of ISO/IEC 25024 are not visible. Their four items come from the conformance clauses, and Table 3 marks their row with a dagger. The scope of ISO/IEC 25024 states that it does not define rating ranges for the measures and does not address the statistical significance of random samples. The previews of ISO/IEC 5259-1, 5259-2, 5259-3 and 5259-5, ISO/IEC TR 5259-6, ISO/IEC TR 24027, ISO 8000-1, ISO 8000-2 and ISO 8000-61 end at their definitions, contents or process structure and contain no requirement of this kind, so they give no item.
 
 ### Fields
 
@@ -120,7 +120,7 @@ The needed level follows four rules.
 3. L3 when the question is the share of records, time or events that meet a criterion, or the value of an index.
 4. L4 when the requirement is judged by model development and training in the target scene, and L5 when it is judged by whether the data improve the model. A ratio to a planned or theoretical amount stays below L4 when the item names no task.
 
-An item whose needed level is above its given level answers its question with inputs of a lower level. Column N>G of Table 4 counts these items.
+An item whose needed level is above its given level answers its question with inputs of a lower level. Column N>G of Table 3 counts these items.
 
 ### Forms of computation
 
@@ -135,13 +135,13 @@ An item whose needed level is above its given level answers its question with in
 
 ### Duplicate documents, coding rounds and adjudication
 
-Three pairs each consist of a national standard draft and a technical document with nearly the same content, namely G48562 and T04, G48563 and T02, G48561 and T03. Their items correspond one to one by name except the metadata element for the annotation tool (G48563-0016), which T02 does not have. Within a pair the given level, the needed level and the form differ only for content authenticity (0205) and the data quality score (S2) that contains it. T04 requires the data to agree with the source of collection, which gives L2, and G48562 decides from the stated source and processing records, which gives L1. Table 4 and the counts that Section 3.2 derives from it keep the drafts and leave out T04, T02 and T03, which gives 411 items in 10 documents. The agreement of the two coding rounds uses all 479 items.
+Three pairs each consist of a national standard draft and a technical document with nearly the same content, namely G48562 and T04, G48563 and T02, G48561 and T03. Their items correspond one to one by name except the metadata element for the annotation tool (G48563-0016), which T02 does not have. Within a pair the given level, the needed level and the form differ only for content authenticity (0205) and the data quality score (S2) that contains it. T04 requires the data to agree with the source of collection, which gives L2, and G48562 decides from the stated source and processing records, which gives L1. Table 3 and the counts that Section 3.2 derives from it keep the drafts and leave out T04, T02 and T03, which gives 411 items in 10 documents. The agreement of the two coding rounds uses all 479 items.
 
 The given level, the needed level and the form of all 479 items were coded twice, in two independent rounds under the rules above. Items with a different code in at least one of the three fields were adjudicated one by one under the same rules, and a code on which both rounds agree was kept, except three given levels that the rules decide otherwise. G48562-S2 takes L1, the lowest given level of its components, and G48560-0013 and G48560-0015, which list deliverables, take L1 by rule 1. `round1` and `round2` hold the codes of the two rounds, and `given`, `needed` and `form` hold the decided codes. The agreement rates and Cohen's kappa compare `round1` with `round2` on all items, on the 442 items of the domestic documents and on the 37 items of the international documents.
 
 ### Running the script
 
-`python analysis/requirement_levels.py` prints Table 4, the other numbers of Section 3.2 and the agreement of the two rounds, and `python analysis/requirement_levels.py --json` prints the same numbers as JSON. The script needs only the Python standard library. `pytest tests/test_requirement_levels.py` compares its results with the numbers of the survey.
+`python analysis/requirement_levels.py` prints Table 3, the other numbers of Section 3.2 and the agreement of the two rounds, and `python analysis/requirement_levels.py --json` prints the same numbers as JSON. The script needs only the Python standard library. `pytest tests/test_requirement_levels.py` compares its results with the numbers of the survey.
 
 ## References
 

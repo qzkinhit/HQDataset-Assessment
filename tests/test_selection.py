@@ -1,9 +1,11 @@
-"""Algorithm 3, the static rule, the hindsight best and Proposition 3."""
+"""Algorithm 3, its precision, the static rule and the hindsight best."""
+import math
+
 import numpy as np
 import pytest
 
 from hqd_assess.selection import (accuracy, gain_precision_bootstrap, hindsight_best, macro_f1, r2, replay_rules, resolution_for_sample_size,
-                                  select_version, split_holdout, static_rule, task_test_sample_size, validation_score_at, wrong_choice_bound)
+                                  select_version, split_holdout, static_rule, validation_score_at)
 
 
 def test_metrics_match_scikit_learn():
@@ -39,7 +41,7 @@ def test_algorithm_3_selects_the_best_candidate_and_measures_on_the_test_part():
     assert result.gain == pytest.approx(0.2, abs=0.03)
     assert result.gain == pytest.approx(result.test_scores["better"] - result.test_scores["raw"])
     assert result.gain_low < result.gain < result.gain_high
-    assert result.precision_method == "Proposition 3"
+    assert result.precision_method == "Bernstein bound"
     assert set(result.validation_scores) == {"raw", "better", "worse"}
 
 
@@ -85,28 +87,23 @@ def test_q_defaults_to_the_share_of_differing_predictions():
     assert forced.precision == pytest.approx(resolution_for_sample_size(500, 0.5, 1, 0.05))
 
 
-def test_proposition_3_holds_in_simulation():
+@pytest.mark.parametrize("n", [500, 2500, 15000])
+def test_resolution_solves_the_bernstein_size(n):
+    gamma = resolution_for_sample_size(n, 0.1, 20, 0.05)
+    assert (8 * 0.1 / gamma ** 2 + 8 / (3 * gamma)) * math.log(2 * 20 / 0.05) == pytest.approx(n)
+    assert resolution_for_sample_size(4 * n, 0.1, 20, 0.05) < gamma
+
+
+def test_resolution_holds_in_simulation():
     rng = np.random.default_rng(0)
-    q, n_candidates, delta, gamma = 0.1, 20, 0.05, 0.05
-    n = task_test_sample_size(gamma, q, n_candidates, delta)
+    q, n_candidates, delta, n = 0.1, 20, 0.05, 2500
+    gamma = resolution_for_sample_size(n, q, n_candidates, delta)
     failures = 0
     trials = 200
     for _ in range(trials):
         z = rng.choice([-1, 0, 1], size=(n, n_candidates), p=[q / 2, 1 - q, q / 2])
         failures += np.abs(z.mean(axis=0)).max() > gamma / 2
     assert failures / trials <= delta
-
-
-def test_choice_bound_of_proposition_3_holds_in_simulation():
-    rng = np.random.default_rng(0)
-    means = np.array([0.8, 0.79, 0.75, 0.74, 0.7])
-    n, gamma, trials = 600, 0.02, 2000
-    gaps = means[0] - means[1:]
-    variances = means[0] * (1 - means[0]) + means[1:] * (1 - means[1:])
-    bound = wrong_choice_bound(n, gaps, variances, gamma)
-    assert 0.0 < bound < 1.0
-    chosen = np.array([np.argmax((rng.random((n, len(means))) < means).mean(axis=0)) for _ in range(trials)])
-    assert np.mean(means[0] - means[chosen] > gamma) <= bound
 
 
 def test_bootstrap_precision_covers_the_movement_of_the_gains():

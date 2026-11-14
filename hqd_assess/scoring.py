@@ -1,4 +1,4 @@
-"""Scores of the standard and the compensation bound, Proposition 1 of the survey.
+"""Scores of the standard and the compensation computation of Section 3.2 of the survey.
 
 The dimension scores follow the score formula of GB/T 48562-2026 as published in
 the public draft and in the technical document TC609-5-2025-04. Every ratio is a
@@ -133,15 +133,15 @@ def passes(score: float, line: float = PASS_LINE) -> bool:
 def compensation_budget(k: int, line: float = PASS_LINE) -> float:
     """Total shortfall that k equally weighted items may carry at the pass line.
 
-    Proposition 1 states that P reaches 90 if and only if the shortfalls 1 - s_i sum
-    to at most 0.1 k.
+    Section 3.2 of the survey computes that P reaches 90 if and only if the shortfalls
+    1 - s_i sum to at most 0.1 k.
     """
     return (1.0 - line / 100.0) * k
 
 
 def within_compensation_budget(values: Iterable[float], weights: Optional[Sequence[float]] = None,
                                line: float = PASS_LINE) -> bool:
-    """Right side of the equivalence in Proposition 1.
+    """Right side of the equivalence in Section 3.2 of the survey.
 
     With equal weights the shortfalls sum to at most 0.1 k. With general weights the weighted
     shortfalls sum to at most 0.1.

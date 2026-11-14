@@ -305,7 +305,6 @@ The docstring of the script gives the detectors D1 to D6, the sample sizes 50, 1
 | Pass line | 90 points |
 | Sample size example | $p=0.9$, $h=0.02$, 95 percent confidence |
 | Sampling standard example | 4000 records and a threshold of 96 percent |
-| Proposition 3 example | $q=q_j=0.1$, $N=20$, $\delta=0.05$, $\gamma=0.02$ in both parts |
 | Weight perturbation in the judgement | 10 percent of each weight, `weight_perturbation` of `judge` |
 | Bootstrap resamples in the package | 1000 in `calibrate_error_rate`, 200 in `select_version` and `bootstrap_metric_interval` |
 

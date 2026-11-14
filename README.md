@@ -47,9 +47,7 @@ The survey writes a quality claim about a dataset as a six-tuple of object, dime
 
 The running example is the classic Tennessee Eastman fault-diagnosis benchmark. It has no missing values and almost no duplicates, so its record-level score is near full marks. On the same files the Macro-F1 of one random forest moves by 0.233 when the split changes, every test window of a random window split shares rows with training windows, and labels taken from file names mark 16.7 percent of each test fault file wrongly.
 
-The survey proves two theorems and three propositions and compares three estimates of an error rate. By Theorem 1, a rule with zero loss in every usage situation exists if and only if the situations that give the same assessment result share a best version, and on Hospitals, where deleting the wrong records raises the Macro-F1 of KNN by 0.487 and lowers that of gradient boosting by 0.579, a rule that reads only static indicators has a minimax loss of about 0.265 between the two versions. By Proposition 1, an equal-weight score of 90 points over 8 sub-indicators allows a single one as low as 0.2. Post-stratifying the labelled sample by the flags of a detector needs no more labels than the direct estimate or the corrected estimate for any detector. By Proposition 2, the excess risk of a repair or a deletion splits into an error bias, a selection bias and a variance, so the error rate alone does not fix the task risk. By Proposition 3, with a variance bound $q=0.1$ of the per-sample score gap and a failure probability $\delta=0.05$, telling apart gains that differ by 2 points for all of 20 candidates needs about 14300 held-out records, while choosing a version within 2 points of the best needs about 3400. By Theorem 2, when a test set misses a part of the target scene with probability $\alpha$ and the models trained on two candidate versions predict the same outside this part and differently everywhere on it, the minimax loss of the choice between the two is $\tfrac{\alpha}{2}$ however large the test set is, and a scene shift of total variation $\beta$ lowers the bound on the gain by $2\beta$.
-
-[docs/framework.md](docs/framework.md) states the definitions, the six-stage procedure, Algorithms 1 to 6 and the theorems and propositions with their proofs.
+[docs/framework.md](docs/framework.md) states the definitions, the six-stage procedure and Algorithms 1 to 6.
 
 ## The package `hqd_assess`
 
@@ -59,21 +57,20 @@ The package holds pure functions without file or network access, and it needs Nu
 |---|---|
 | `claim` | `QualityClaim`, `Estimate`, `UsageContext`, `DatasetVersion`, `AssessmentLevel`, `minimum_level`, `task_gain` |
 | `scoring` | Scores of GB/T 48562-2026, `SUB_INDICATORS`, single-item floors, model fit |
-| `sampling` | Sample sizes, Wilson and Jeffreys intervals, `rogan_gladen`, `calibrate_error_rate` (Algorithm 1), `estimator_variances` |
+| `sampling` | Sample sizes, Wilson and Jeffreys intervals, `rogan_gladen`, `calibrate_error_rate` (Algorithm 1) |
 | `split_check` | Group and window overlap, `check_split_independence` (Algorithm 2) |
-| `selection` | `select_version` (Algorithm 3), `static_rule`, `hindsight_best`, `replay_rules`, `task_test_sample_size`, `zero_loss_rule_exists`, `two_version_gaps`, `minimax_loss`, `minimax_choice_probability`, `selection_sample_size`, `wrong_choice_bound`, `coverage_minimax_loss`, `shifted_gain_lower_bound` |
-| `interaction` | `interaction_test` (Algorithm 4), `paired_flags`, `additivity_counterexample`, `operation_biases`, `repair_interaction`, `run_mean_excess_risk` |
+| `selection` | `select_version` (Algorithm 3), `static_rule`, `hindsight_best`, `replay_rules` |
+| `interaction` | `interaction_test` (Algorithm 4), `paired_flags`, `additivity_counterexample` |
 | `judge` | `judge` (Algorithm 5) |
 | `renewal` | `renew` (Algorithm 6), `stages_to_redo`, `violation_trigger`, `trigger_counts` |
 
 ```python
 from hqd_assess import (AssessmentLevel, Estimate, QualityClaim, Requirement, UsageContext, judge, minimum_observed_rate,
                         model_application_score, model_fit_value, proportion_sample_size, single_item_floor,
-                        task_test_sample_size, wilson_interval)
+                        wilson_interval)
 
 print(proportion_sample_size(0.9, 0.02))                    # 865 records for a half-width of 2 points
 print(single_item_floor(8), single_item_floor(4))           # floors 0.2 and 0.6 of one item at 90 points
-print(task_test_sample_size(gamma=0.02, q=0.1))             # 14261 records for 20 candidates at 2 points
 print(minimum_observed_rate(0.96, 4000))                    # 0.96625 reaches a lower bound of 96 percent
 print(model_application_score(model_fit_value(0.697, 0.8))) # 87.9 points fail the pass line
 
@@ -104,7 +101,7 @@ pytest
 | `hqd_assess/` | The method package |
 | `tests/` | Tests that reproduce every number the survey derives by calculation, and that compare the package with the stored results |
 | `examples/` | `tep_assessment.py` on classic TEP and `table_claims.py` on one table |
-| `docs/framework.md`, `docs/framework_zh.md` | The framework with six algorithms, two theorems, three propositions and the variance comparison of Section 4.1 of the survey |
+| `docs/framework.md`, `docs/framework_zh.md` | The framework with its definitions, the six-stage procedure and six algorithms |
 | `docs/datasets.md` | Official source, license as stated by the source, use, scale, errors, download command and scripts of every dataset |
 | `docs/parameters.md` | Every engineering parameter with the file that holds it, and the runs stored per result file |
 | `docs/release_assets.md` | The content of each release archive |
@@ -270,7 +267,7 @@ python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 python analysis/summaries.py results
 python analysis/make_numbers.py results                 # every number of the text as JSON
 python analysis/print_tables.py                         # plain tables per dataset
-python analysis/print_tables.py --latex                 # Table 6 and Table 7 of the survey in LaTeX
+python analysis/print_tables.py --latex                 # Table 5 and Table 6 of the survey in LaTeX
 python figures/plot_results.py results figures/plots    # the single panels res_*.pdf form Figures 5 to 9
 python native/audit_native.py results                   # finished runs of the native tracks against their job lists
 python analysis/stored_runs.py --update docs/parameters.md
@@ -304,14 +301,13 @@ Figures 1 to 4 and the tables that summarize the literature are typeset with the
 | Figure 9(c), synthetic images | `results/results_synth.jsonl` | `study/run_synth.py`, `figures/plot_results.py` | `Synthetic images`, `Numbers, tables and figures` |
 | Figure 9(d), filters on image-text pools | `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl` | `native/run_datacomp.py`, `native/run_mirflickr.py`, `figures/plot_results.py` | `COCO image-text pairs`, `Numbers, tables and figures` |
 | Table 1, comparison with existing surveys | | | Works cited in the survey |
-| Table 2, symbols | `docs/framework.md` | | |
-| Table 3, comparison of standards | `docs/standards.md` | | |
-| Table 4, assessment levels of the requirement items of ten assessment documents | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
-| Table 5, comparison of the five method families | `docs/framework.md` | | |
-| Table 6, datasets of the experiments | `results/table_sizes.json`, `results/results_sizes_native.json`, `results/label_errors.json`, `results/results_audioset_labels.json`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_taxi.json`, `results/corpus_stats.json`, `results/results_cleanml.jsonl`, `results/results_datacomp.jsonl`, `results/results_wilds.jsonl`, `results/results_multimodal.jsonl` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
-| Table 7, results on all datasets | `results/tables_summary.json`, `results/static_native.json`, `results/corpus_static.json`, `results/dataset_docs.json`, `results/results_decision_fine.jsonl`, `results/results_versions.jsonl`, `results/results_cleanml.jsonl`, `results/results_corpus.jsonl`, `results/results_taxi.json`, `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_wilds.jsonl`, `results/results_synth.jsonl`, `results/results_vision.jsonl`, `results/results_fair.json`, `results/results_multimodal.jsonl`, `results/label_errors.json` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| Table 2, comparison of standards | `docs/standards.md` | | |
+| Table 3, assessment levels of the requirement items of ten assessment documents | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
+| Table 4, comparison of the five method families | `docs/framework.md` | | |
+| Table 5, datasets of the experiments | `results/table_sizes.json`, `results/results_sizes_native.json`, `results/label_errors.json`, `results/results_audioset_labels.json`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_taxi.json`, `results/corpus_stats.json`, `results/results_cleanml.jsonl`, `results/results_datacomp.jsonl`, `results/results_wilds.jsonl`, `results/results_multimodal.jsonl` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| Table 6, results on all datasets | `results/tables_summary.json`, `results/static_native.json`, `results/corpus_static.json`, `results/dataset_docs.json`, `results/results_decision_fine.jsonl`, `results/results_versions.jsonl`, `results/results_cleanml.jsonl`, `results/results_corpus.jsonl`, `results/results_taxi.json`, `results/results_datacomp.jsonl`, `results/results_mirflickr.jsonl`, `results/case_tep.json`, `results/results_rieth.json`, `results/results_wilds.jsonl`, `results/results_synth.jsonl`, `results/results_vision.jsonl`, `results/results_fair.json`, `results/results_multimodal.jsonl`, `results/label_errors.json` | `analysis/datasets.py`, `analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
 | Numbers in the text | `results/numbers_*.json`, `results/tables_summary.json`, `results/insights_summary.json`, `results/results_random_delete.jsonl` | `analysis/summaries.py`, `analysis/insights.py`, `study/run_random_delete.py`, `analysis/make_numbers.py` | `Numbers, tables and figures` |
-| Derived numbers of the theorems, propositions and examples | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
+| Numbers that the survey derives by calculation | | `hqd_assess/`, `tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## Results
 

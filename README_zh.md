@@ -47,9 +47,7 @@
 
 贯穿全文的例子是经典 Tennessee Eastman 故障诊断基准。它没有缺失值，重复记录极少，按记录统计的得分接近满分。在同一批文件上，同一个随机森林的 Macro-F1 仅因划分方式就相差 0.233，随机划分窗口时每个测试窗口都与训练窗口共享记录，按文件名标注时每个故障测试文件有 16.7% 的记录标错。
 
-综述证明了两个定理和三个命题，并比较了错误率的三种估计。定理 1 说明，存在在所有使用情形下损失都为零的决策规则，当且仅当产生同一测评结果的情形有共同的最优版本，Hospitals 上删除全部错误记录使 KNN 的 Macro-F1 提高 0.487、使梯度提升的 Macro-F1 降低 0.579，只读取静态指标的规则在这两个版本之间的最小最大损失约为 0.265。命题 1 说明，8 项子指标的等权得分达到 90 分时，单项可以低至 0.2。按检测器标记对抽样标注做事后分层估计，在任何检测器上需要的标注都不多于直接估计和校正估计。命题 2 把修复或删除的超额风险分解为错误偏差、选择偏差和方差，错误率因此不决定任务风险。命题 3 说明，取 单样本得分差的方差上界 $q=0.1$、失败概率 $\delta=0.05$ 时，在 20 个候选上区分相差 2 个百分点的全部增益约需 14300 条留出样本，选出与最优版本相差不超过 2 个百分点的版本只需约 3400 条。定理 2 说明，测试数据未覆盖目标场景中概率为 $\alpha$ 的部分，且两个候选版本训练出的模型在未覆盖部分之外预测相同、在该部分上预测处处不同时，无论测试样本有多少，在两者之间选择的最小最大损失都是 $\tfrac{\alpha}{2}$，目标场景与测试分布的总变差距离为 $\beta$ 时，增益下界还要减去 $2\beta$。
-
-[docs/framework_zh.md](docs/framework_zh.md) 给出定义、六阶段流程、算法 1 到算法 6 以及定理、命题和证明。
+[docs/framework_zh.md](docs/framework_zh.md) 给出定义、六阶段流程和算法 1 到算法 6。
 
 ## 软件包 `hqd_assess`
 
@@ -59,21 +57,20 @@
 |---|---|
 | `claim` | `QualityClaim`、`Estimate`、`UsageContext`、`DatasetVersion`、`AssessmentLevel`、`minimum_level`、`task_gain` |
 | `scoring` | GB/T 48562-2026 的得分、`SUB_INDICATORS`、单项下限、模型适配性 |
-| `sampling` | 样本量、Wilson 和 Jeffreys 区间、`rogan_gladen`、`calibrate_error_rate`（算法 1）、`estimator_variances` |
+| `sampling` | 样本量、Wilson 和 Jeffreys 区间、`rogan_gladen`、`calibrate_error_rate`（算法 1） |
 | `split_check` | 分组和窗口重叠、`check_split_independence`（算法 2） |
-| `selection` | `select_version`（算法 3）、`static_rule`、`hindsight_best`、`replay_rules`、`task_test_sample_size`、`zero_loss_rule_exists`、`two_version_gaps`、`minimax_loss`、`minimax_choice_probability`、`selection_sample_size`、`wrong_choice_bound`、`coverage_minimax_loss`、`shifted_gain_lower_bound` |
-| `interaction` | `interaction_test`（算法 4）、`paired_flags`、`additivity_counterexample`、`operation_biases`、`repair_interaction`、`run_mean_excess_risk` |
+| `selection` | `select_version`（算法 3）、`static_rule`、`hindsight_best`、`replay_rules` |
+| `interaction` | `interaction_test`（算法 4）、`paired_flags`、`additivity_counterexample` |
 | `judge` | `judge`（算法 5） |
 | `renewal` | `renew`（算法 6）、`stages_to_redo`、`violation_trigger`、`trigger_counts` |
 
 ```python
 from hqd_assess import (AssessmentLevel, Estimate, QualityClaim, Requirement, UsageContext, judge, minimum_observed_rate,
                         model_application_score, model_fit_value, proportion_sample_size, single_item_floor,
-                        task_test_sample_size, wilson_interval)
+                        wilson_interval)
 
 print(proportion_sample_size(0.9, 0.02))                    # 半宽 2 个百分点需要 865 条记录
 print(single_item_floor(8), single_item_floor(4))           # 90 分时单项下限为 0.2 和 0.6
-print(task_test_sample_size(gamma=0.02, q=0.1))             # 20 个候选、2 个百分点的精度需要 14261 条
 print(minimum_observed_rate(0.96, 4000))                    # 观测合格率 0.96625 时下界达到 96%
 print(model_application_score(model_fit_value(0.697, 0.8))) # 87.9 分，低于通过线
 
@@ -104,7 +101,7 @@ pytest
 | `hqd_assess/` | 方法软件包 |
 | `tests/` | 复现综述中全部计算得到的数字，并把软件包的结果与实验记录相比较 |
 | `examples/` | 经典 TEP 上的 `tep_assessment.py` 和单张表上的 `table_claims.py` |
-| `docs/framework.md`，`docs/framework_zh.md` | 测评框架、六个算法、两个定理、三个命题和综述第 4.1 节的方差比较 |
+| `docs/framework.md`，`docs/framework_zh.md` | 测评框架的定义、六阶段流程和六个算法 |
 | `docs/datasets.md` | 每个数据集的官方来源、来源声明的许可、用途、规模、错误来源、下载命令和对应脚本 |
 | `docs/parameters.md` | 全部工程参数及其所在文件，以及每个结果文件存放的运行数 |
 | `docs/release_assets.md` | 每个发布归档包的内容 |
@@ -270,7 +267,7 @@ python native/static_native.py --native $DIR --rieth $DIR/rieth --out results
 python analysis/summaries.py results
 python analysis/make_numbers.py results                 # 正文中的全部数字，输出 JSON
 python analysis/print_tables.py                         # 按数据集输出的表格
-python analysis/print_tables.py --latex                 # 综述表 6 和表 7 的 LaTeX
+python analysis/print_tables.py --latex                 # 综述表 5 和表 6 的 LaTeX
 python figures/plot_results.py results figures/plots    # 单个子图 res_*.pdf 组成图 5 到图 9
 python native/audit_native.py results                   # 原生实验的完成情况与作业清单的比较
 python analysis/stored_runs.py --update docs/parameters.md
@@ -304,14 +301,13 @@ python analysis/stored_runs.py --update docs/parameters.md
 | 图 9(c)，合成图像 | `results/results_synth.jsonl` | `study/run_synth.py`，`figures/plot_results.py` | 合成图像、保真度和图像版本的回放，数字、表和图 |
 | 图 9(d)，图文数据的筛选 | `results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl` | `native/run_datacomp.py`，`native/run_mirflickr.py`，`figures/plot_results.py` | COCO 图文对和图文数据池，数字、表和图 |
 | 表 1，与已有综述的比较 | | | 综述引用的文献 |
-| 表 2，符号表 | `docs/framework_zh.md` | | |
-| 表 3，标准比较 | `docs/standards.md` | | |
-| 表 4，测评类文件中要求条目的测评层级 | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
-| 表 5，五类测评方法的比较 | `docs/framework_zh.md` | | |
-| 表 6，实验使用的数据集 | `results/table_sizes.json`，`results/results_sizes_native.json`，`results/label_errors.json`，`results/results_audioset_labels.json`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_taxi.json`，`results/corpus_stats.json`，`results/results_cleanml.jsonl`，`results/results_datacomp.jsonl`，`results/results_wilds.jsonl`，`results/results_multimodal.jsonl` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
-| 表 7，全部数据集上的结果 | `results/tables_summary.json`，`results/static_native.json`，`results/corpus_static.json`，`results/dataset_docs.json`，`results/results_decision_fine.jsonl`，`results/results_versions.jsonl`，`results/results_cleanml.jsonl`，`results/results_corpus.jsonl`，`results/results_taxi.json`，`results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_wilds.jsonl`，`results/results_synth.jsonl`，`results/results_vision.jsonl`，`results/results_fair.json`，`results/results_multimodal.jsonl`，`results/label_errors.json` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| 表 2，标准比较 | `docs/standards.md` | | |
+| 表 3，测评类文件中要求条目的测评层级 | `data/requirements/items.jsonl` | `analysis/requirement_levels.py` | `python analysis/requirement_levels.py` |
+| 表 4，五类测评方法的比较 | `docs/framework_zh.md` | | |
+| 表 5，实验使用的数据集 | `results/table_sizes.json`，`results/results_sizes_native.json`，`results/label_errors.json`，`results/results_audioset_labels.json`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_taxi.json`，`results/corpus_stats.json`，`results/results_cleanml.jsonl`，`results/results_datacomp.jsonl`，`results/results_wilds.jsonl`，`results/results_multimodal.jsonl` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
+| 表 6，全部数据集上的结果 | `results/tables_summary.json`，`results/static_native.json`，`results/corpus_static.json`，`results/dataset_docs.json`，`results/results_decision_fine.jsonl`，`results/results_versions.jsonl`，`results/results_cleanml.jsonl`，`results/results_corpus.jsonl`，`results/results_taxi.json`，`results/results_datacomp.jsonl`，`results/results_mirflickr.jsonl`，`results/case_tep.json`，`results/results_rieth.json`，`results/results_wilds.jsonl`，`results/results_synth.jsonl`，`results/results_vision.jsonl`，`results/results_fair.json`，`results/results_multimodal.jsonl`，`results/label_errors.json` | `analysis/datasets.py`，`analysis/big_tables.py` | `python analysis/print_tables.py --latex` |
 | 正文中的数字 | `results/numbers_*.json`，`results/tables_summary.json`，`results/insights_summary.json`，`results/results_random_delete.jsonl` | `analysis/summaries.py`，`analysis/insights.py`，`study/run_random_delete.py`，`analysis/make_numbers.py` | 数字、表格和图 |
-| 定理、命题和例子中计算得到的数字 | | `hqd_assess/`，`tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
+| 综述中计算得到的数字 | | `hqd_assess/`，`tests/test_paper_numbers.py` | `pytest tests/test_paper_numbers.py` |
 
 ## 结果
 

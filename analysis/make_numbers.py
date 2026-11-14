@@ -66,14 +66,7 @@ if T:
     fl = sorted(T["flips"], key=lambda x: -min(x["pos"]["delta"], -x["neg"]["delta"]))
     if fl:
         x = fl[0]; ACT = dict(delete_records="删除全部错误记录", repair_records="修复全部错误", repair_labels="修复标签", repair_type_value="修复语义错误", repair_type_domain="修复语法错误", repair_type_missing="修复缺失值"); MOD = dict(linear="线性模型", rf="随机森林", gb="梯度提升", knn=" K 近邻 (k-nearest neighbors, \\textbf{KNN}) ", mlp="多层感知机"); DSN = dict(soccer_full="Soccer", breast_cancer="Breast Cancer", soilmoisture="Soil Moisture", smartfactory="SmartFactory", nasa="NASA")
-        ex = f"{DSN.get(x['ds'], x['ds'].capitalize())} 上{ACT.get(x['action'], x['action'])}使{MOD[x['pos']['model']]}提高 {x['pos']['delta']:.3f}, 使{MOD[x['neg']['model']]}降低 {-x['neg']['delta']:.3f}"; N["TFlipExample"] = ex; N["TFlipExampleA"] = ex; p_, n_ = x["pos"]["delta"], -x["neg"]["delta"]; N["TFlipRegret"] = f"{p_ * n_ / (p_ + n_):.3f}"; N["TFlipDetRegret"] = f"{min(p_, n_):.3f}"     # theorem 1 (2) on the two uses of the flip
-    n = next((v["n0"] for k, v in B.items() if k == "flights"), None)
-    if n:
-        te = round(n / .7 * .3); N["TFlightsTest"] = f"{te}"; L = math.log(2 * 20 / .05); lo, hi = 1e-4, 1
-        for _ in range(60):
-            g = (lo + hi) / 2; lo, hi = (lo, g) if (8 * .1 / g ** 2 + 8 / (3 * g)) * L <= te else (g, hi)
-        N["TFlightsRes"] = f"{100 * g:.0f}"
-    d_, v_, K_ = .02, .1, 20; N["TSelN"] = f"{round((2 * v_ / d_ ** 2 + 4 / (3 * d_)) * math.log((K_ - 1) / .05), -2):.0f}"     # Proposition 3 (2): candidates more than 2 points below the best are excluded
+        ex = f"{DSN.get(x['ds'], x['ds'].capitalize())} 上{ACT.get(x['action'], x['action'])}使{MOD[x['pos']['model']]}提高 {x['pos']['delta']:.3f}, 使{MOD[x['neg']['model']]}降低 {-x['neg']['delta']:.3f}"; N["TFlipExample"] = ex
 # ---- taxi, vision, corpus, multimodal and decision numbers come from the files that summaries.py writes
 for extra in ("numbers_taxi.json", "numbers_vision.json", "numbers_corpus.json", "numbers_mm.json", "numbers_decision.json", "numbers_search.json", "numbers_totals.json"):
     e = load(extra)
